@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GM Client Panel - Complete Promotion Suite</title>
+    <title>GM Client Panel - Earn Coins First Then Promote</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -23,10 +23,6 @@
             background: rgba(255,255,255,0.95);
             border-color: #e2e8f0;
             color: #1a1a2e;
-        }
-        body.light-mode .service-card {
-            background: #f8fafc;
-            border-color: #cbd5e1;
         }
         .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
         .card, .panel {
@@ -85,6 +81,12 @@
             border: 1px solid rgba(255,255,255,0.1);
         }
         .service-card:hover { transform: translateY(-5px); border-color: #22c55e; background: rgba(34,197,94,0.1); }
+        .service-card.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: grayscale(0.3);
+        }
+        .service-card.disabled:hover { transform: none; border-color: rgba(255,255,255,0.1); background: none; }
         .badge {
             display: inline-flex;
             align-items: center;
@@ -115,7 +117,7 @@
         .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
         .btn-warning { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
         .btn-purple { background: linear-gradient(135deg, #a855f7, #7c3aed); color: white; }
-        .btn-cyan { background: linear-gradient(135deg, #06b6d4, #0891b2); color: white; }
+        .btn-purple.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
         .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
         .mt-2 { margin-top: 12px; }
         .mt-3 { margin-top: 18px; }
@@ -185,6 +187,14 @@
             background: #1a1a2e;
             color: white;
         }
+        .warning-box {
+            background: #f59e0b20;
+            border: 1px solid #f59e0b;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
         @media (max-width: 768px) {
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .task-grid, .promotion-grid, .service-grid { grid-template-columns: 1fr; }
@@ -237,8 +247,16 @@
         </div>
     </div>
 
-    <!-- Promote Your Video Section - Complete Package -->
-    <div class="card">
+    <!-- Warning: Pehle Coins Earn Karo -->
+    <div id="noCoinsWarning" class="warning-box" style="display: none;">
+        <i class="fas fa-exclamation-triangle" style="font-size: 40px; color: #f59e0b;"></i>
+        <h3 class="mt-2">⚠️ Pehle Coins Earn Karein!</h3>
+        <p class="mt-2">Apni video upload karne aur promotion lene ke liye aapko pehle coins earn karne honge.</p>
+        <p class="text-warning">Neeche diye gaye videos dekh kar coins earn karein!</p>
+    </div>
+
+    <!-- Promote Your Video Section - Only visible if coins > 0 -->
+    <div id="promotionSection" class="card" style="display: none;">
         <div class="flex-between">
             <h2><i class="fas fa-rocket"></i> Promote Your Video - Complete Package</h2>
             <span class="badge badge-purple"><i class="fas fa-fire"></i> Use Your Coins!</span>
@@ -252,44 +270,12 @@
                 <input type="text" id="promoVideoTitle" class="input" placeholder="Your Video Title">
                 <input type="text" id="promoVideoUrl" class="input" placeholder="YouTube Video URL">
             </div>
-            <button class="btn btn-purple" onclick="client.addPromotionVideo()" style="margin-top: 10px;"><i class="fas fa-plus-circle"></i> Add My Video</button>
+            <button class="btn btn-purple" id="addVideoBtn" onclick="client.addPromotionVideo()"><i class="fas fa-plus-circle"></i> Add My Video</button>
         </div>
 
-        <!-- All Services - Views, Likes, Shares, Comments, Subscribers -->
+        <!-- All Services -->
         <h3><i class="fas fa-gem"></i> Buy Promotion Services (Use Your Coins)</h3>
-        <div class="service-grid">
-            <div class="service-card" onclick="client.buyService('views')">
-                <i class="fas fa-eye service-icon" style="color: #06b6d4;"></i>
-                <strong>👁️ Views (Watch Time)</strong>
-                <div class="price-tag">1 Coin = 1 Second</div>
-                <div>60 coins = 60 seconds watch time</div>
-                <small class="text-info">Client khud decide karega kitne seconds!</small>
-            </div>
-            <div class="service-card" onclick="client.buyService('like')">
-                <i class="fas fa-thumbs-up service-icon" style="color: #3b82f6;"></i>
-                <strong>👍 Likes</strong>
-                <div class="price-tag">10 Coins per Like</div>
-                <small class="text-info">Get real likes on your video</small>
-            </div>
-            <div class="service-card" onclick="client.buyService('share')">
-                <i class="fas fa-share-alt service-icon" style="color: #22c55e;"></i>
-                <strong>🔄 Shares</strong>
-                <div class="price-tag">15 Coins per Share</div>
-                <small class="text-info">Increase video reach</small>
-            </div>
-            <div class="service-card" onclick="client.buyService('comment')">
-                <i class="fas fa-comment service-icon" style="color: #f59e0b;"></i>
-                <strong>💬 Comments</strong>
-                <div class="price-tag">20 Coins per Comment</div>
-                <small class="text-info">Engage with viewers</small>
-            </div>
-            <div class="service-card" onclick="client.buyService('subscribe')">
-                <i class="fas fa-bell service-icon" style="color: #ef4444;"></i>
-                <strong>🔔 Subscribers</strong>
-                <div class="price-tag">50 Coins per Subscriber</div>
-                <small class="text-info">Grow your channel</small>
-            </div>
-        </div>
+        <div class="service-grid" id="servicesGrid"></div>
 
         <!-- My Promoted Videos List -->
         <h3 class="mt-3"><i class="fas fa-list"></i> My Promoted Videos</h3>
@@ -306,7 +292,7 @@
         <div id="videoTasksList" class="task-grid"></div>
     </div>
 
-    <!-- Engagement Tasks Section - Like/Share/Comment/Subscribe to Earn -->
+    <!-- Engagement Tasks Section -->
     <div class="card">
         <div class="flex-between">
             <h2><i class="fas fa-heart"></i> Engagement Tasks (Earn Bonus Coins)</h2>
@@ -349,41 +335,12 @@
         promotedVideos: 'gm_final_promoted_videos'
     };
 
-    // Service Prices
-    const SERVICE_PRICES = {
-        like: 10,
-        share: 15,
-        comment: 20,
-        subscribe: 50
-    };
+    const SERVICE_PRICES = { like: 10, share: 15, comment: 20, subscribe: 50 };
+    const SERVICE_NAMES = { views: 'Views (Watch Time)', like: 'Likes', share: 'Shares', comment: 'Comments', subscribe: 'Subscribers' };
 
-    const SERVICE_NAMES = {
-        views: 'Views (Watch Time)',
-        like: 'Likes',
-        share: 'Shares',
-        comment: 'Comments',
-        subscribe: 'Subscribers'
-    };
-
-    const SERVICE_ICONS = {
-        views: '👁️',
-        like: '👍',
-        share: '🔄',
-        comment: '💬',
-        subscribe: '🔔'
-    };
-
-    // Client State
     let clientState = {
-        videos: [],
-        completedTasks: {},
-        engagementTasks: [],
-        completedEngagement: {},
-        clientCoins: 0,
-        totalCompleted: 0,
-        messages: [],
-        earningsHistory: [],
-        promotedVideos: []
+        videos: [], completedTasks: {}, engagementTasks: [], completedEngagement: {},
+        clientCoins: 0, totalCompleted: 0, messages: [], earningsHistory: [], promotedVideos: []
     };
 
     function loadData() {
@@ -403,6 +360,8 @@
         renderMessages();
         renderEarningsHistory();
         renderPromotedVideos();
+        checkCoinsAndShowPromotion();
+        renderServices();
     }
 
     function saveClientData() {
@@ -416,12 +375,7 @@
 
     function addToHistory(title, type, coinsChange, isEarning = true) {
         clientState.earningsHistory.unshift({
-            id: Date.now(),
-            title: title,
-            type: type,
-            coins: coinsChange,
-            isEarning: isEarning,
-            timestamp: new Date().toLocaleString()
+            id: Date.now(), title: title, type: type, coins: coinsChange, isEarning: isEarning, timestamp: new Date().toLocaleString()
         });
         if (clientState.earningsHistory.length > 100) clientState.earningsHistory.pop();
         localStorage.setItem(STORAGE_KEYS.earningsHistory, JSON.stringify(clientState.earningsHistory));
@@ -436,14 +390,7 @@
         localStorage.setItem(STORAGE_KEYS.adminBalance, currentAdminBalance);
         
         let activityLog = JSON.parse(localStorage.getItem(STORAGE_KEYS.activityLog)) || [];
-        activityLog.unshift({
-            id: Date.now(),
-            type: 'client_promotion',
-            title: 'Client Bought Promotion',
-            details: `Client spent ${coinsSpent} coins | Admin earned $${adminEarn.toFixed(2)}`,
-            amount: adminEarn,
-            timestamp: new Date().toLocaleString()
-        });
+        activityLog.unshift({ id: Date.now(), type: 'client_promotion', title: 'Client Bought Promotion', details: `Client spent ${coinsSpent} coins | Admin earned $${adminEarn.toFixed(2)}`, amount: adminEarn, timestamp: new Date().toLocaleString() });
         if (activityLog.length > 500) activityLog.pop();
         localStorage.setItem(STORAGE_KEYS.activityLog, JSON.stringify(activityLog));
     }
@@ -456,22 +403,56 @@
         localStorage.setItem(STORAGE_KEYS.adminBalance, currentAdminBalance);
         
         let activityLog = JSON.parse(localStorage.getItem(STORAGE_KEYS.activityLog)) || [];
-        activityLog.unshift({
-            id: Date.now(),
-            type: 'task_completed',
-            title: 'Task Completed by Client',
-            details: `Client earned ${taskCoins} coins | Admin earned $${adminEarn.toFixed(2)}`,
-            amount: adminEarn,
-            timestamp: new Date().toLocaleString()
-        });
+        activityLog.unshift({ id: Date.now(), type: 'task_completed', title: 'Task Completed by Client', details: `Client earned ${taskCoins} coins | Admin earned $${adminEarn.toFixed(2)}`, amount: adminEarn, timestamp: new Date().toLocaleString() });
         if (activityLog.length > 500) activityLog.pop();
         localStorage.setItem(STORAGE_KEYS.activityLog, JSON.stringify(activityLog));
     }
 
-    // Buy Service - Generic function for all services
+    function checkCoinsAndShowPromotion() {
+        const promotionSection = document.getElementById('promotionSection');
+        const noCoinsWarning = document.getElementById('noCoinsWarning');
+        
+        if (clientState.clientCoins > 0) {
+            promotionSection.style.display = 'block';
+            noCoinsWarning.style.display = 'none';
+        } else {
+            promotionSection.style.display = 'none';
+            noCoinsWarning.style.display = 'block';
+        }
+    }
+
+    function renderServices() {
+        const container = document.getElementById('servicesGrid');
+        const hasCoins = clientState.clientCoins > 0;
+        const hasVideo = clientState.promotedVideos.length > 0;
+        
+        const services = [
+            { type: 'views', icon: 'fa-eye', color: '#06b6d4', name: 'Views (Watch Time)', price: '1 Coin = 1 Second', desc: '60 coins = 60 seconds' },
+            { type: 'like', icon: 'fa-thumbs-up', color: '#3b82f6', name: 'Likes', price: '10 Coins per Like', desc: 'Get real likes' },
+            { type: 'share', icon: 'fa-share-alt', color: '#22c55e', name: 'Shares', price: '15 Coins per Share', desc: 'Increase reach' },
+            { type: 'comment', icon: 'fa-comment', color: '#f59e0b', name: 'Comments', price: '20 Coins per Comment', desc: 'Engage viewers' },
+            { type: 'subscribe', icon: 'fa-bell', color: '#ef4444', name: 'Subscribers', price: '50 Coins per Subscriber', desc: 'Grow channel' }
+        ];
+        
+        container.innerHTML = services.map(s => `
+            <div class="service-card ${!hasCoins || !hasVideo ? 'disabled' : ''}" onclick="${hasCoins && hasVideo ? `client.buyService('${s.type}')` : ''}">
+                <i class="fas ${s.icon}" style="font-size: 40px; margin-bottom: 10px; display: block; color: ${s.color};"></i>
+                <strong>${s.name}</strong>
+                <div class="price-tag">${s.price}</div>
+                <div>${s.desc}</div>
+                ${!hasCoins ? '<small class="text-danger mt-2">❌ Pehle coins earn karein!</small>' : (!hasVideo ? '<small class="text-danger mt-2">❌ Pehle video upload karein!</small>' : '')}
+            </div>
+        `).join('');
+    }
+
     function buyService(serviceType) {
+        if (clientState.clientCoins === 0) {
+            Swal.fire('Cannot Buy!', 'Aapke paas coins nahi hain. Pehle videos dekh kar coins earn karein!', 'error');
+            return;
+        }
+        
         if (clientState.promotedVideos.length === 0) {
-            Swal.fire('No Video', 'Please add a video for promotion first!', 'error');
+            Swal.fire('No Video', 'Pehle apni video upload karein!', 'error');
             return;
         }
         
@@ -526,7 +507,6 @@
                 
                 clientState.clientCoins -= cost;
                 
-                // Update video stats
                 if (serviceType === 'views') {
                     video.totalWatchTime = (video.totalWatchTime || 0) + quantity;
                     video.views = (video.views || 0) + Math.floor(quantity / 30);
@@ -548,18 +528,14 @@
                 animateCoins();
                 updateUI();
                 renderPromotedVideos();
+                checkCoinsAndShowPromotion();
+                renderServices();
                 
-                Swal.fire({
-                    title: 'Purchase Successful!',
-                    html: `You bought ${quantityText} for "${video.title}"!<br>
-                           Cost: <strong class="text-warning">${cost} coins</strong>`,
-                    icon: 'success'
-                });
+                Swal.fire({ title: 'Purchase Successful!', html: `You bought ${quantityText} for "${video.title}"!<br>Cost: <strong class="text-warning">${cost} coins</strong>`, icon: 'success' });
             }
         });
     }
 
-    // Complete Video Task with Timer
     function completeVideoTask(taskId, taskTitle, taskUrl, watchTimeNeeded) {
         if (clientState.completedTasks[taskId]) {
             Swal.fire('Already Completed!', 'You have already completed this task.', 'info');
@@ -578,19 +554,7 @@
         
         Swal.fire({
             title: '🎬 Watch Video to Earn Coins!',
-            html: `
-                <div style="text-align: center;">
-                    <a href="${taskUrl}" target="_blank" class="btn btn-primary" style="display: inline-block; margin-bottom: 15px;">
-                        <i class="fab fa-youtube"></i> Open YouTube Video
-                    </a>
-                    <div class="watch-timer" id="watchTimer">${timeLeft} seconds remaining</div>
-                    <div class="progress-bar mt-2">
-                        <div class="progress-fill" id="timerProgress" style="width: 0%"></div>
-                    </div>
-                    <p class="mt-2"><strong class="text-warning">💰 ${watchTimeNeeded} coins</strong> waiting for you!</p>
-                    <p class="text-info">1 second watch = 1 coin! Watch full ${watchTimeNeeded} seconds to earn!</p>
-                </div>
-            `,
+            html: `<div style="text-align: center;"><a href="${taskUrl}" target="_blank" class="btn btn-primary" style="display: inline-block; margin-bottom: 15px;"><i class="fab fa-youtube"></i> Open YouTube Video</a><div class="watch-timer" id="watchTimer">${timeLeft} seconds remaining</div><div class="progress-bar mt-2"><div class="progress-fill" id="timerProgress" style="width: 0%"></div></div><p class="mt-2"><strong class="text-warning">💰 ${watchTimeNeeded} coins</strong> waiting for you!</p><p class="text-info">1 second watch = 1 coin! Watch full ${watchTimeNeeded} seconds to earn!</p></div>`,
             icon: 'info',
             showConfirmButton: false,
             showCancelButton: true,
@@ -621,24 +585,17 @@
                         animateCoins();
                         updateUI();
                         renderVideoTasks();
+                        checkCoinsAndShowPromotion();
+                        renderServices();
                         
-                        Swal.fire({
-                            title: '🎉 Task Completed!',
-                            html: `You earned <strong class="text-warning">${coinsToEarn} coins</strong>!`,
-                            icon: 'success',
-                            timer: 3000,
-                            showConfirmButton: false
-                        });
+                        Swal.fire({ title: '🎉 Task Completed!', html: `You earned <strong class="text-warning">${coinsToEarn} coins</strong>!`, icon: 'success', timer: 3000, showConfirmButton: false });
                     }
                 }, 1000);
             },
-            willClose: () => {
-                if (timerInterval) clearInterval(timerInterval);
-            }
+            willClose: () => { if (timerInterval) clearInterval(timerInterval); }
         });
     }
 
-    // Complete Engagement Task (Like/Share/Comment/Subscribe)
     function completeEngagementTask(taskId, taskTarget, taskType, taskCoins, commentText) {
         if (clientState.completedEngagement[taskId]) {
             Swal.fire('Already Completed!', 'You have already completed this task.', 'info');
@@ -656,14 +613,7 @@
         
         Swal.fire({
             title: `${actionText} Task`,
-            html: `<div style="text-align: left;">
-                       <p><strong>Task:</strong> ${actionText} this content</p>
-                       <p><strong>Target:</strong> <a href="${taskTarget}" target="_blank" style="color: #3b82f6;">Open Link</a></p>
-                       <p><strong>Instructions:</strong> ${instructions}</p>
-                       <p><strong>Reward:</strong> <span class="text-warning">${taskCoins} coins</span></p>
-                       <br>
-                       <small>After completing, click confirm below.</small>
-                   </div>`,
+            html: `<div style="text-align: left;"><p><strong>Task:</strong> ${actionText} this content</p><p><strong>Target:</strong> <a href="${taskTarget}" target="_blank" style="color: #3b82f6;">Open Link</a></p><p><strong>Instructions:</strong> ${instructions}</p><p><strong>Reward:</strong> <span class="text-warning">${taskCoins} coins</span></p><br><small>After completing, click confirm below.</small></div>`,
             icon: 'info',
             showCancelButton: true,
             confirmButtonText: '<i class="fas fa-check"></i> I completed it!',
@@ -680,14 +630,20 @@
                 animateCoins();
                 updateUI();
                 renderEngagementTasks();
+                checkCoinsAndShowPromotion();
+                renderServices();
                 
                 Swal.fire('Task Completed!', `You earned ${taskCoins} coins!`, 'success');
             }
         });
     }
 
-    // Add Promotion Video
     function addPromotionVideo() {
+        if (clientState.clientCoins === 0) {
+            Swal.fire('Cannot Add Video!', 'Aapke paas coins nahi hain. Pehle videos dekh kar coins earn karein!', 'error');
+            return;
+        }
+        
         const title = document.getElementById('promoVideoTitle').value.trim();
         const url = document.getElementById('promoVideoUrl').value.trim();
         
@@ -705,22 +661,13 @@
         const thumbnail = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
         
         clientState.promotedVideos.unshift({
-            id: Date.now(),
-            title: title,
-            url: url,
-            videoId: videoId,
-            thumbnail: thumbnail,
-            views: 0,
-            totalWatchTime: 0,
-            likes: 0,
-            shares: 0,
-            comments: 0,
-            subscribers: 0,
-            createdAt: new Date().toLocaleString()
+            id: Date.now(), title: title, url: url, videoId: videoId, thumbnail: thumbnail,
+            views: 0, totalWatchTime: 0, likes: 0, shares: 0, comments: 0, subscribers: 0, createdAt: new Date().toLocaleString()
         });
         
         saveClientData();
         renderPromotedVideos();
+        renderServices();
         
         document.getElementById('promoVideoTitle').value = '';
         document.getElementById('promoVideoUrl').value = '';
@@ -728,7 +675,6 @@
         Swal.fire('Video Added!', 'Your video is ready for promotion!', 'success');
     }
 
-    // Render Promoted Videos
     function renderPromotedVideos() {
         const container = document.getElementById('promotedVideosList');
         if (clientState.promotedVideos.length === 0) {
@@ -739,10 +685,7 @@
         container.innerHTML = clientState.promotedVideos.map(video => `
             <div class="promotion-card priority-low">
                 <img src="${video.thumbnail}" style="width: 100%; border-radius: 12px; margin-bottom: 10px;" onerror="this.src='https://via.placeholder.com/640x360?text=Video'">
-                <div class="flex-between">
-                    <strong>${escapeHtml(video.title)}</strong>
-                    <span class="badge badge-info"><i class="fas fa-calendar"></i> ${video.createdAt}</span>
-                </div>
+                <div class="flex-between"><strong>${escapeHtml(video.title)}</strong><span class="badge badge-info"><i class="fas fa-calendar"></i> ${video.createdAt}</span></div>
                 <div class="mt-2">
                     <div class="flex-between"><span><i class="fas fa-eye" style="color: #06b6d4;"></i> Watch Time:</span><span class="text-info"><strong>${(video.totalWatchTime || 0).toLocaleString()}</strong> sec</span></div>
                     <div class="flex-between"><span><i class="fas fa-chart-line"></i> Views:</span><span class="text-info"><strong>${(video.views || 0).toLocaleString()}</strong></span></div>
@@ -750,9 +693,6 @@
                     <div class="flex-between"><span><i class="fas fa-share-alt" style="color: #22c55e;"></i> Shares:</span><span class="text-info"><strong>${video.shares || 0}</strong></span></div>
                     <div class="flex-between"><span><i class="fas fa-comment" style="color: #f59e0b;"></i> Comments:</span><span class="text-info"><strong>${video.comments || 0}</strong></span></div>
                     <div class="flex-between"><span><i class="fas fa-bell" style="color: #ef4444;"></i> Subscribers:</span><span class="text-info"><strong>${video.subscribers || 0}</strong></span></div>
-                </div>
-                <div class="progress-bar mt-2">
-                    <div class="progress-fill" style="width: ${Math.min(((video.totalWatchTime || 0) / 6000) * 100, 100)}%"></div>
                 </div>
                 <a href="${video.url}" target="_blank" class="btn btn-secondary mt-2" style="width: 100%;"><i class="fab fa-youtube"></i> Watch Video</a>
             </div>
@@ -768,7 +708,6 @@
     function updateUI() {
         document.getElementById('clientCoins').innerHTML = clientState.clientCoins;
         document.getElementById('completedCount').innerHTML = clientState.totalCompleted;
-        
         const totalEarned = clientState.earningsHistory.filter(h => h.isEarning).reduce((sum, h) => sum + h.coins, 0);
         document.getElementById('totalEarned').innerHTML = totalEarned;
         
@@ -782,26 +721,15 @@
     function renderVideoTasks() {
         const container = document.getElementById('videoTasksList');
         const availableTasks = clientState.videos.filter(v => !clientState.completedTasks[v.id]);
-        
         if (availableTasks.length === 0) {
             container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-check-circle" style="font-size: 48px; color: #22c55e;"></i><p style="margin-top: 15px;">No video tasks available.</p></div>';
             return;
         }
-        
         container.innerHTML = availableTasks.map(task => `
             <div class="task-card priority-${task.priority || 'low'}">
-                <div class="flex-between">
-                    <strong><i class="fab fa-youtube" style="color: #ef4444;"></i> ${escapeHtml(task.title)}</strong>
-                    <span class="badge badge-warning"><i class="fas fa-clock"></i> Pending</span>
-                </div>
-                <div class="mt-2">
-                    <div><i class="fas fa-coins"></i> Reward: <span class="text-warning">${task.watchTime} coins</span></div>
-                    <div><i class="fas fa-hourglass-half"></i> Watch Time: ${task.watchTime} seconds</div>
-                    <div class="text-info mt-1">⚡ 1 second = 1 coin!</div>
-                </div>
-                <button class="btn btn-primary mt-2" style="width: 100%;" onclick="completeVideoTask(${task.id}, '${escapeHtml(task.title)}', '${escapeHtml(task.url)}', ${task.watchTime})">
-                    <i class="fab fa-youtube"></i> Watch & Earn ${task.watchTime} Coins
-                </button>
+                <div class="flex-between"><strong><i class="fab fa-youtube" style="color: #ef4444;"></i> ${escapeHtml(task.title)}</strong><span class="badge badge-warning"><i class="fas fa-clock"></i> Pending</span></div>
+                <div class="mt-2"><div><i class="fas fa-coins"></i> Reward: <span class="text-warning">${task.watchTime} coins</span></div><div><i class="fas fa-hourglass-half"></i> Watch Time: ${task.watchTime} seconds</div><div class="text-info mt-1">⚡ 1 second = 1 coin!</div></div>
+                <button class="btn btn-primary mt-2" style="width: 100%;" onclick="completeVideoTask(${task.id}, '${escapeHtml(task.title)}', '${escapeHtml(task.url)}', ${task.watchTime})"><i class="fab fa-youtube"></i> Watch & Earn ${task.watchTime} Coins</button>
             </div>
         `).join('');
     }
@@ -809,30 +737,17 @@
     function renderEngagementTasks() {
         const container = document.getElementById('engagementTasksList');
         const availableTasks = clientState.engagementTasks.filter(e => !clientState.completedEngagement[e.id]);
-        
         if (availableTasks.length === 0) {
             container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-tasks" style="font-size: 48px; color: #3b82f6;"></i><p style="margin-top: 15px;">No engagement tasks available.</p></div>';
             return;
         }
-        
         const icons = { like:'👍', share:'🔄', comment:'💬', subscribe:'🔔' };
         const typeNames = { like:'Like', share:'Share', comment:'Comment', subscribe:'Subscribe' };
-        
         container.innerHTML = availableTasks.map(task => `
             <div class="task-card priority-${task.priority || 'low'}">
-                <div class="flex-between">
-                    <strong>${icons[task.type]} ${typeNames[task.type]} Task</strong>
-                    <span class="badge badge-warning"><i class="fas fa-clock"></i> Pending</span>
-                </div>
-                <div class="mt-2">
-                    <div><i class="fas fa-link"></i> Target: <a href="${escapeHtml(task.target)}" target="_blank" style="color: #3b82f6;">Open Link</a></div>
-                    <div><i class="fas fa-coins"></i> Reward: <span class="text-warning">${task.coins} coins</span></div>
-                    ${task.commentText ? `<div><i class="fas fa-comment"></i> Suggested: "${escapeHtml(task.commentText)}"</div>` : ''}
-                </div>
-                <button class="btn btn-secondary mt-2" style="width: 100%;" onclick="completeEngagementTask(${task.id}, '${escapeHtml(task.target)}', '${task.type}', ${task.coins}, '${escapeHtml(task.commentText || '')}')">
-                    <i class="fas ${task.type === 'like' ? 'fa-thumbs-up' : task.type === 'share' ? 'fa-share' : task.type === 'comment' ? 'fa-comment' : 'fa-bell'}"></i>
-                    Complete & Earn ${task.coins} Coins
-                </button>
+                <div class="flex-between"><strong>${icons[task.type]} ${typeNames[task.type]} Task</strong><span class="badge badge-warning"><i class="fas fa-clock"></i> Pending</span></div>
+                <div class="mt-2"><div><i class="fas fa-link"></i> Target: <a href="${escapeHtml(task.target)}" target="_blank" style="color: #3b82f6;">Open Link</a></div><div><i class="fas fa-coins"></i> Reward: <span class="text-warning">${task.coins} coins</span></div>${task.commentText ? `<div><i class="fas fa-comment"></i> Suggested: "${escapeHtml(task.commentText)}"</div>` : ''}</div>
+                <button class="btn btn-secondary mt-2" style="width: 100%;" onclick="completeEngagementTask(${task.id}, '${escapeHtml(task.target)}', '${task.type}', ${task.coins}, '${escapeHtml(task.commentText || '')}')"><i class="fas ${task.type === 'like' ? 'fa-thumbs-up' : task.type === 'share' ? 'fa-share' : task.type === 'comment' ? 'fa-comment' : 'fa-bell'}"></i> Complete & Earn ${task.coins} Coins</button>
             </div>
         `).join('');
     }
@@ -843,16 +758,7 @@
             container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-inbox" style="font-size: 48px; color: #94a3b8;"></i><p style="margin-top: 15px;">No messages from admin yet.</p></div>';
             return;
         }
-        
-        container.innerHTML = clientState.messages.map(msg => `
-            <div style="background: rgba(10,20,35,0.8); border-radius: 16px; padding: 15px; margin-bottom: 12px; border-left: 3px solid #3b82f6;">
-                <div class="flex-between">
-                    <span class="badge badge-info"><i class="fas fa-user-shield"></i> Admin</span>
-                    <span style="font-size: 11px; color: #94a3b8;">${msg.timestamp}</span>
-                </div>
-                <div class="mt-2">${escapeHtml(msg.message)}</div>
-            </div>
-        `).join('');
+        container.innerHTML = clientState.messages.map(msg => `<div style="background: rgba(10,20,35,0.8); border-radius: 16px; padding: 15px; margin-bottom: 12px; border-left: 3px solid #3b82f6;"><div class="flex-between"><span class="badge badge-info"><i class="fas fa-user-shield"></i> Admin</span><span style="font-size: 11px; color: #94a3b8;">${msg.timestamp}</span></div><div class="mt-2">${escapeHtml(msg.message)}</div></div>`).join('');
     }
 
     function renderEarningsHistory() {
@@ -861,18 +767,7 @@
             container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-chart-line" style="font-size: 48px; color: #94a3b8;"></i><p style="margin-top: 15px;">No activity yet. Watch videos to start earning!</p></div>';
             return;
         }
-        
-        container.innerHTML = clientState.earningsHistory.map(item => `
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                <div>
-                    <div><strong>${escapeHtml(item.title)}</strong></div>
-                    <div style="font-size: 11px; color: #94a3b8;">${item.type} • ${item.timestamp}</div>
-                </div>
-                <div class="${item.isEarning ? 'text-warning' : 'text-danger'}" style="font-size: 18px; font-weight: 600;">
-                    ${item.isEarning ? '+' : '-'}${item.coins} 🪙
-                </div>
-            </div>
-        `).join('');
+        container.innerHTML = clientState.earningsHistory.map(item => `<div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1);"><div><div><strong>${escapeHtml(item.title)}</strong></div><div style="font-size: 11px; color: #94a3b8;">${item.type} • ${item.timestamp}</div></div><div class="${item.isEarning ? 'text-warning' : 'text-danger'}" style="font-size: 18px; font-weight: 600;">${item.isEarning ? '+' : '-'}${item.coins} 🪙</div></div>`).join('');
     }
 
     function animateCoins() {
@@ -881,31 +776,14 @@
         setTimeout(() => coinElement.classList.remove('coin-animation'), 500);
     }
 
-    function updateDateTime() {
-        document.getElementById('currentDateTime').innerHTML = new Date().toLocaleString();
-    }
+    function updateDateTime() { document.getElementById('currentDateTime').innerHTML = new Date().toLocaleString(); }
     setInterval(updateDateTime, 1000);
 
-    function escapeHtml(text) {
-        if (!text) return '';
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
+    function escapeHtml(text) { if (!text) return ''; const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
 
     function resetAllData() {
-        Swal.fire({
-            title: 'Reset All Data?',
-            text: 'This will clear all your coins, tasks, and history!',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, reset',
-            cancelButtonText: 'Cancel'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                localStorage.clear();
-                location.reload();
-            }
+        Swal.fire({ title: 'Reset All Data?', text: 'This will clear all your coins, tasks, and history!', icon: 'warning', showCancelButton: true, confirmButtonText: 'Yes, reset' }).then((result) => {
+            if (result.isConfirmed) { localStorage.clear(); location.reload(); }
         });
     }
 
@@ -913,9 +791,9 @@
         toggleTheme() { document.body.classList.toggle('light-mode'); },
         showHelp() {
             Swal.fire('Complete Guide', 
-                '💰 EARN COINS:\n• Watch YouTube videos - 1 second = 1 coin!\n• Complete Like/Share/Comment/Subscribe tasks\n\n' +
-                '🚀 PROMOTE YOUR VIDEO (Use Your Coins):\n• Upload your YouTube video\n• Buy Views (1 coin = 1 second watch time)\n• Buy Likes (10 coins each)\n• Buy Shares (15 coins each)\n• Buy Comments (20 coins each)\n• Buy Subscribers (50 coins each)\n\n' +
-                'Client khud decide karega kitna lena hai!', 'info');
+                '💰 EARN COINS FIRST:\n• Watch YouTube videos - 1 second = 1 coin!\n• Complete Like/Share/Comment/Subscribe tasks\n\n' +
+                '✅ JAB COINS HO JAYEIN TAB:\n• Upload your YouTube video\n• Buy Views (1 coin = 1 second watch time)\n• Buy Likes (10 coins each)\n• Buy Shares (15 coins each)\n• Buy Comments (20 coins each)\n• Buy Subscribers (50 coins each)\n\n' +
+                '⚠️ BINA COINS KE KUCH NAHI KAR SAKTE!', 'info');
         },
         addPromotionVideo() { addPromotionVideo(); },
         buyService(serviceType) { buyService(serviceType); },
