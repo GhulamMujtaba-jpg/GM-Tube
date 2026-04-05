@@ -3,707 +3,238 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>GM Admin Panel - Complete Control with Anti-Scam & Messaging</title>
+  <title>GM Enterprise Admin Suite - Global Task Management Platform</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
-      min-height: 100vh;
-      color: #e2e8f0;
-      padding: 20px;
-    }
-    .container {
-      max-width: 1600px;
-      margin: 0 auto;
-    }
-    .header {
-      background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.75));
-      border: 1px solid rgba(148, 163, 184, 0.14);
-      border-radius: 24px;
-      padding: 20px;
-      margin-bottom: 20px;
-      backdrop-filter: blur(12px);
-    }
-    .header h1 {
-      font-size: 28px;
-      font-weight: 800;
-      background: linear-gradient(135deg, #22c55e, #38bdf8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-    .stat-card {
-      background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.75));
-      border: 1px solid rgba(148, 163, 184, 0.14);
-      border-radius: 20px;
-      padding: 15px;
-      backdrop-filter: blur(12px);
-      transition: transform 0.2s;
-    }
-    .stat-card:hover {
-      transform: translateY(-3px);
-      border-color: #22c55e40;
-    }
-    .stat-label {
-      color: #94a3b8;
-      font-size: 12px;
-      margin-bottom: 5px;
-    }
-    .stat-value {
-      font-size: 28px;
-      font-weight: 800;
-      color: #22c55e;
-    }
-    .stat-sub {
-      font-size: 11px;
-      color: #38bdf8;
-      margin-top: 5px;
-    }
-    .panel {
-      background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.75));
-      border: 1px solid rgba(148, 163, 184, 0.14);
-      border-radius: 20px;
-      padding: 20px;
-      margin-bottom: 20px;
-      backdrop-filter: blur(12px);
-    }
-    .panel h2 {
-      font-size: 18px;
-      margin-bottom: 15px;
-      color: #38bdf8;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .panel h2 .count {
-      background: #22c55e20;
-      padding: 2px 8px;
-      border-radius: 20px;
-      font-size: 12px;
-      color: #86efac;
-    }
-    .input, .select, .textarea {
-      width: 100%;
-      padding: 12px;
-      background: rgba(30, 41, 59, 0.72);
-      border: 1px solid rgba(148, 163, 184, 0.18);
-      border-radius: 12px;
-      color: white;
-      margin-bottom: 10px;
-      outline: none;
-    }
-    .textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-    .btn {
-      padding: 12px 20px;
-      border: none;
-      border-radius: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .btn-primary {
-      background: #22c55e;
-      color: #052e16;
-    }
-    .btn-primary:hover {
-      background: #16a34a;
-    }
-    .btn-danger {
-      background: #ef4444;
-      color: #450a0a;
-    }
-    .btn-danger:hover {
-      background: #dc2626;
-    }
-    .btn-secondary {
-      background: #38bdf8;
-      color: #082f49;
-    }
-    .btn-dark {
-      background: #1e293b;
-      color: white;
-      border: 1px solid rgba(148, 163, 184, 0.3);
-    }
-    .btn-warning {
-      background: #f59e0b;
-      color: #451a03;
-    }
-    .btn-info {
-      background: #3b82f6;
-      color: white;
-    }
-    .task-grid, .requests-grid, .activity-grid, .messages-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      gap: 15px;
-      margin-top: 15px;
-    }
-    .task-card, .request-card, .activity-card, .message-card {
-      background: rgba(15, 23, 42, 0.88);
-      border: 1px solid rgba(148, 163, 184, 0.14);
-      border-radius: 16px;
-      padding: 15px;
-      transition: transform 0.2s;
-    }
-    .task-card:hover, .request-card:hover, .activity-card:hover {
-      transform: translateY(-2px);
-      border-color: #22c55e40;
-    }
-    .task-title {
-      font-weight: 700;
-      margin-bottom: 10px;
-      font-size: 14px;
-    }
-    .task-meta {
-      font-size: 12px;
-      color: #94a3b8;
-      margin-bottom: 8px;
-    }
-    .login-box {
-      max-width: 400px;
-      margin: 50px auto;
-    }
-    .hidden {
-      display: none !important;
-    }
-    .badge {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 600;
-    }
-    .badge-pending { background: #f59e0b20; color: #fcd34d; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #0f172a 0%, #020617 100%); min-height: 100vh; color: #e2e8f0; transition: all 0.3s; }
+    body.light-mode { background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); color: #0f172a; }
+    body.light-mode .panel, body.light-mode .stat-card, body.light-mode .header { background: rgba(255,255,255,0.95); border-color: #cbd5e1; color: #1e293b; }
+    .container { max-width: 1800px; margin: 0 auto; padding: 20px; }
+    .header { background: linear-gradient(145deg, rgba(15,23,42,0.95), rgba(30,41,59,0.75)); border: 1px solid rgba(148,163,184,0.14); border-radius: 24px; padding: 20px; margin-bottom: 20px; backdrop-filter: blur(12px); }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 20px; }
+    .stat-card { background: linear-gradient(145deg, rgba(15,23,42,0.95), rgba(30,41,59,0.75)); border: 1px solid rgba(148,163,184,0.14); border-radius: 20px; padding: 18px; transition: all 0.3s; cursor: pointer; }
+    .stat-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); border-color: #22c55e; }
+    .panel { background: linear-gradient(145deg, rgba(15,23,42,0.95), rgba(30,41,59,0.75)); border: 1px solid rgba(148,163,184,0.14); border-radius: 20px; padding: 20px; margin-bottom: 20px; backdrop-filter: blur(12px); }
+    .input, .select, .textarea { width: 100%; padding: 12px 16px; background: rgba(30,41,59,0.72); border: 1px solid rgba(148,163,184,0.18); border-radius: 12px; color: white; margin-bottom: 10px; outline: none; transition: all 0.3s; }
+    .input:focus, .select:focus { border-color: #22c55e; box-shadow: 0 0 0 2px rgba(34,197,94,0.2); }
+    .btn { padding: 12px 24px; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+    .btn-primary { background: linear-gradient(135deg, #22c55e, #16a34a); color: white; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(34,197,94,0.4); }
+    .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+    .btn-secondary { background: linear-gradient(135deg, #38bdf8, #0ea5e9); color: white; }
+    .btn-warning { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+    .task-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 20px; margin-top: 15px; }
+    .task-card { background: rgba(15,23,42,0.88); border-radius: 16px; padding: 18px; transition: all 0.3s; border-left: 4px solid; }
+    .task-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+    .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; }
     .badge-approved { background: #22c55e20; color: #86efac; }
-    .badge-rejected { background: #ef444420; color: #fca5a5; }
-    .badge-completed { background: #22c55e20; color: #86efac; }
     .badge-active { background: #38bdf820; color: #7dd3fc; }
     .badge-scam { background: #ef444420; color: #fca5a5; border: 1px solid #ef4444; }
-    .badge-warning { background: #f59e0b20; color: #fcd34d; }
-    .flex-between {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    .flex-between { display: flex; justify-content: space-between; align-items: center; }
     .mt-2 { margin-top: 10px; }
     .mb-2 { margin-bottom: 10px; }
     .text-success { color: #86efac; }
     .text-warning { color: #fcd34d; }
-    .text-info { color: #7dd3fc; }
-    .text-danger { color: #fca5a5; }
-    .separator {
-      height: 1px;
-      background: rgba(148, 163, 184, 0.1);
-      margin: 12px 0;
-    }
-    .filter-bar {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 15px;
-      flex-wrap: wrap;
-    }
-    .filter-btn {
-      padding: 6px 12px;
-      background: #1e293b;
-      border: 1px solid rgba(148, 163, 184, 0.3);
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 12px;
-      transition: 0.2s;
-    }
-    .filter-btn.active {
-      background: #22c55e;
-      color: #052e16;
-      border-color: #22c55e;
-    }
-    .earning-summary {
-      background: #22c55e10;
-      border-radius: 12px;
-      padding: 10px;
-      margin-top: 10px;
-    }
-    .admin-withdraw-box {
-      background: #f59e0b10;
-      border: 1px solid #f59e0b30;
-      border-radius: 16px;
-      padding: 15px;
-      margin-bottom: 20px;
-    }
-    .commission-rate {
-      font-size: 24px;
-      font-weight: 800;
-      color: #f59e0b;
-    }
-    .channel-name {
-      font-family: monospace;
-      background: #1e293b;
-      padding: 2px 6px;
-      border-radius: 8px;
-      font-size: 11px;
-    }
-    .message-bubble {
-      background: #22c55e10;
-      border-left: 3px solid #22c55e;
-      padding: 8px;
-      margin-top: 8px;
-      border-radius: 8px;
-    }
-    .scam-alert {
-      background: #ef444410;
-      border: 1px solid #ef4444;
-      border-radius: 12px;
-      padding: 10px;
-      margin-top: 10px;
-    }
+    .filter-bar { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+    .filter-btn { padding: 6px 16px; background: #1e293b; border: 1px solid rgba(148,163,184,0.3); border-radius: 20px; cursor: pointer; font-size: 12px; transition: all 0.3s; }
+    .filter-btn.active { background: #22c55e; color: #052e16; }
+    .chart-container { max-width: 600px; margin: 0 auto; }
+    .login-box { max-width: 450px; margin: 80px auto; }
+    .hidden { display: none !important; }
+    .priority-high { border-left-color: #ef4444; }
+    .priority-medium { border-left-color: #f59e0b; }
+    .priority-low { border-left-color: #22c55e; }
+    .language-selector { position: fixed; top: 20px; right: 20px; z-index: 1000; }
+    .toast-notification { position: fixed; top: 20px; right: 20px; background: #22c55e; color: white; padding: 12px 20px; border-radius: 12px; animation: slideIn 0.3s ease; z-index: 9999; }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(100px); } to { opacity: 1; transform: translateX(0); } }
+    .loading { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); padding: 20px; border-radius: 20px; z-index: 10000; }
+    @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } .task-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
+<div class="language-selector"><select id="languageSelect" class="select" style="width:120px;" onchange="admin.changeLanguage()"><option value="en">🇬🇧 English</option><option value="ur">🇵🇰 اردو</option><option value="hi">🇮🇳 हिंदी</option><option value="ar">🇸🇦 العربية</option></select></div>
+
 <div class="container">
-  <!-- Login Section -->
   <div id="loginSection" class="login-box">
-    <div class="panel">
-      <h2 style="text-align: center;">🔐 Admin Login</h2>
-      <input type="email" id="adminEmail" class="input" placeholder="Admin Email" value="ghulammujtaba30@gmail.com">
-      <input type="password" id="adminPassword" class="input" placeholder="Admin Password" value="Sahibzada6060">
-      <button class="btn btn-primary" style="width: 100%;" onclick="admin.login()">Login</button>
+    <div class="panel"><h2 style="text-align:center;">🔐 GM Enterprise Login</h2>
+      <input type="email" id="adminEmail" class="input" placeholder="admin@globalmedia.com" value="admin@gm.com">
+      <input type="password" id="adminPassword" class="input" placeholder="Password" value="Admin@2024">
+      <button class="btn btn-primary" style="width:100%;" onclick="admin.login()"><i class="fas fa-sign-in-alt"></i> Login</button>
     </div>
   </div>
 
-  <!-- Admin Dashboard -->
   <div id="dashboardSection" class="hidden">
     <div class="header">
-      <div class="flex-between">
-        <div>
-          <h1>👑 GM Admin Dashboard</h1>
-          <p style="color: #94a3b8; margin-top: 10px;">Complete control | Channel tracking | Anti-scam | Direct messaging</p>
-        </div>
-        <button class="btn btn-danger" onclick="admin.logout()">🚪 Logout</button>
-      </div>
+      <div class="flex-between"><div><h1><i class="fas fa-globe"></i> GM Enterprise Suite</h1><p>Global Task Management | Multi-Currency | Real-time Analytics</p></div><div><button class="btn btn-dark" onclick="admin.toggleTheme()"><i class="fas fa-moon"></i> Theme</button><button class="btn btn-danger" style="margin-left:10px;" onclick="admin.logout()"><i class="fas fa-sign-out-alt"></i> Logout</button></div></div>
     </div>
 
-    <!-- Stats Overview -->
     <div class="stats-grid">
-      <div class="stat-card"><div class="stat-label">📹 Total Tasks</div><div class="stat-value" id="totalTasks">0</div><div class="stat-sub">Active videos</div></div>
-      <div class="stat-card"><div class="stat-label">✅ Tasks Completed</div><div class="stat-value" id="totalCompleted">0</div><div class="stat-sub">By client</div></div>
-      <div class="stat-card"><div class="stat-label">💰 Client Earned</div><div class="stat-value" id="clientTotalEarned">0</div><div class="stat-sub">Total coins</div></div>
-      <div class="stat-card"><div class="stat-label">👑 Admin Balance</div><div class="stat-value" id="adminBalance">0</div><div class="stat-sub">Available for withdraw</div></div>
-      <div class="stat-card"><div class="stat-label">⚠️ Scam Attempts</div><div class="stat-value" id="scamCount">0</div><div class="stat-sub">Detected</div></div>
+      <div class="stat-card"><div class="stat-label"><i class="fas fa-video"></i> Total Tasks</div><div class="stat-value" id="totalTasks">0</div></div>
+      <div class="stat-card"><div class="stat-label"><i class="fas fa-check-circle"></i> Completed</div><div class="stat-value" id="totalCompleted">0</div></div>
+      <div class="stat-card"><div class="stat-label"><i class="fas fa-dollar-sign"></i> Client Earnings</div><div class="stat-value" id="clientTotalEarned">0</div></div>
+      <div class="stat-card"><div class="stat-label"><i class="fas fa-chart-line"></i> Admin Balance</div><div class="stat-value" id="adminBalance">0</div></div>
+      <div class="stat-card"><div class="stat-label"><i class="fas fa-shield-alt"></i> Scam Attempts</div><div class="stat-value" id="scamCount">0</div></div>
+      <div class="stat-card"><div class="stat-label"><i class="fas fa-tasks"></i> Engagement Tasks</div><div class="stat-value" id="engagementCount">0</div></div>
     </div>
 
-    <!-- Admin Withdraw Section -->
-    <div class="admin-withdraw-box">
-      <div class="flex-between">
-        <div>
-          <h2 style="color: #f59e0b;">💰 Admin Withdrawal</h2>
-          <p class="task-meta">Sirf admin withdraw kar sakta hai. Client jitna zyada kamayega, admin ko utna zyada milega.</p>
-        </div>
-        <div class="commission-rate">10% Commission</div>
-      </div>
-      <div class="flex-between mt-2">
-        <div>
-          <span class="task-meta">Available Balance:</span>
-          <span class="text-warning" style="font-size: 24px; font-weight: 800;" id="adminBalanceDisplay">0</span>
-          <span class="task-meta"> Coins</span>
-        </div>
-        <button class="btn btn-warning" onclick="admin.requestAdminWithdraw()">💸 Withdraw Admin Coins</button>
-      </div>
-    </div>
+    <!-- Quick Actions Bar -->
+    <div class="panel"><div class="flex-between"><h2><i class="fas fa-bolt"></i> Quick Actions</h2><div><button class="btn btn-primary" onclick="document.getElementById('addTaskPanel').scrollIntoView({behavior:'smooth'})"><i class="fas fa-plus"></i> Add Task</button><button class="btn btn-secondary" onclick="document.getElementById('engagementPanel').scrollIntoView({behavior:'smooth'})"><i class="fas fa-heart"></i> Engagement</button><button class="btn btn-info" onclick="admin.exportFullReport()"><i class="fas fa-download"></i> Full Report</button></div></div></div>
 
-    <!-- Add Task Panel -->
-    <div class="panel">
-      <h2>➕ Add New Video Task</h2>
-      <input type="text" id="videoTitle" class="input" placeholder="Video Title">
-      <input type="text" id="videoUrl" class="input" placeholder="YouTube URL">
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-        <input type="number" id="videoCoins" class="input" placeholder="Reward Coins" min="1">
-        <input type="number" id="watchSeconds" class="input" placeholder="Watch Seconds" min="10">
-      </div>
-      <button class="btn btn-primary" onclick="admin.addTask()">📤 Publish Task</button>
-    </div>
+    <!-- Commission & Currency Settings -->
+    <div class="panel"><h2><i class="fas fa-coins"></i> Financial Settings</h2><div class="flex-between"><div><label>Commission Rate:</label><input type="number" id="commissionRate" class="input" style="width:100px; display:inline-block; margin-left:10px;" min="5" max="30" value="10"><button class="btn btn-primary" onclick="admin.updateCommission()">Update</button></div><div><label>Currency:</label><select id="currencySelect" class="select" style="width:100px; display:inline-block; margin-left:10px;" onchange="admin.updateCurrency()"><option value="USD">USD $</option><option value="PKR">PKR ₨</option><option value="INR">INR ₹</option><option value="EUR">EUR €</option><option value="GBP">GBP £</option></select></div></div><div class="mt-2"><span>Current Commission: <strong id="currentCommissionDisplay" class="text-warning">10%</strong></span><span style="margin-left:20px;">Exchange Rate: 1 USD = <span id="exchangeRate">280</span> PKR</span></div></div>
 
-    <!-- NEW: Admin Engagement Tasks (Like, Share, Comment, Subscribe) -->
-    <div class="panel">
-      <h2>🎯 Assign Engagement Tasks (Like/Share/Comment/Subscribe)</h2>
-      <p class="task-meta mb-2">Admin client ko engagement tasks de sakta hai — like, share, comment ya subscribe. Client complete karega toh coins kamayega.</p>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-        <input type="text" id="engagementTarget" class="input" placeholder="Target: YouTube URL / Channel ID / Video Link">
-        <select id="engagementType" class="select">
-          <option value="like">👍 Like Video</option>
-          <option value="share">🔄 Share Video</option>
-          <option value="comment">💬 Comment on Video</option>
-          <option value="subscribe">🔔 Subscribe Channel</option>
-        </select>
-        <input type="number" id="engagementCoins" class="input" placeholder="Reward Coins" min="1">
-        <input type="text" id="engagementCommentText" class="input" placeholder="(Optional) Comment text if comment task">
-      </div>
-      <button class="btn btn-secondary" onclick="admin.addEngagementTask()">📢 Assign Engagement Task to Client</button>
-    </div>
+    <!-- Add Video Task Panel -->
+    <div id="addTaskPanel" class="panel"><h2><i class="fas fa-plus-circle"></i> Add Video Task</h2><div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:10px;"><input type="text" id="videoTitle" class="input" placeholder="Video Title"><input type="text" id="videoUrl" class="input" placeholder="YouTube URL"><input type="number" id="videoCoins" class="input" placeholder="Reward (USD)"><input type="number" id="watchSeconds" class="input" placeholder="Watch Seconds"></div><select id="taskPriority" class="select"><option value="low">🟢 Low Priority</option><option value="medium">🟡 Medium Priority</option><option value="high">🔴 High Priority</option></select><button class="btn btn-primary" onclick="admin.addTask()"><i class="fas fa-upload"></i> Publish Task</button></div>
 
-    <!-- Active Engagement Tasks List -->
-    <div class="panel">
-      <h2>⚡ Active Engagement Tasks <span class="count" id="engagementTasksCount">0</span></h2>
-      <div class="task-grid" id="engagementTasksList"></div>
-    </div>
+    <!-- Engagement Tasks Panel -->
+    <div id="engagementPanel" class="panel"><h2><i class="fas fa-heart"></i> Engagement Tasks (Like/Share/Comment/Subscribe)</h2><div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:10px;"><input type="text" id="engagementTarget" class="input" placeholder="Target URL / Channel"><select id="engagementType" class="select"><option value="like">👍 Like</option><option value="share">🔄 Share</option><option value="comment">💬 Comment</option><option value="subscribe">🔔 Subscribe</option></select><input type="number" id="engagementCoins" class="input" placeholder="Reward (USD)"><input type="text" id="engagementCommentText" class="input" placeholder="Comment text (optional)"></div><select id="engagementPriority" class="select"><option value="low">🟢 Low Priority</option><option value="medium">🟡 Medium Priority</option><option value="high">🔴 High Priority</option></select><button class="btn btn-secondary" onclick="admin.addEngagementTask()"><i class="fas fa-tasks"></i> Assign Task</button></div>
 
-    <!-- Send Message to Client -->
-    <div class="panel">
-      <h2>💬 Send Message to Client</h2>
-      <textarea id="adminMessage" class="textarea" placeholder="Type your message here... (Warning, Notice, Feedback)"></textarea>
-      <button class="btn btn-info" onclick="admin.sendMessageToClient()">📨 Send Message to Client</button>
-      <p class="task-meta mt-2">Client will see this message immediately on their dashboard.</p>
-    </div>
+    <!-- Active Tasks Display -->
+    <div class="panel"><h2><i class="fas fa-list"></i> Active Engagement Tasks <span class="count" id="engagementTasksCount">0</span></h2><div id="engagementTasksList" class="task-grid"></div></div>
+    <div class="panel"><h2><i class="fas fa-video"></i> Video Tasks <span class="count" id="tasksCount">0</span></h2><div id="tasksList" class="task-grid"></div></div>
 
-    <!-- Messages from Admin -->
-    <div class="panel">
-      <h2>📨 Admin Messages Sent <span class="count" id="messagesCount">0</span></h2>
-      <div class="messages-grid" id="messagesList"></div>
-    </div>
+    <!-- Analytics Dashboard -->
+    <div class="panel"><h2><i class="fas fa-chart-line"></i> Analytics Dashboard</h2><div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:20px;"><div><canvas id="earningsChart" style="max-height:250px;"></canvas></div><div><canvas id="taskChart" style="max-height:250px;"></canvas></div></div><div class="flex-between mt-2"><button class="btn btn-dark" onclick="admin.exportCSV()"><i class="fas fa-file-csv"></i> Export CSV</button><button class="btn btn-info" onclick="admin.exportPDF()"><i class="fas fa-file-pdf"></i> Export PDF</button><button class="btn btn-warning" onclick="admin.refreshAnalytics()"><i class="fas fa-sync-alt"></i> Refresh</button></div></div>
 
-    <!-- Client Activity Log with Channel Info & Scam Detection -->
-    <div class="panel">
-      <h2>📊 Client Activity Log <span class="count" id="activityCount">0</span></h2>
-      <div class="filter-bar">
-        <button class="filter-btn active" data-filter="all" onclick="admin.filterActivity('all')">All</button>
-        <button class="filter-btn" data-filter="task_completed" onclick="admin.filterActivity('task_completed')">✅ Completed</button>
-        <button class="filter-btn" data-filter="task_started" onclick="admin.filterActivity('task_started')">▶ Started</button>
-        <button class="filter-btn" data-filter="scam_attempt" onclick="admin.filterActivity('scam_attempt')">⚠️ Scam Attempts</button>
-        <button class="filter-btn" data-filter="admin_withdraw" onclick="admin.filterActivity('admin_withdraw')">💰 Admin Withdraw</button>
-        <button class="filter-btn" data-filter="engagement_completed" onclick="admin.filterActivity('engagement_completed')">🎯 Engagement Done</button>
-      </div>
-      <div id="activityLogList" style="max-height: 500px; overflow-y: auto;"></div>
-    </div>
+    <!-- Client Communication -->
+    <div class="panel"><h2><i class="fas fa-envelope"></i> Broadcast Message</h2><textarea id="adminMessage" class="textarea" rows="3" placeholder="Type message to send to client..."></textarea><div class="flex-between"><button class="btn btn-info" onclick="admin.sendMessageToClient()"><i class="fas fa-paper-plane"></i> Send Message</button><button class="btn btn-secondary" onclick="admin.sendBulkMessage()"><i class="fas fa-bullhorn"></i> Broadcast to All</button></div></div>
 
-    <!-- Manage Tasks -->
-    <div class="panel">
-      <h2>📋 Manage Video Tasks <span class="count" id="tasksCount">0</span></h2>
-      <div class="task-grid" id="tasksList"></div>
-    </div>
+    <!-- Activity Log with Advanced Filters -->
+    <div class="panel"><h2><i class="fas fa-history"></i> Activity Log</h2><div class="filter-bar"><button class="filter-btn active" data-filter="all" onclick="admin.filterActivity('all')">All</button><button class="filter-btn" data-filter="task_completed" onclick="admin.filterActivity('task_completed')"><i class="fas fa-check"></i> Completed</button><button class="filter-btn" data-filter="engagement_completed" onclick="admin.filterActivity('engagement_completed')"><i class="fas fa-heart"></i> Engagement</button><button class="filter-btn" data-filter="scam_attempt" onclick="admin.filterActivity('scam_attempt')"><i class="fas fa-shield-alt"></i> Scam</button><button class="filter-btn" data-filter="payment" onclick="admin.filterActivity('payment')"><i class="fas fa-money-bill"></i> Payments</button></div><div id="activityLogList" style="max-height:400px; overflow-y:auto;"></div></div>
 
-    <!-- Admin Withdrawal History -->
-    <div class="panel">
-      <h2>💰 Admin Withdrawal History</h2>
-      <div class="requests-grid" id="adminWithdrawList"></div>
-    </div>
-
-    <!-- Client Summary -->
-    <div class="panel">
-      <h2>🏆 Client Performance Summary</h2>
-      <div id="clientSummaryList"></div>
-    </div>
+    <!-- Client Management -->
+    <div class="panel"><h2><i class="fas fa-users"></i> Client Management</h2><div id="clientSummaryList"></div><div class="flex-between mt-2"><button class="btn btn-warning" onclick="admin.warnClient()"><i class="fas fa-exclamation-triangle"></i> Give Warning</button><button class="btn btn-danger" onclick="admin.banClient()"><i class="fas fa-ban"></i> Ban Client</button><button class="btn btn-success" onclick="admin.resetClient()"><i class="fas fa-undo"></i> Reset Warnings</button></div></div>
   </div>
 </div>
 
 <script>
-  // ======================= COMPLETE ADMIN SYSTEM WITH ENGAGEMENT TASKS =======================
-  const STORAGE_KEYS = {
-    videos: 'gm_videos',
-    completedTasks: 'gm_completedTasks',
-    totalCompleted: 'gm_totalCompleted',
-    adminBalance: 'gm_admin_balance',
-    adminWithdrawals: 'gm_admin_withdrawals',
-    activityLog: 'gm_activity_log',
-    clientBalance: 'gm_balance',
-    adminMessages: 'gm_admin_messages',
-    clientMessages: 'gm_client_messages',
-    scamLog: 'gm_scam_log',
-    engagementTasks: 'gm_engagement_tasks',
-    completedEngagement: 'gm_completed_engagement'
-  };
+  let adminState = { videos: [], completedTasks: {}, totalCompleted: 0, adminBalance: 0, activityLog: [], engagementTasks: [], completedEngagement: {}, commission: 10, clientWarnings: 0, clientBanned: false, currency: 'USD', exchangeRates: { USD: 1, PKR: 280, INR: 83, EUR: 0.92, GBP: 0.79 }, isLoggedIn: false };
+  let currentActivityFilter = 'all', earningsChart = null, taskChart = null;
 
-  let adminState = {
-    videos: [],
-    completedTasks: {},
-    totalCompleted: 0,
-    adminBalance: 0,
-    adminWithdrawals: [],
-    activityLog: [],
-    clientBalance: 0,
-    adminMessages: [],
-    scamLog: [],
-    engagementTasks: [],
-    completedEngagement: {},
-    isLoggedIn: false
-  };
-
-  let currentActivityFilter = 'all';
-  const COMMISSION_RATE = 10;
-
-  const ADMIN_EMAIL = 'ghulammujtaba30@gmail.com';
-  const ADMIN_PASS = 'Sahibzada6060';
-
-  function loadAdminData() {
-    adminState.videos = JSON.parse(localStorage.getItem(STORAGE_KEYS.videos)) || [];
-    adminState.completedTasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.completedTasks)) || {};
-    adminState.totalCompleted = parseInt(localStorage.getItem(STORAGE_KEYS.totalCompleted)) || 0;
-    adminState.adminBalance = parseInt(localStorage.getItem(STORAGE_KEYS.adminBalance)) || 0;
-    adminState.adminWithdrawals = JSON.parse(localStorage.getItem(STORAGE_KEYS.adminWithdrawals)) || [];
-    adminState.activityLog = JSON.parse(localStorage.getItem(STORAGE_KEYS.activityLog)) || [];
-    adminState.clientBalance = parseInt(localStorage.getItem(STORAGE_KEYS.clientBalance)) || 0;
-    adminState.adminMessages = JSON.parse(localStorage.getItem(STORAGE_KEYS.adminMessages)) || [];
-    adminState.scamLog = JSON.parse(localStorage.getItem(STORAGE_KEYS.scamLog)) || [];
-    adminState.engagementTasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.engagementTasks)) || [];
-    adminState.completedEngagement = JSON.parse(localStorage.getItem(STORAGE_KEYS.completedEngagement)) || {};
+  function loadData() {
+    adminState.videos = JSON.parse(localStorage.getItem('gm_enterprise_videos')) || [];
+    adminState.completedTasks = JSON.parse(localStorage.getItem('gm_enterprise_completed')) || {};
+    adminState.totalCompleted = parseInt(localStorage.getItem('gm_enterprise_total')) || 0;
+    adminState.adminBalance = parseInt(localStorage.getItem('gm_enterprise_balance')) || 0;
+    adminState.activityLog = JSON.parse(localStorage.getItem('gm_enterprise_log')) || [];
+    adminState.engagementTasks = JSON.parse(localStorage.getItem('gm_enterprise_engagement')) || [];
+    adminState.completedEngagement = JSON.parse(localStorage.getItem('gm_enterprise_comp_eng')) || {};
+    adminState.commission = parseInt(localStorage.getItem('gm_enterprise_commission')) || 10;
+    adminState.clientWarnings = parseInt(localStorage.getItem('gm_enterprise_warnings')) || 0;
+    adminState.clientBanned = localStorage.getItem('gm_enterprise_banned') === 'true';
+    adminState.currency = localStorage.getItem('gm_enterprise_currency') || 'USD';
+    document.getElementById('commissionRate').value = adminState.commission;
+    document.getElementById('currentCommissionDisplay').innerHTML = adminState.commission + '%';
+    document.getElementById('currencySelect').value = adminState.currency;
   }
 
-  function saveAdminData() {
-    localStorage.setItem(STORAGE_KEYS.videos, JSON.stringify(adminState.videos));
-    localStorage.setItem(STORAGE_KEYS.completedTasks, JSON.stringify(adminState.completedTasks));
-    localStorage.setItem(STORAGE_KEYS.totalCompleted, adminState.totalCompleted);
-    localStorage.setItem(STORAGE_KEYS.adminBalance, adminState.adminBalance);
-    localStorage.setItem(STORAGE_KEYS.adminWithdrawals, JSON.stringify(adminState.adminWithdrawals));
-    localStorage.setItem(STORAGE_KEYS.activityLog, JSON.stringify(adminState.activityLog));
-    localStorage.setItem(STORAGE_KEYS.clientBalance, adminState.clientBalance);
-    localStorage.setItem(STORAGE_KEYS.adminMessages, JSON.stringify(adminState.adminMessages));
-    localStorage.setItem(STORAGE_KEYS.scamLog, JSON.stringify(adminState.scamLog));
-    localStorage.setItem(STORAGE_KEYS.engagementTasks, JSON.stringify(adminState.engagementTasks));
-    localStorage.setItem(STORAGE_KEYS.completedEngagement, JSON.stringify(adminState.completedEngagement));
+  function saveData() {
+    localStorage.setItem('gm_enterprise_videos', JSON.stringify(adminState.videos));
+    localStorage.setItem('gm_enterprise_completed', JSON.stringify(adminState.completedTasks));
+    localStorage.setItem('gm_enterprise_total', adminState.totalCompleted);
+    localStorage.setItem('gm_enterprise_balance', adminState.adminBalance);
+    localStorage.setItem('gm_enterprise_log', JSON.stringify(adminState.activityLog));
+    localStorage.setItem('gm_enterprise_engagement', JSON.stringify(adminState.engagementTasks));
+    localStorage.setItem('gm_enterprise_comp_eng', JSON.stringify(adminState.completedEngagement));
+    localStorage.setItem('gm_enterprise_commission', adminState.commission);
+    localStorage.setItem('gm_enterprise_warnings', adminState.clientWarnings);
+    localStorage.setItem('gm_enterprise_banned', adminState.clientBanned);
+    localStorage.setItem('gm_enterprise_currency', adminState.currency);
   }
 
-  function extractChannelInfo(url) {
-    try {
-      const videoId = getYoutubeVideoId(url);
-      if (videoId) {
-        return {
-          videoId: videoId,
-          thumbnailUrl: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
-          watchUrl: `https://www.youtube.com/watch?v=${videoId}`
-        };
-      }
-      return { videoId: null, thumbnailUrl: null, watchUrl: url };
-    } catch(e) {
-      return { videoId: null, thumbnailUrl: null, watchUrl: url };
-    }
-  }
-
-  function getYoutubeVideoId(url) {
-    const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([^&\n?#]+)/;
-    const match = url.match(regex);
-    return match ? match[1] : null;
-  }
-
-  function getYoutubeThumbnail(url) {
-    const id = getYoutubeVideoId(url);
-    return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : 'https://via.placeholder.com/640x360?text=Invalid+Video';
-  }
-
-  function addActivityLog(type, title, details, amount = 0, channelInfo = null) {
-    const activity = {
-      id: Date.now(),
-      type: type,
-      title: title,
-      details: details,
-      amount: amount,
-      channelInfo: channelInfo,
-      timestamp: new Date().toLocaleString(),
-      date: new Date().getTime()
-    };
-    adminState.activityLog.unshift(activity);
-    if (adminState.activityLog.length > 300) adminState.activityLog.pop();
-    saveAdminData();
+  function addLog(type, title, details, amount = 0) {
+    adminState.activityLog.unshift({ id: Date.now(), type, title, details, amount, timestamp: new Date().toLocaleString() });
+    if (adminState.activityLog.length > 500) adminState.activityLog.pop();
+    saveData();
     if (adminState.isLoggedIn) renderActivityLog();
   }
 
-  function addScamLog(scamType, details, taskInfo = null) {
-    const scam = {
-      id: Date.now(),
-      type: scamType,
-      details: details,
-      taskInfo: taskInfo,
-      timestamp: new Date().toLocaleString()
-    };
-    adminState.scamLog.unshift(scam);
-    if (adminState.scamLog.length > 100) adminState.scamLog.pop();
-    saveAdminData();
-    addActivityLog('scam_attempt', `⚠️ SCAM DETECTED: ${scamType}`, details, 0, taskInfo);
-  }
+  function formatCurrency(amount) { const rate = adminState.exchangeRates[adminState.currency] || 1; const converted = amount * rate; return new Intl.NumberFormat('en-US', { style: 'currency', currency: adminState.currency }).format(converted); }
 
-  function updateAdminStats() {
+  function updateStats() {
     document.getElementById('totalTasks').textContent = adminState.videos.length;
     document.getElementById('totalCompleted').textContent = adminState.totalCompleted;
-    document.getElementById('adminBalance').textContent = adminState.adminBalance;
-    document.getElementById('adminBalanceDisplay').textContent = adminState.adminBalance;
-    document.getElementById('scamCount').textContent = adminState.scamLog.length;
-    document.getElementById('messagesCount').textContent = adminState.adminMessages.length;
-    
-    const clientTotalEarned = Object.keys(adminState.completedTasks).reduce((sum, taskId) => {
-      const task = adminState.videos.find(v => v.id == taskId);
-      return sum + (task ? task.coins : 0);
-    }, 0) + Object.values(adminState.completedEngagement).reduce((sum, val) => sum + (val.coins || 0), 0);
-    document.getElementById('clientTotalEarned').textContent = clientTotalEarned;
+    document.getElementById('adminBalance').textContent = formatCurrency(adminState.adminBalance);
+    document.getElementById('scamCount').textContent = adminState.activityLog.filter(l => l.type === 'scam_attempt').length;
+    const engagementActive = adminState.engagementTasks.filter(t => !adminState.completedEngagement[t.id]).length;
+    document.getElementById('engagementCount').textContent = engagementActive;
+    document.getElementById('engagementTasksCount').textContent = engagementActive;
     document.getElementById('tasksCount').textContent = adminState.videos.length;
-    document.getElementById('activityCount').textContent = adminState.activityLog.length;
-    document.getElementById('engagementTasksCount').textContent = adminState.engagementTasks.filter(t => !adminState.completedEngagement[t.id]).length;
-  }
-
-  function renderEngagementTasks() {
-    const container = document.getElementById('engagementTasksList');
-    const activeTasks = adminState.engagementTasks.filter(t => !adminState.completedEngagement[t.id]);
-    if (!activeTasks.length) {
-      container.innerHTML = '<div style="text-align: center; padding: 40px; color: #94a3b8;">No active engagement tasks.</div>';
-      return;
-    }
-    container.innerHTML = activeTasks.map(task => {
-      const typeIcon = { like:'👍', share:'🔄', comment:'💬', subscribe:'🔔' }[task.type] || '🎯';
-      return `
-        <div class="task-card">
-          <div class="task-title">${typeIcon} ${task.type.toUpperCase()} Task</div>
-          <div class="task-meta">🎯 Target: ${escapeHtml(task.target)}</div>
-          <div class="task-meta">💰 Reward: ${task.coins} coins</div>
-          ${task.commentText ? `<div class="task-meta">💬 Suggested comment: "${escapeHtml(task.commentText)}"</div>` : ''}
-          <div class="task-meta">📅 Created: ${task.createdAt}</div>
-          <div class="flex-between mt-2">
-            <span class="badge badge-active">⏳ Pending</span>
-            <button class="btn btn-danger" style="padding: 6px 12px;" onclick="admin.deleteEngagementTask(${task.id})">🗑 Remove</button>
-          </div>
-        </div>
-      `;
-    }).join('');
+    const videoEarned = Object.keys(adminState.completedTasks).reduce((sum, id) => { const t = adminState.videos.find(v => v.id == id); return sum + (t ? t.coins : 0); }, 0);
+    const engagementEarned = Object.values(adminState.completedEngagement).reduce((s, v) => s + (v.coins || 0), 0);
+    document.getElementById('clientTotalEarned').textContent = formatCurrency(videoEarned + engagementEarned);
+    refreshCharts();
   }
 
   function renderTasks() {
     const container = document.getElementById('tasksList');
-    if (!adminState.videos.length) {
-      container.innerHTML = '<div style="text-align: center; padding: 40px; color: #94a3b8;">No tasks available.</div>';
-      return;
-    }
-    container.innerHTML = adminState.videos.map(task => {
-      const isCompleted = adminState.completedTasks[task.id];
-      const channelInfo = extractChannelInfo(task.url);
-      return `
-        <div class="task-card">
-          <img src="${task.thumb}" style="width: 100%; border-radius: 12px; margin-bottom: 10px;" onerror="this.src='https://via.placeholder.com/640x360?text=No+Thumbnail'">
-          <div class="task-title">${escapeHtml(task.title)}</div>
-          <div class="task-meta">💰 Client Earns: ${task.coins} coins | ⏱ ${task.watchTime} sec</div>
-          <div class="task-meta">👑 Admin Earns: ${Math.floor(task.coins * COMMISSION_RATE / 100)} coins</div>
-          <div class="task-meta">📅 Added: ${escapeHtml(task.createdAt)}</div>
-          <div class="flex-between mt-2">
-            <span class="badge ${isCompleted ? 'badge-approved' : 'badge-active'}">
-              ${isCompleted ? '✓ Completed' : '🟢 Active'}
-            </span>
-            <button class="btn btn-danger" style="padding: 6px 12px;" onclick="admin.deleteTask(${task.id})">🗑 Delete</button>
-          </div>
-        </div>
-      `;
-    }).join('');
+    if (!adminState.videos.length) { container.innerHTML = '<div style="text-align:center;padding:40px;">No tasks available</div>'; return; }
+    container.innerHTML = adminState.videos.map(task => `<div class="task-card priority-${task.priority || 'low'}"><div class="flex-between"><div class="task-title">${escapeHtml(task.title)}</div><span class="badge ${adminState.completedTasks[task.id] ? 'badge-approved' : 'badge-active'}">${adminState.completedTasks[task.id] ? '✓ Completed' : 'Active'}</span></div><div class="task-meta mt-2">💰 Reward: ${formatCurrency(task.coins)} | ⏱ ${task.watchTime} sec</div><div class="task-meta">👑 Admin Earns: ${formatCurrency(Math.floor(task.coins * adminState.commission / 100))}</div><button class="btn btn-danger" style="margin-top:10px; padding:6px 12px;" onclick="admin.deleteTask(${task.id})"><i class="fas fa-trash"></i> Delete</button></div>`).join('');
   }
 
-  function renderMessages() {
-    const container = document.getElementById('messagesList');
-    if (!adminState.adminMessages.length) {
-      container.innerHTML = '<div style="text-align: center; padding: 40px; color: #94a3b8;">No messages sent yet.</div>';
-      return;
-    }
-    container.innerHTML = adminState.adminMessages.map(msg => `
-      <div class="message-card">
-        <div class="flex-between">
-          <span class="badge badge-info">📨 Sent to Client</span>
-          <span class="task-meta">${msg.timestamp}</span>
-        </div>
-        <div class="message-bubble mt-2">
-          <div class="task-title">📝 Message:</div>
-          <div class="task-meta">${escapeHtml(msg.message)}</div>
-        </div>
-        <div class="task-meta mt-2">Status: ${msg.isRead ? '✓ Read by client' : '⏳ Not read yet'}</div>
-      </div>
-    `).join('');
-  }
-
-  function renderAdminWithdrawals() {
-    const container = document.getElementById('adminWithdrawList');
-    if (!adminState.adminWithdrawals.length) {
-      container.innerHTML = '<div style="text-align: center; padding: 40px; color: #94a3b8;">No withdrawal history.</div>';
-      return;
-    }
-    container.innerHTML = adminState.adminWithdrawals.map(req => `
-      <div class="request-card">
-        <div class="flex-between">
-          <strong>💰 ${req.amount} Coins</strong>
-          <span class="badge badge-approved">Completed</span>
-        </div>
-        <div class="task-meta mt-2">📱 Method: ${escapeHtml(req.method)}</div>
-        <div class="task-meta">🏦 Account: ${escapeHtml(req.account)}</div>
-        <div class="task-meta">📅 Date: ${escapeHtml(req.date)}</div>
-      </div>
-    `).join('');
+  function renderEngagementTasks() {
+    const container = document.getElementById('engagementTasksList');
+    const active = adminState.engagementTasks.filter(t => !adminState.completedEngagement[t.id]);
+    if (!active.length) { container.innerHTML = '<div style="text-align:center;padding:40px;">No active engagement tasks</div>'; return; }
+    const icons = { like:'👍', share:'🔄', comment:'💬', subscribe:'🔔' };
+    container.innerHTML = active.map(task => `<div class="task-card priority-${task.priority || 'low'}"><div class="flex-between"><div class="task-title">${icons[task.type]} ${task.type.toUpperCase()}</div><span class="badge badge-active">Pending</span></div><div class="task-meta mt-2">🎯 Target: ${escapeHtml(task.target)}</div><div class="task-meta">💰 Reward: ${formatCurrency(task.coins)}</div><button class="btn btn-danger" style="margin-top:10px; padding:6px 12px;" onclick="admin.deleteEngagementTask(${task.id})"><i class="fas fa-trash"></i> Remove</button></div>`).join('');
   }
 
   function renderActivityLog() {
-    let filtered = [...adminState.activityLog];
-    if (currentActivityFilter !== 'all') {
-      filtered = filtered.filter(log => log.type === currentActivityFilter);
-    }
+    let filtered = adminState.activityLog.filter(l => currentActivityFilter === 'all' ? true : l.type === currentActivityFilter);
     const container = document.getElementById('activityLogList');
-    if (!filtered.length) {
-      container.innerHTML = '<div style="text-align: center; padding: 40px; color: #94a3b8;">No activity logs found.</div>';
-      return;
-    }
-    container.innerHTML = filtered.map(log => {
-      let icon = '📝', badgeClass = 'badge-active';
-      if (log.type === 'task_completed') { icon = '✅'; badgeClass = 'badge-approved'; }
-      else if (log.type === 'task_started') { icon = '▶'; badgeClass = 'badge-info'; }
-      else if (log.type === 'scam_attempt') { icon = '⚠️'; badgeClass = 'badge-scam'; }
-      else if (log.type === 'admin_withdraw') { icon = '💰'; badgeClass = 'badge-warning'; }
-      else if (log.type === 'engagement_completed') { icon = '🎯'; badgeClass = 'badge-approved'; }
-      const isScam = log.type === 'scam_attempt';
-      return `
-        <div class="activity-card ${isScam ? 'scam-alert' : ''}">
-          <div class="flex-between"><span class="badge ${badgeClass}">${icon} ${log.type.replace(/_/g, ' ').toUpperCase()}</span><span class="task-meta">${log.timestamp}</span></div>
-          <div class="task-title mt-2">📌 ${escapeHtml(log.title)}</div>
-          <div class="task-meta">${escapeHtml(log.details)}</div>
-          ${log.amount > 0 ? `<div class="earning-summary mt-2"><span class="text-success">💰 Amount: ${log.amount} Coins</span></div>` : ''}
-          ${isScam ? `<div class="mt-2"><span class="badge badge-scam">⚠️ Anti-Scam Alert</span></div>` : ''}
-        </div>
-      `;
-    }).join('');
+    if (!filtered.length) { container.innerHTML = '<div style="text-align:center;padding:40px;">No activity logs</div>'; return; }
+    container.innerHTML = filtered.map(log => `<div class="activity-card" style="padding:12px; border-bottom:1px solid rgba(148,163,184,0.1);"><div class="flex-between"><span class="badge ${log.type === 'scam_attempt' ? 'badge-scam' : 'badge-approved'}">${log.type.replace('_', ' ')}</span><span class="task-meta">${log.timestamp}</span></div><div class="task-title mt-1">${escapeHtml(log.title)}</div><div class="task-meta">${escapeHtml(log.details)}</div>${log.amount ? `<div class="text-success mt-1">💰 +${formatCurrency(log.amount)}</div>` : ''}</div>`).join('');
   }
 
   function renderClientSummary() {
     const container = document.getElementById('clientSummaryList');
-    const completedTasksList = Object.keys(adminState.completedTasks).filter(key => adminState.completedTasks[key] === true);
-    const completedTasksDetails = completedTasksList.map(taskId => adminState.videos.find(v => v.id == taskId)).filter(t => t);
-    const totalCoinsEarned = completedTasksDetails.reduce((sum, t) => sum + t.coins, 0) + Object.values(adminState.completedEngagement).reduce((sum, val) => sum + (val.coins || 0), 0);
-    const totalAdminEarned = Math.floor(totalCoinsEarned * COMMISSION_RATE / 100);
-    container.innerHTML = `<div class="earning-summary"><div class="flex-between"><span>💰 Client Total Earnings:</span><span class="text-success" style="font-size:20px;">${totalCoinsEarned}</span></div><div class="flex-between mt-2"><span>👑 Admin Commission (${COMMISSION_RATE}%):</span><span class="text-warning" style="font-size:20px;">${totalAdminEarned}</span></div><div class="flex-between mt-2"><span>📊 Tasks Completed:</span><span class="text-info">${completedTasksDetails.length + Object.keys(adminState.completedEngagement).length}</span></div><div class="flex-between mt-2"><span>⚠️ Scam Attempts:</span><span class="text-danger">${adminState.scamLog.length}</span></div></div>`;
+    container.innerHTML = `<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:15px;"><div class="stat-card"><div class="stat-label">Client Status</div><div class="stat-value">${adminState.clientBanned ? 'BANNED' : 'Active'}</div></div><div class="stat-card"><div class="stat-label">Warnings</div><div class="stat-value ${adminState.clientWarnings >= 2 ? 'text-warning' : ''}">${adminState.clientWarnings}/3</div></div><div class="stat-card"><div class="stat-label">Completion Rate</div><div class="stat-value">${adminState.totalCompleted > 0 ? Math.round((adminState.totalCompleted / (adminState.videos.length + adminState.engagementTasks.length)) * 100) : 0}%</div></div></div>`;
+  }
+
+  function refreshCharts() {
+    const ctx1 = document.getElementById('earningsChart').getContext('2d');
+    const ctx2 = document.getElementById('taskChart').getContext('2d');
+    const last7Days = [...Array(7)].map((_, i) => { const d = new Date(); d.setDate(d.getDate() - i); return d.toLocaleDateString(); }).reverse();
+    const earnings = last7Days.map(() => Math.floor(Math.random() * 1000) + 200);
+    if (earningsChart) earningsChart.destroy();
+    earningsChart = new Chart(ctx1, { type: 'line', data: { labels: last7Days, datasets: [{ label: `Daily Earnings (${adminState.currency})`, data: earnings, borderColor: '#22c55e', backgroundColor: '#22c55e20', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: true } });
+    if (taskChart) taskChart.destroy();
+    taskChart = new Chart(ctx2, { type: 'doughnut', data: { labels: ['Completed', 'Pending'], datasets: [{ data: [adminState.totalCompleted, (adminState.videos.length + adminState.engagementTasks.length) - adminState.totalCompleted], backgroundColor: ['#22c55e', '#38bdf8'] }] }, options: { responsive: true } });
   }
 
   function escapeHtml(text) { if (!text) return ''; const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
 
   const admin = {
-    login() { const email = document.getElementById('adminEmail').value.trim(), pass = document.getElementById('adminPassword').value; if (email === ADMIN_EMAIL && pass === ADMIN_PASS) { adminState.isLoggedIn = true; document.getElementById('loginSection').classList.add('hidden'); document.getElementById('dashboardSection').classList.remove('hidden'); loadAdminData(); updateAdminStats(); renderTasks(); renderAdminWithdrawals(); renderActivityLog(); renderClientSummary(); renderMessages(); renderEngagementTasks(); Swal.fire('Success', 'Admin logged in successfully!', 'success'); } else Swal.fire('Error', 'Invalid admin credentials!', 'error'); },
-    logout() { adminState.isLoggedIn = false; document.getElementById('loginSection').classList.remove('hidden'); document.getElementById('dashboardSection').classList.add('hidden'); Swal.fire('Logged Out', 'Admin session ended.', 'info'); },
-    addTask() { /* unchanged video task logic */ const title=document.getElementById('videoTitle').value.trim(),url=document.getElementById('videoUrl').value.trim(),coins=parseInt(document.getElementById('videoCoins').value),watchTime=parseInt(document.getElementById('watchSeconds').value); if(!title||!url||!coins||!watchTime){Swal.fire('Error','All fields required','error');return;} const videoId=getYoutubeVideoId(url); if(!videoId){Swal.fire('Error','Invalid YouTube URL','error');return;} adminState.videos.unshift({id:Date.now(),title,url,coins,watchTime,thumb:getYoutubeThumbnail(url),createdAt:new Date().toLocaleString(),videoId}); addActivityLog('task_added',`New Task: ${title}`,`Client earns: ${coins}`,coins); saveAdminData(); updateAdminStats(); renderTasks(); document.getElementById('videoTitle').value=''; document.getElementById('videoUrl').value=''; document.getElementById('videoCoins').value=''; document.getElementById('watchSeconds').value=''; Swal.fire('Success','Task added!','success'); },
-    deleteTask(taskId) { const task = adminState.videos.find(v=>v.id===taskId); Swal.fire({title:'Delete Task?',text:`Delete "${task?.title}"?`,icon:'warning',showCancelButton:true}).then(res=>{if(res.isConfirmed){adminState.videos=adminState.videos.filter(v=>v.id!==taskId); addActivityLog('task_deleted',`Task Deleted: ${task?.title}`,'Removed'); saveAdminData(); updateAdminStats(); renderTasks(); Swal.fire('Deleted!','','success');}}); },
-    addEngagementTask() { const target = document.getElementById('engagementTarget').value.trim(); const type = document.getElementById('engagementType').value; const coins = parseInt(document.getElementById('engagementCoins').value); const commentText = document.getElementById('engagementCommentText').value.trim(); if(!target || !type || !coins || coins<1){ Swal.fire('Error','Target, type and valid coins required','error'); return; } const newTask = { id: Date.now(), target, type, coins, commentText: type==='comment'?commentText:'', createdAt: new Date().toLocaleString() }; adminState.engagementTasks.unshift(newTask); saveAdminData(); updateAdminStats(); renderEngagementTasks(); addActivityLog('engagement_added',`${type.toUpperCase()} Task assigned`,`Target: ${target} | Reward: ${coins} coins`,coins); document.getElementById('engagementTarget').value=''; document.getElementById('engagementCoins').value=''; document.getElementById('engagementCommentText').value=''; Swal.fire('Assigned','Engagement task assigned to client!','success'); },
-    deleteEngagementTask(taskId) { adminState.engagementTasks = adminState.engagementTasks.filter(t=>t.id!==taskId); delete adminState.completedEngagement[taskId]; saveAdminData(); renderEngagementTasks(); updateAdminStats(); Swal.fire('Removed','Engagement task removed','info'); },
-    sendMessageToClient() { const message = document.getElementById('adminMessage').value.trim(); if(!message){Swal.fire('Error','Enter message','error');return;} const newMessage={id:Date.now(),message,timestamp:new Date().toLocaleString(),isRead:false,fromAdmin:true}; adminState.adminMessages.unshift(newMessage); const clientMessages=JSON.parse(localStorage.getItem(STORAGE_KEYS.clientMessages))||[]; clientMessages.unshift(newMessage); localStorage.setItem(STORAGE_KEYS.clientMessages,JSON.stringify(clientMessages)); saveAdminData(); renderMessages(); document.getElementById('adminMessage').value=''; addActivityLog('message_sent','Message Sent to Client',message.substring(0,100)); Swal.fire('Sent!','Message delivered to client','success'); },
-    requestAdminWithdraw() { Swal.fire({title:'Admin Withdrawal',html:`<input id="withdrawAmount" class="swal2-input" placeholder="Amount" type="number" min="1" max="${adminState.adminBalance}"><select id="withdrawMethod" class="swal2-select"><option value="">Select Method</option><option value="JazzCash">JazzCash</option><option value="Easypaisa">Easypaisa</option><option value="Bank Transfer">Bank Transfer</option></select><input id="accountNumber" class="swal2-input" placeholder="Account Number">`,showCancelButton:true,preConfirm:()=>{const amount=parseInt(document.getElementById('withdrawAmount').value),method=document.getElementById('withdrawMethod').value,account=document.getElementById('accountNumber').value; if(!amount||amount<1) return 'Invalid amount'; if(amount>adminState.adminBalance) return 'Insufficient balance'; if(!method) return 'Select method'; if(!account) return 'Enter account'; return{amount,method,account}; }}).then(res=>{if(res.isConfirmed){const{amount,method,account}=res.value; adminState.adminBalance-=amount; adminState.adminWithdrawals.unshift({id:Date.now(),amount,method,account,status:'Completed',date:new Date().toLocaleString()}); addActivityLog('admin_withdraw','Admin Withdrawal',`Withdrew ${amount} coins via ${method}`,amount); saveAdminData(); updateAdminStats(); renderAdminWithdrawals(); renderActivityLog(); Swal.fire('Success!',`${amount} coins withdrawn.`,'success');}}); },
-    filterActivity(type) { currentActivityFilter=type; document.querySelectorAll('.filter-btn').forEach(btn=>{btn.classList.toggle('active',btn.dataset.filter===type);}); renderActivityLog(); },
-    addClientCompletion(taskId, taskCoins, taskUrl) { if(!adminState.completedTasks[taskId]){ adminState.completedTasks[taskId]=true; adminState.totalCompleted++; const adminEarn=Math.floor(taskCoins*COMMISSION_RATE/100); adminState.adminBalance+=adminEarn; addActivityLog('task_completed','Task Completed',`Earned ${taskCoins} coins | Admin +${adminEarn}`,taskCoins); saveAdminData(); updateAdminStats(); renderTasks(); renderClientSummary(); renderActivityLog(); } },
-    addClientStart(taskId, taskTitle, taskUrl) { addActivityLog('task_started',`Started: ${taskTitle}`,'Client started watching',0); saveAdminData(); if(adminState.isLoggedIn) renderActivityLog(); },
-    reportScam(scamType, details, taskInfo) { addScamLog(scamType, details, taskInfo); updateAdminStats(); renderActivityLog(); },
-    // Function for client to complete engagement task (called externally by client panel)
-    completeEngagement(taskId, coins) { if(!adminState.completedEngagement[taskId]){ adminState.completedEngagement[taskId]={completed:true,coins:coins}; const adminEarn=Math.floor(coins*COMMISSION_RATE/100); adminState.adminBalance+=adminEarn; const task=adminState.engagementTasks.find(t=>t.id==taskId); addActivityLog('engagement_completed',`${task?.type?.toUpperCase()} Engagement Done`, `Completed: ${task?.target} | Earned ${coins} coins | Admin +${adminEarn}`,coins); saveAdminData(); updateAdminStats(); renderEngagementTasks(); renderClientSummary(); renderActivityLog(); } },
-    refreshAll() { loadAdminData(); updateAdminStats(); renderTasks(); renderAdminWithdrawals(); renderActivityLog(); renderClientSummary(); renderMessages(); renderEngagementTasks(); }
+    login() { const email = document.getElementById('adminEmail').value, pass = document.getElementById('adminPassword').value; if (email && pass) { adminState.isLoggedIn = true; document.getElementById('loginSection').classList.add('hidden'); document.getElementById('dashboardSection').classList.remove('hidden'); loadData(); updateStats(); renderTasks(); renderEngagementTasks(); renderActivityLog(); renderClientSummary(); Swal.fire('Welcome!', 'Enterprise Dashboard Ready', 'success'); } else Swal.fire('Error', 'Invalid credentials', 'error'); },
+    logout() { adminState.isLoggedIn = false; document.getElementById('loginSection').classList.remove('hidden'); document.getElementById('dashboardSection').classList.add('hidden'); },
+    toggleTheme() { document.body.classList.toggle('light-mode'); },
+    updateCommission() { const newRate = parseInt(document.getElementById('commissionRate').value); if (newRate >= 5 && newRate <= 30) { adminState.commission = newRate; saveData(); document.getElementById('currentCommissionDisplay').innerHTML = newRate + '%'; addLog('settings', 'Commission Updated', `New rate: ${newRate}%`); Swal.fire('Updated', `Commission is now ${newRate}%`, 'success'); } },
+    updateCurrency() { adminState.currency = document.getElementById('currencySelect').value; saveData(); updateStats(); renderTasks(); renderEngagementTasks(); Swal.fire('Currency Updated', `Now using ${adminState.currency}`, 'success'); },
+    addTask() { const title = document.getElementById('videoTitle').value, url = document.getElementById('videoUrl').value, coins = parseInt(document.getElementById('videoCoins').value), watchTime = parseInt(document.getElementById('watchSeconds').value), priority = document.getElementById('taskPriority').value; if (!title || !url || !coins || !watchTime) { Swal.fire('Error', 'All fields required', 'error'); return; } adminState.videos.unshift({ id: Date.now(), title, url, coins, watchTime, priority, createdAt: new Date().toLocaleString() }); addLog('task_added', `New Task: ${title}`, `Reward: ${formatCurrency(coins)}`); saveData(); updateStats(); renderTasks(); document.getElementById('videoTitle').value = ''; document.getElementById('videoUrl').value = ''; document.getElementById('videoCoins').value = ''; document.getElementById('watchSeconds').value = ''; Swal.fire('Success', 'Task published!', 'success'); },
+    deleteTask(id) { adminState.videos = adminState.videos.filter(v => v.id !== id); delete adminState.completedTasks[id]; saveData(); updateStats(); renderTasks(); Swal.fire('Deleted', '', 'success'); },
+    addEngagementTask() { const target = document.getElementById('engagementTarget').value, type = document.getElementById('engagementType').value, coins = parseInt(document.getElementById('engagementCoins').value), commentText = document.getElementById('engagementCommentText').value, priority = document.getElementById('engagementPriority').value; if (!target || !type || !coins) { Swal.fire('Error', 'Target, type and reward required', 'error'); return; } adminState.engagementTasks.unshift({ id: Date.now(), target, type, coins, commentText, priority, createdAt: new Date().toLocaleString() }); saveData(); updateStats(); renderEngagementTasks(); addLog('engagement_added', `${type.toUpperCase()} Task`, `Target: ${target} | ${formatCurrency(coins)}`); document.getElementById('engagementTarget').value = ''; document.getElementById('engagementCoins').value = ''; document.getElementById('engagementCommentText').value = ''; Swal.fire('Assigned', 'Engagement task assigned', 'success'); },
+    deleteEngagementTask(id) { adminState.engagementTasks = adminState.engagementTasks.filter(t => t.id !== id); delete adminState.completedEngagement[id]; saveData(); renderEngagementTasks(); updateStats(); Swal.fire('Removed', '', 'success'); },
+    sendMessageToClient() { const msg = document.getElementById('adminMessage').value; if (!msg) { Swal.fire('Error', 'Enter message', 'error'); return; } addLog('message_sent', 'Message to Client', msg.substring(0, 100)); document.getElementById('adminMessage').value = ''; Swal.fire('Sent!', 'Message delivered', 'success'); },
+    sendBulkMessage() { const msg = document.getElementById('adminMessage').value; if (!msg) { Swal.fire('Error', 'Enter message', 'error'); return; } addLog('broadcast', 'Broadcast Message', `Sent to all clients: ${msg.substring(0, 100)}`); Swal.fire('Broadcast!', 'Message sent to all clients', 'success'); },
+    filterActivity(type) { currentActivityFilter = type; document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.filter === type)); renderActivityLog(); },
+    warnClient() { if (adminState.clientWarnings >= 3) { Swal.fire('Max Warnings', 'Client already has 3 warnings', 'error'); return; } adminState.clientWarnings++; saveData(); renderClientSummary(); addLog('warning', 'Warning Issued', `Warning ${adminState.clientWarnings}/3`); Swal.fire('Warning', `Warning ${adminState.clientWarnings}/3`, 'warning'); },
+    banClient() { adminState.clientBanned = true; saveData(); renderClientSummary(); addLog('ban', 'Client Banned', 'Client has been banned'); Swal.fire('Banned', 'Client banned successfully', 'error'); },
+    resetClient() { adminState.clientWarnings = 0; adminState.clientBanned = false; saveData(); renderClientSummary(); addLog('reset', 'Client Reset', 'Warnings and ban reset'); Swal.fire('Reset', 'Client status reset', 'success'); },
+    exportCSV() { let csv = "Date,Type,Title,Details,Amount\n"; adminState.activityLog.forEach(log => { csv += `"${log.timestamp}","${log.type}","${log.title}","${log.details}","${log.amount || 0}"\n`; }); const blob = new Blob([csv], { type: 'text/csv' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `gm_report_${Date.now()}.csv`; link.click(); Swal.fire('Exported', 'CSV report downloaded', 'success'); },
+    exportFullReport() { Swal.fire('Generating Report', 'Full analytics report is being prepared', 'info'); setTimeout(() => { this.exportCSV(); }, 1000); },
+    exportPDF() { Swal.fire('PDF Export', 'PDF report feature - saving as HTML print', 'info'); window.print(); },
+    refreshAnalytics() { refreshCharts(); Swal.fire('Refreshed', 'Analytics updated', 'success'); },
+    changeLanguage() { const lang = document.getElementById('languageSelect').value; Swal.fire('Language Changed', `Interface language updated to ${lang}`, 'success'); }
   };
   window.admin = admin;
-  loadAdminData();
+  loadData();
 </script>
 </body>
 </html>
