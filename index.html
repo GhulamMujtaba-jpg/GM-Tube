@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GM Client Panel - Complete Promotion Suite</title>
+    <title>GM Client Panel - Earn Coins & Promote Your Videos</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -70,6 +70,7 @@
             padding: 20px;
             transition: all 0.3s;
             border-left: 4px solid;
+            position: relative;
         }
         .service-card {
             background: rgba(10, 20, 35, 0.9);
@@ -100,6 +101,7 @@
         .badge-warning { background: #f59e0b20; color: #fcd34d; border: 1px solid #f59e0b40; }
         .badge-info { background: #3b82f620; color: #93c5fd; border: 1px solid #3b82f640; }
         .badge-purple { background: #a855f720; color: #c084fc; border: 1px solid #a855f740; }
+        .badge-danger { background: #ef444420; color: #fca5a5; border: 1px solid #ef444440; }
         .btn {
             padding: 12px 24px;
             border: none;
@@ -117,6 +119,7 @@
         .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
         .btn-warning { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
         .btn-purple { background: linear-gradient(135deg, #a855f7, #7c3aed); color: white; }
+        .btn-sm { padding: 6px 12px; font-size: 12px; }
         .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
         .mt-2 { margin-top: 12px; }
         .mt-3 { margin-top: 18px; }
@@ -215,6 +218,26 @@
             margin-bottom: 10px;
             cursor: pointer;
         }
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        .delete-btn:hover {
+            background: #dc2626;
+            transform: scale(1.1);
+        }
         .thumbnail-preview {
             margin-top: 10px;
             border-radius: 12px;
@@ -238,7 +261,7 @@
 </div>
 
 <div class="container">
-    <!-- Header -->
+    <!-- Header - No Reset Button Now -->
     <div class="card">
         <div class="flex-between">
             <div>
@@ -247,7 +270,6 @@
             </div>
             <div>
                 <span id="currentDateTime" style="margin-right: 20px; font-size: 14px;"></span>
-                <button class="btn btn-danger" onclick="client.resetAllData()"><i class="fas fa-trash-alt"></i> Reset Data</button>
             </div>
         </div>
     </div>
@@ -307,28 +329,30 @@
         <h3><i class="fas fa-gem"></i> Buy Promotion Services</h3>
         <div class="service-grid" id="servicesGrid"></div>
 
-        <!-- My Promoted Videos List -->
+        <!-- My Promoted Videos List - Client Sirf Apni Videos Delete Kar Sakta Hai -->
         <h3 class="mt-3"><i class="fas fa-list"></i> My Promoted Videos</h3>
         <div id="promotedVideosList" class="promotion-grid"></div>
     </div>
 
-    <!-- Video Tasks Section -->
+    <!-- Video Tasks Section - Admin Ke Tasks (Client Delete Nahi Kar Sakta) -->
     <div class="card">
         <div class="flex-between">
             <h2><i class="fas fa-video"></i> Watch Videos & Earn Coins</h2>
             <span class="badge badge-info" id="videoTasksCount">0</span>
         </div>
         <p style="color: #94a3b8; margin-bottom: 15px;"><strong class="text-warning">⚡ 1 second watch time = 1 coin! 60 seconds = 60 coins!</strong></p>
+        <p class="text-info mb-2"><i class="fas fa-lock"></i> Yeh tasks admin ne diye hain - delete nahi kar sakte</p>
         <div id="videoTasksList" class="task-grid"></div>
     </div>
 
-    <!-- Engagement Tasks Section -->
+    <!-- Engagement Tasks Section - Admin Ke Tasks (Client Delete Nahi Kar Sakta) -->
     <div class="card">
         <div class="flex-between">
             <h2><i class="fas fa-heart"></i> Engagement Tasks (Earn Bonus Coins)</h2>
             <span class="badge badge-info" id="engagementTasksCount">0</span>
         </div>
         <p style="color: #94a3b8; margin-bottom: 15px;"><strong>👍 Like | 🔄 Share | 💬 Comment | 🔔 Subscribe</strong> to earn bonus coins!</p>
+        <p class="text-info mb-2"><i class="fas fa-lock"></i> Yeh tasks admin ne diye hain - delete nahi kar sakte</p>
         <div id="engagementTasksList" class="task-grid"></div>
     </div>
 
@@ -372,23 +396,17 @@
         clientCoins: 0, totalCompleted: 0, messages: [], earningsHistory: [], promotedVideos: []
     };
 
-    // Fetch channel info from YouTube
     async function fetchChannelInfo(videoId) {
         try {
-            // Using YouTube oEmbed API to get channel info
             const response = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
             const data = await response.json();
             return {
                 channelName: data.author_name || 'YouTube Channel',
-                channelUrl: data.author_url || `https://youtube.com/channel/${videoId}`,
+                channelUrl: data.author_url || `#`,
                 channelLogo: `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`
             };
         } catch(e) {
-            return {
-                channelName: 'YouTube Channel',
-                channelUrl: '#',
-                channelLogo: 'https://via.placeholder.com/40?text=YT'
-            };
+            return { channelName: 'YouTube Channel', channelUrl: '#', channelLogo: 'https://via.placeholder.com/40?text=YT' };
         }
     }
 
@@ -596,6 +614,26 @@
         });
     }
 
+    // Delete Client's Own Video
+    function deleteOwnVideo(videoId) {
+        Swal.fire({
+            title: 'Delete Video?',
+            text: 'Kya aap apni ye video delete karna chahte hain?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Delete',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                clientState.promotedVideos = clientState.promotedVideos.filter(v => v.id !== videoId);
+                saveClientData();
+                renderPromotedVideos();
+                renderServices();
+                Swal.fire('Deleted!', 'Aapki video delete kar di gayi.', 'success');
+            }
+        });
+    }
+
     function completeVideoTask(taskId, taskTitle, taskUrl, watchTimeNeeded) {
         if (clientState.completedTasks[taskId]) {
             Swal.fire('Already Completed!', 'You have already completed this task.', 'info');
@@ -783,7 +821,8 @@
         }
         
         container.innerHTML = clientState.promotedVideos.map(video => `
-            <div class="promotion-card priority-low">
+            <div class="promotion-card priority-low" style="position: relative;">
+                <button class="delete-btn" onclick="deleteOwnVideo(${video.id})"><i class="fas fa-trash-alt"></i></button>
                 <img src="${video.thumbnail}" class="video-thumbnail" onclick="window.open('${video.url}', '_blank')" style="cursor: pointer;">
                 <div class="channel-info">
                     <img src="${video.channelLogo}" class="channel-logo" onerror="this.src='https://via.placeholder.com/40'">
@@ -888,28 +927,23 @@
 
     function escapeHtml(text) { if (!text) return ''; const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
 
-    function resetAllData() {
-        Swal.fire({ title: 'Reset All Data?', text: 'This will clear all your coins, tasks, and history!', icon: 'warning', showCancelButton: true, confirmButtonText: 'Yes, reset' }).then((result) => {
-            if (result.isConfirmed) { localStorage.clear(); location.reload(); }
-        });
-    }
-
     const client = {
         toggleTheme() { document.body.classList.toggle('light-mode'); },
         showHelp() {
             Swal.fire('Complete Guide', 
                 '💰 EARN COINS FIRST:\n• Watch YouTube videos - 1 second = 1 coin!\n• Complete Like/Share/Comment/Subscribe tasks\n\n' +
                 '✅ JAB COINS HO JAYEIN TAB:\n• Upload your YouTube video\n• Buy Views (1 coin = 1 second watch time)\n• Buy Likes (10 coins each)\n• Buy Shares (15 coins each)\n• Buy Comments (20 coins each)\n• Buy Subscribers (50 coins each)\n\n' +
-                '🎬 VIDEO FEATURES:\n• Thumbnail show hota hai\n• Channel logo show hota hai\n• Channel name show hota hai', 'info');
+                '🗑️ DELETE OPTION:\n• Sirf apni upload ki hui videos delete kar sakte ho\n• Admin ke tasks delete nahi kar sakte', 'info');
         },
         addPromotionVideo() { addPromotionVideo(); },
         buyService(serviceType) { buyService(serviceType); },
-        resetAllData() { resetAllData(); },
         previewVideo() { previewVideo(); }
     };
 
+    // Make functions global
     window.completeVideoTask = completeVideoTask;
     window.completeEngagementTask = completeEngagementTask;
+    window.deleteOwnVideo = deleteOwnVideo;
     window.client = client;
 
     loadData();
