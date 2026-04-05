@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GM Client Panel - Earn Coins First Then Promote</title>
+    <title>GM Client Panel - Complete Promotion Suite</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -54,7 +54,7 @@
         .stat-label { font-size: 12px; color: #94a3b8; margin-top: 5px; }
         .task-grid, .promotion-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
@@ -117,7 +117,6 @@
         .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
         .btn-warning { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
         .btn-purple { background: linear-gradient(135deg, #a855f7, #7c3aed); color: white; }
-        .btn-purple.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
         .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
         .mt-2 { margin-top: 12px; }
         .mt-3 { margin-top: 18px; }
@@ -195,6 +194,36 @@
             text-align: center;
             margin-bottom: 20px;
         }
+        .channel-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+        }
+        .channel-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .video-thumbnail {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .thumbnail-preview {
+            margin-top: 10px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .thumbnail-preview img {
+            width: 100%;
+            border-radius: 8px;
+        }
         @media (max-width: 768px) {
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .task-grid, .promotion-grid, .service-grid { grid-template-columns: 1fr; }
@@ -214,7 +243,7 @@
         <div class="flex-between">
             <div>
                 <h1 style="font-size: 28px;"><i class="fas fa-user-circle"></i> GM Client Dashboard</h1>
-                <p style="color: #94a3b8; margin-top: 5px;">Earn coins by watching videos & completing tasks | Use coins to promote your videos!</p>
+                <p style="color: #94a3b8; margin-top: 5px;">Earn coins by watching videos | Use coins to promote your videos with real engagement!</p>
             </div>
             <div>
                 <span id="currentDateTime" style="margin-right: 20px; font-size: 14px;"></span>
@@ -255,26 +284,27 @@
         <p class="text-warning">Neeche diye gaye videos dekh kar coins earn karein!</p>
     </div>
 
-    <!-- Promote Your Video Section - Only visible if coins > 0 -->
+    <!-- Promote Your Video Section -->
     <div id="promotionSection" class="card" style="display: none;">
         <div class="flex-between">
-            <h2><i class="fas fa-rocket"></i> Promote Your Video - Complete Package</h2>
+            <h2><i class="fas fa-rocket"></i> Promote Your Video</h2>
             <span class="badge badge-purple"><i class="fas fa-fire"></i> Use Your Coins!</span>
         </div>
         <p style="color: #94a3b8; margin-bottom: 20px;">Apni video upload karein aur apne coins se <strong>Views, Likes, Shares, Comments aur Subscribers</strong> lein!</p>
         
-        <!-- Upload Video Form -->
+        <!-- Upload Video Form with Live Preview -->
         <div style="background: rgba(0,0,0,0.3); border-radius: 20px; padding: 20px; margin-bottom: 25px;">
             <h3><i class="fas fa-upload"></i> Upload Your Video</h3>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
                 <input type="text" id="promoVideoTitle" class="input" placeholder="Your Video Title">
-                <input type="text" id="promoVideoUrl" class="input" placeholder="YouTube Video URL">
+                <input type="text" id="promoVideoUrl" class="input" placeholder="YouTube Video URL" onkeyup="client.previewVideo()">
             </div>
-            <button class="btn btn-purple" id="addVideoBtn" onclick="client.addPromotionVideo()"><i class="fas fa-plus-circle"></i> Add My Video</button>
+            <div id="uploadPreview" class="thumbnail-preview" style="display: none;"></div>
+            <button class="btn btn-purple mt-2" id="addVideoBtn" onclick="client.addPromotionVideo()"><i class="fas fa-plus-circle"></i> Add My Video</button>
         </div>
 
         <!-- All Services -->
-        <h3><i class="fas fa-gem"></i> Buy Promotion Services (Use Your Coins)</h3>
+        <h3><i class="fas fa-gem"></i> Buy Promotion Services</h3>
         <div class="service-grid" id="servicesGrid"></div>
 
         <!-- My Promoted Videos List -->
@@ -282,7 +312,7 @@
         <div id="promotedVideosList" class="promotion-grid"></div>
     </div>
 
-    <!-- Video Tasks Section - Earn Coins by Watching -->
+    <!-- Video Tasks Section -->
     <div class="card">
         <div class="flex-between">
             <h2><i class="fas fa-video"></i> Watch Videos & Earn Coins</h2>
@@ -329,7 +359,6 @@
         commission: 'gm_final_commission',
         clientWarnings: 'gm_final_warnings',
         clientBanned: 'gm_final_banned',
-        currency: 'gm_final_currency',
         clientMessages: 'gm_final_client_messages',
         earningsHistory: 'gm_final_earnings_history',
         promotedVideos: 'gm_final_promoted_videos'
@@ -342,6 +371,37 @@
         videos: [], completedTasks: {}, engagementTasks: [], completedEngagement: {},
         clientCoins: 0, totalCompleted: 0, messages: [], earningsHistory: [], promotedVideos: []
     };
+
+    // Fetch channel info from YouTube
+    async function fetchChannelInfo(videoId) {
+        try {
+            // Using YouTube oEmbed API to get channel info
+            const response = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
+            const data = await response.json();
+            return {
+                channelName: data.author_name || 'YouTube Channel',
+                channelUrl: data.author_url || `https://youtube.com/channel/${videoId}`,
+                channelLogo: `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`
+            };
+        } catch(e) {
+            return {
+                channelName: 'YouTube Channel',
+                channelUrl: '#',
+                channelLogo: 'https://via.placeholder.com/40?text=YT'
+            };
+        }
+    }
+
+    function extractYouTubeId(url) {
+        const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/|youtube\.com\/embed\/)([^&\n?#]+)/;
+        const match = url.match(regex);
+        return match ? match[1] : null;
+    }
+
+    function getThumbnail(url) {
+        const id = extractYouTubeId(url);
+        return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
+    }
 
     function loadData() {
         clientState.videos = JSON.parse(localStorage.getItem(STORAGE_KEYS.videos)) || [];
@@ -551,10 +611,23 @@
         let coinsToEarn = watchTimeNeeded;
         let timerInterval;
         let timeLeft = watchTimeNeeded;
+        const thumbnail = getThumbnail(taskUrl);
         
         Swal.fire({
             title: '🎬 Watch Video to Earn Coins!',
-            html: `<div style="text-align: center;"><a href="${taskUrl}" target="_blank" class="btn btn-primary" style="display: inline-block; margin-bottom: 15px;"><i class="fab fa-youtube"></i> Open YouTube Video</a><div class="watch-timer" id="watchTimer">${timeLeft} seconds remaining</div><div class="progress-bar mt-2"><div class="progress-fill" id="timerProgress" style="width: 0%"></div></div><p class="mt-2"><strong class="text-warning">💰 ${watchTimeNeeded} coins</strong> waiting for you!</p><p class="text-info">1 second watch = 1 coin! Watch full ${watchTimeNeeded} seconds to earn!</p></div>`,
+            html: `<div style="text-align: center;">
+                       ${thumbnail ? `<img src="${thumbnail}" style="width: 100%; border-radius: 12px; margin-bottom: 15px;">` : ''}
+                       <p><strong>${escapeHtml(taskTitle)}</strong></p>
+                       <a href="${taskUrl}" target="_blank" class="btn btn-primary" style="display: inline-block; margin-bottom: 15px;">
+                           <i class="fab fa-youtube"></i> Open YouTube Video
+                       </a>
+                       <div class="watch-timer" id="watchTimer">${timeLeft} seconds remaining</div>
+                       <div class="progress-bar mt-2">
+                           <div class="progress-fill" id="timerProgress" style="width: 0%"></div>
+                       </div>
+                       <p class="mt-2"><strong class="text-warning">💰 ${watchTimeNeeded} coins</strong> waiting for you!</p>
+                       <p class="text-info">1 second watch = 1 coin! Watch full ${watchTimeNeeded} seconds to earn!</p>
+                   </div>`,
             icon: 'info',
             showConfirmButton: false,
             showCancelButton: true,
@@ -638,7 +711,30 @@
         });
     }
 
-    function addPromotionVideo() {
+    function previewVideo() {
+        const url = document.getElementById('promoVideoUrl').value.trim();
+        const videoId = extractYouTubeId(url);
+        const previewDiv = document.getElementById('uploadPreview');
+        
+        if (videoId) {
+            const thumbnail = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+            previewDiv.style.display = 'block';
+            previewDiv.innerHTML = `
+                <div class="channel-info">
+                    <img src="${thumbnail}" class="channel-logo" onerror="this.src='https://via.placeholder.com/40'">
+                    <div>
+                        <strong>Video Preview</strong>
+                        <div class="text-info" style="font-size: 12px;">Thumbnail loaded successfully!</div>
+                    </div>
+                </div>
+                <img src="${thumbnail}" style="width: 100%; border-radius: 12px; margin-top: 10px;" onerror="this.src='https://via.placeholder.com/640x360'">
+            `;
+        } else {
+            previewDiv.style.display = 'none';
+        }
+    }
+
+    async function addPromotionVideo() {
         if (clientState.clientCoins === 0) {
             Swal.fire('Cannot Add Video!', 'Aapke paas coins nahi hain. Pehle videos dekh kar coins earn karein!', 'error');
             return;
@@ -658,10 +754,13 @@
             return;
         }
         
-        const thumbnail = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+        const thumbnail = getThumbnail(url);
+        const channelInfo = await fetchChannelInfo(videoId);
         
         clientState.promotedVideos.unshift({
             id: Date.now(), title: title, url: url, videoId: videoId, thumbnail: thumbnail,
+            channelName: channelInfo.channelName,
+            channelLogo: channelInfo.channelLogo,
             views: 0, totalWatchTime: 0, likes: 0, shares: 0, comments: 0, subscribers: 0, createdAt: new Date().toLocaleString()
         });
         
@@ -671,6 +770,7 @@
         
         document.getElementById('promoVideoTitle').value = '';
         document.getElementById('promoVideoUrl').value = '';
+        document.getElementById('uploadPreview').style.display = 'none';
         
         Swal.fire('Video Added!', 'Your video is ready for promotion!', 'success');
     }
@@ -684,8 +784,14 @@
         
         container.innerHTML = clientState.promotedVideos.map(video => `
             <div class="promotion-card priority-low">
-                <img src="${video.thumbnail}" style="width: 100%; border-radius: 12px; margin-bottom: 10px;" onerror="this.src='https://via.placeholder.com/640x360?text=Video'">
-                <div class="flex-between"><strong>${escapeHtml(video.title)}</strong><span class="badge badge-info"><i class="fas fa-calendar"></i> ${video.createdAt}</span></div>
+                <img src="${video.thumbnail}" class="video-thumbnail" onclick="window.open('${video.url}', '_blank')" style="cursor: pointer;">
+                <div class="channel-info">
+                    <img src="${video.channelLogo}" class="channel-logo" onerror="this.src='https://via.placeholder.com/40'">
+                    <div>
+                        <strong>${escapeHtml(video.channelName)}</strong>
+                        <div class="text-info" style="font-size: 11px;">${escapeHtml(video.title)}</div>
+                    </div>
+                </div>
                 <div class="mt-2">
                     <div class="flex-between"><span><i class="fas fa-eye" style="color: #06b6d4;"></i> Watch Time:</span><span class="text-info"><strong>${(video.totalWatchTime || 0).toLocaleString()}</strong> sec</span></div>
                     <div class="flex-between"><span><i class="fas fa-chart-line"></i> Views:</span><span class="text-info"><strong>${(video.views || 0).toLocaleString()}</strong></span></div>
@@ -694,15 +800,12 @@
                     <div class="flex-between"><span><i class="fas fa-comment" style="color: #f59e0b;"></i> Comments:</span><span class="text-info"><strong>${video.comments || 0}</strong></span></div>
                     <div class="flex-between"><span><i class="fas fa-bell" style="color: #ef4444;"></i> Subscribers:</span><span class="text-info"><strong>${video.subscribers || 0}</strong></span></div>
                 </div>
+                <div class="progress-bar mt-2">
+                    <div class="progress-fill" style="width: ${Math.min(((video.totalWatchTime || 0) / 6000) * 100, 100)}%"></div>
+                </div>
                 <a href="${video.url}" target="_blank" class="btn btn-secondary mt-2" style="width: 100%;"><i class="fab fa-youtube"></i> Watch Video</a>
             </div>
         `).join('');
-    }
-
-    function extractYouTubeId(url) {
-        const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([^&\n?#]+)/;
-        const match = url.match(regex);
-        return match ? match[1] : null;
     }
 
     function updateUI() {
@@ -725,13 +828,17 @@
             container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-check-circle" style="font-size: 48px; color: #22c55e;"></i><p style="margin-top: 15px;">No video tasks available.</p></div>';
             return;
         }
-        container.innerHTML = availableTasks.map(task => `
-            <div class="task-card priority-${task.priority || 'low'}">
-                <div class="flex-between"><strong><i class="fab fa-youtube" style="color: #ef4444;"></i> ${escapeHtml(task.title)}</strong><span class="badge badge-warning"><i class="fas fa-clock"></i> Pending</span></div>
-                <div class="mt-2"><div><i class="fas fa-coins"></i> Reward: <span class="text-warning">${task.watchTime} coins</span></div><div><i class="fas fa-hourglass-half"></i> Watch Time: ${task.watchTime} seconds</div><div class="text-info mt-1">⚡ 1 second = 1 coin!</div></div>
-                <button class="btn btn-primary mt-2" style="width: 100%;" onclick="completeVideoTask(${task.id}, '${escapeHtml(task.title)}', '${escapeHtml(task.url)}', ${task.watchTime})"><i class="fab fa-youtube"></i> Watch & Earn ${task.watchTime} Coins</button>
-            </div>
-        `).join('');
+        container.innerHTML = availableTasks.map(task => {
+            const thumbnail = getThumbnail(task.url);
+            return `
+                <div class="task-card priority-${task.priority || 'low'}">
+                    ${thumbnail ? `<img src="${thumbnail}" class="video-thumbnail" onclick="window.open('${task.url}', '_blank')" style="cursor: pointer;">` : ''}
+                    <div class="flex-between"><strong><i class="fab fa-youtube" style="color: #ef4444;"></i> ${escapeHtml(task.title)}</strong><span class="badge badge-warning"><i class="fas fa-clock"></i> Pending</span></div>
+                    <div class="mt-2"><div><i class="fas fa-coins"></i> Reward: <span class="text-warning">${task.watchTime} coins</span></div><div><i class="fas fa-hourglass-half"></i> Watch Time: ${task.watchTime} seconds</div><div class="text-info mt-1">⚡ 1 second = 1 coin!</div></div>
+                    <button class="btn btn-primary mt-2" style="width: 100%;" onclick="completeVideoTask(${task.id}, '${escapeHtml(task.title)}', '${escapeHtml(task.url)}', ${task.watchTime})"><i class="fab fa-youtube"></i> Watch & Earn ${task.watchTime} Coins</button>
+                </div>
+            `;
+        }).join('');
     }
 
     function renderEngagementTasks() {
@@ -793,11 +900,12 @@
             Swal.fire('Complete Guide', 
                 '💰 EARN COINS FIRST:\n• Watch YouTube videos - 1 second = 1 coin!\n• Complete Like/Share/Comment/Subscribe tasks\n\n' +
                 '✅ JAB COINS HO JAYEIN TAB:\n• Upload your YouTube video\n• Buy Views (1 coin = 1 second watch time)\n• Buy Likes (10 coins each)\n• Buy Shares (15 coins each)\n• Buy Comments (20 coins each)\n• Buy Subscribers (50 coins each)\n\n' +
-                '⚠️ BINA COINS KE KUCH NAHI KAR SAKTE!', 'info');
+                '🎬 VIDEO FEATURES:\n• Thumbnail show hota hai\n• Channel logo show hota hai\n• Channel name show hota hai', 'info');
         },
         addPromotionVideo() { addPromotionVideo(); },
         buyService(serviceType) { buyService(serviceType); },
-        resetAllData() { resetAllData(); }
+        resetAllData() { resetAllData(); },
+        previewVideo() { previewVideo(); }
     };
 
     window.completeVideoTask = completeVideoTask;
