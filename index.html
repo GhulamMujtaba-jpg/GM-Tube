@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GM Secure Client - Fixed Engagement Tasks</title>
+    <title>GM ULTIMATE SECURE - Bank Level Security</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -19,20 +19,14 @@
             background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
             color: #1a1a2e;
         }
-        body.light-mode .card, body.light-mode .panel {
-            background: rgba(255,255,255,0.95);
-            border-color: #e2e8f0;
-            color: #1a1a2e;
-        }
         .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
-        .card, .panel {
+        .card {
             background: rgba(15, 25, 45, 0.85);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 24px;
             padding: 24px;
             margin-bottom: 24px;
-            transition: all 0.3s;
         }
         .stats-grid {
             display: grid;
@@ -46,61 +40,22 @@
             border-radius: 20px;
             padding: 20px;
             text-align: center;
-            transition: all 0.3s;
-            cursor: pointer;
         }
-        .stat-card:hover { transform: translateY(-5px); border-color: #22c55e; }
         .stat-value { font-size: 32px; font-weight: 800; color: #f59e0b; }
         .stat-label { font-size: 12px; color: #94a3b8; margin-top: 5px; }
-        .task-grid, .promotion-grid {
+        .task-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
-        .service-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-        .task-card, .promotion-card {
+        .task-card {
             background: rgba(10, 20, 35, 0.9);
             border-radius: 20px;
             padding: 20px;
-            transition: all 0.3s;
             border-left: 4px solid;
             position: relative;
         }
-        .service-card {
-            background: rgba(10, 20, 35, 0.9);
-            border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-            transition: all 0.3s;
-            cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .service-card:hover { transform: translateY(-5px); border-color: #22c55e; background: rgba(34,197,94,0.1); }
-        .service-card.disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            filter: grayscale(0.3);
-        }
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 5px 12px;
-            border-radius: 30px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-        .badge-success { background: #22c55e20; color: #86efac; border: 1px solid #22c55e40; }
-        .badge-warning { background: #f59e0b20; color: #fcd34d; border: 1px solid #f59e0b40; }
-        .badge-info { background: #3b82f620; color: #93c5fd; border: 1px solid #3b82f640; }
-        .badge-purple { background: #a855f720; color: #c084fc; border: 1px solid #a855f740; }
-        .badge-danger { background: #ef444420; color: #fca5a5; border: 1px solid #ef444440; }
         .btn {
             padding: 12px 24px;
             border: none;
@@ -113,27 +68,90 @@
             gap: 8px;
         }
         .btn-primary { background: linear-gradient(135deg, #22c55e, #16a34a); color: white; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(34,197,94,0.4); }
-        .btn-secondary { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); }
         .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
-        .btn-warning { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
-        .btn-purple { background: linear-gradient(135deg, #a855f7, #7c3aed); color: white; }
+        .btn-secondary { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
         .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
         .mt-2 { margin-top: 12px; }
-        .mt-3 { margin-top: 18px; }
-        .text-success { color: #86efac; }
         .text-warning { color: #fcd34d; }
         .text-info { color: #7dd3fc; }
         .text-danger { color: #fca5a5; }
-        .service-icon { font-size: 40px; margin-bottom: 10px; display: block; }
-        .price-tag { font-size: 20px; font-weight: 800; color: #f59e0b; }
-        .coin-animation {
-            animation: coinPop 0.5s ease;
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
         }
-        @keyframes coinPop {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.3); color: #f59e0b; }
-            100% { transform: scale(1); opacity: 1; }
+        .badge-warning { background: #f59e0b20; color: #fcd34d; border: 1px solid #f59e0b40; }
+        .badge-success { background: #22c55e20; color: #86efac; border: 1px solid #22c55e40; }
+        .security-badge {
+            background: #22c55e20;
+            border: 1px solid #22c55e;
+            border-radius: 30px;
+            padding: 5px 12px;
+            font-size: 11px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .warning-box {
+            background: #ef444420;
+            border: 1px solid #ef4444;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .channel-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+        }
+        .channel-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .video-thumbnail {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+        .verification-code {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: 5px;
+            background: #1a1a2e;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 10px 0;
+        }
+        .countdown-timer {
+            font-size: 48px;
+            font-weight: 800;
+            color: #22c55e;
+            text-align: center;
+            padding: 20px;
+        }
+        .progress-bar {
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #22c55e, #3b82f6);
+            border-radius: 3px;
+            transition: width 0.5s;
         }
         .floating-actions {
             position: fixed;
@@ -156,103 +174,9 @@
             box-shadow: 0 5px 20px rgba(34,197,94,0.4);
         }
         .floating-btn:hover { transform: scale(1.1); }
-        .progress-bar {
-            height: 6px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 3px;
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #22c55e, #3b82f6);
-            border-radius: 3px;
-            transition: width 0.5s;
-        }
-        .watch-timer {
-            font-size: 48px;
-            font-weight: 800;
-            color: #22c55e;
-            text-align: center;
-            padding: 20px;
-        }
-        .warning-box {
-            background: #f59e0b20;
-            border: 1px solid #f59e0b;
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .channel-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 10px;
-            padding: 10px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 12px;
-        }
-        .channel-logo {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        .video-thumbnail {
-            width: 100%;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            cursor: pointer;
-        }
-        .delete-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #ef4444;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            z-index: 10;
-        }
-        .delete-btn:hover {
-            background: #dc2626;
-            transform: scale(1.1);
-        }
-        .thumbnail-preview {
-            margin-top: 10px;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-        .security-badge {
-            background: #22c55e20;
-            border: 1px solid #22c55e;
-            border-radius: 30px;
-            padding: 5px 12px;
-            font-size: 11px;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .verification-code {
-            font-size: 32px;
-            font-weight: 800;
-            letter-spacing: 5px;
-            background: #1a1a2e;
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-            margin: 10px 0;
-        }
         @media (max-width: 768px) {
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .task-grid, .promotion-grid, .service-grid { grid-template-columns: 1fr; }
+            .task-grid { grid-template-columns: 1fr; }
             .container { padding: 12px; }
         }
     </style>
@@ -267,11 +191,12 @@
     <div class="card">
         <div class="flex-between">
             <div>
-                <h1 style="font-size: 28px;"><i class="fas fa-shield-alt"></i> GM Secure Client Dashboard</h1>
+                <h1 style="font-size: 28px;"><i class="fas fa-shield-alt"></i> GM ULTIMATE SECURE</h1>
                 <p style="color: #94a3b8; margin-top: 5px;">
-                    <span class="security-badge"><i class="fas fa-lock"></i> Anti-Scam Active</span>
-                    <span class="security-badge"><i class="fas fa-fingerprint"></i> Verification Required</span>
-                    <span class="security-badge"><i class="fas fa-check-circle"></i> Fixed Engagement Tasks</span>
+                    <span class="security-badge"><i class="fas fa-lock"></i> Bank Level Security</span>
+                    <span class="security-badge"><i class="fas fa-fingerprint"></i> Device Tracking</span>
+                    <span class="security-badge"><i class="fas fa-clock"></i> Real-time Monitor</span>
+                    <span class="security-badge"><i class="fas fa-ban"></i> Auto-Ban on Scam</span>
                 </p>
             </div>
             <div>
@@ -280,125 +205,125 @@
         </div>
     </div>
 
-    <!-- Stats Section -->
     <div class="stats-grid">
-        <div class="stat-card">
-            <i class="fas fa-coins" style="font-size: 28px; color: #f59e0b;"></i>
-            <div class="stat-value" id="clientCoins">0</div>
-            <div class="stat-label">Your Coins Balance</div>
-        </div>
-        <div class="stat-card">
-            <i class="fas fa-check-circle" style="font-size: 28px; color: #22c55e;"></i>
-            <div class="stat-value" id="completedCount">0</div>
-            <div class="stat-label">Tasks Completed</div>
-        </div>
-        <div class="stat-card">
-            <i class="fas fa-tasks" style="font-size: 28px; color: #3b82f6;"></i>
-            <div class="stat-value" id="availableTasks">0</div>
-            <div class="stat-label">Available Tasks</div>
-        </div>
-        <div class="stat-card">
-            <i class="fas fa-chart-line" style="font-size: 28px; color: #a855f7;"></i>
-            <div class="stat-value" id="totalEarned">0</div>
-            <div class="stat-label">Total Coins Earned</div>
-        </div>
+        <div class="stat-card"><i class="fas fa-coins" style="font-size: 28px; color: #f59e0b;"></i><div class="stat-value" id="clientCoins">0</div><div class="stat-label">Your Coins</div></div>
+        <div class="stat-card"><i class="fas fa-check-circle" style="font-size: 28px; color: #22c55e;"></i><div class="stat-value" id="completedCount">0</div><div class="stat-label">Tasks Done</div></div>
+        <div class="stat-card"><i class="fas fa-tasks" style="font-size: 28px; color: #3b82f6;"></i><div class="stat-value" id="availableTasks">0</div><div class="stat-label">Available</div></div>
+        <div class="stat-card"><i class="fas fa-shield-alt" style="font-size: 28px; color: #a855f7;"></i><div class="stat-value" id="securityScore">100%</div><div class="stat-label">Security Score</div></div>
     </div>
 
-    <!-- Scam Warning Banner -->
-    <div id="scamWarning" class="warning-box" style="display: none; background: #ef444420; border-color: #ef4444;">
+    <div id="scamWarning" class="warning-box" style="display: none;">
         <i class="fas fa-exclamation-triangle" style="font-size: 40px; color: #ef4444;"></i>
-        <h3 class="mt-2">⚠️ FRAUD DETECTED!</h3>
-        <p class="mt-2" id="scamMessage">Your activity has been flagged. This incident has been reported.</p>
+        <h3 class="mt-2">⚠️ SCAM ATTEMPT DETECTED!</h3>
+        <p class="mt-2" id="scamMessage">This incident has been logged. 2 more attempts will result in permanent ban.</p>
     </div>
 
-    <!-- Promote Your Video Section -->
-    <div id="promotionSection" class="card" style="display: none;">
-        <div class="flex-between">
-            <h2><i class="fas fa-rocket"></i> Promote Your Video</h2>
-            <span class="badge badge-purple"><i class="fas fa-fire"></i> Use Your Coins!</span>
-        </div>
-        <div style="background: rgba(0,0,0,0.3); border-radius: 20px; padding: 20px; margin-bottom: 25px;">
-            <h3><i class="fas fa-upload"></i> Upload Your Video</h3>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
-                <input type="text" id="promoVideoTitle" class="input" placeholder="Your Video Title">
-                <input type="text" id="promoVideoUrl" class="input" placeholder="YouTube Video URL" onkeyup="client.previewVideo()">
-            </div>
-            <div id="uploadPreview" class="thumbnail-preview" style="display: none;"></div>
-            <button class="btn btn-purple mt-2" onclick="client.addPromotionVideo()"><i class="fas fa-plus-circle"></i> Add My Video</button>
-        </div>
-        <h3><i class="fas fa-gem"></i> Buy Promotion Services</h3>
-        <div class="service-grid" id="servicesGrid"></div>
-        <h3 class="mt-3"><i class="fas fa-list"></i> My Promoted Videos</h3>
-        <div id="promotedVideosList" class="promotion-grid"></div>
-    </div>
-
-    <!-- Video Tasks Section -->
     <div class="card">
         <div class="flex-between">
-            <h2><i class="fas fa-video"></i> Watch Videos & Earn Coins</h2>
+            <h2><i class="fas fa-video"></i> Video Tasks (1 Sec = 1 Coin)</h2>
             <span class="badge badge-info" id="videoTasksCount">0</span>
         </div>
-        <p style="color: #94a3b8; margin-bottom: 15px;"><strong class="text-warning">🔒 SECURE SYSTEM:</strong> Timer complete hone par verification code enter karna hoga.</p>
+        <p class="text-info mb-2"><i class="fas fa-shield-alt"></i> Tab switch automatically cancels task | Verification required</p>
         <div id="videoTasksList" class="task-grid"></div>
     </div>
 
-    <!-- Engagement Tasks Section - FIXED -->
     <div class="card">
         <div class="flex-between">
-            <h2><i class="fas fa-heart"></i> Engagement Tasks (Like/Share/Comment/Subscribe)</h2>
+            <h2><i class="fas fa-heart"></i> Engagement Tasks</h2>
             <span class="badge badge-info" id="engagementTasksCount">0</span>
         </div>
-        <p style="color: #94a3b8; margin-bottom: 15px;"><strong class="text-warning">🔒 SECURE SYSTEM:</strong> Action complete karne ke baad verification code enter karna hoga. Channel logo aur thumbnail properly show hoga!</p>
+        <p class="text-info mb-2"><i class="fas fa-shield-alt"></i> Action + Verification Code required | One-time completion</p>
         <div id="engagementTasksList" class="task-grid"></div>
     </div>
 
-    <!-- Admin Messages -->
     <div class="card">
-        <h2><i class="fas fa-envelope"></i> Messages from Admin</h2>
+        <h2><i class="fas fa-envelope"></i> Admin Messages</h2>
         <div id="messagesList" style="max-height: 300px; overflow-y: auto;"></div>
-    </div>
-
-    <!-- Activity History -->
-    <div class="card">
-        <h2><i class="fas fa-history"></i> Your Activity History</h2>
-        <div id="earningsHistory" style="max-height: 300px; overflow-y: auto;"></div>
     </div>
 </div>
 
 <script>
-    // Storage Keys
+    // ============= ULTIMATE SECURITY SYSTEM =============
+    
     const STORAGE_KEYS = {
-        videos: 'gm_final_videos',
-        completedTasks: 'gm_final_completed',
-        totalCompleted: 'gm_final_total',
-        adminBalance: 'gm_final_admin_balance',
-        clientCoins: 'gm_final_client_coins',
-        activityLog: 'gm_final_log',
-        engagementTasks: 'gm_final_engagement',
-        completedEngagement: 'gm_final_comp_eng',
-        commission: 'gm_final_commission',
-        clientWarnings: 'gm_final_warnings',
-        clientBanned: 'gm_final_banned',
-        clientMessages: 'gm_final_client_messages',
-        earningsHistory: 'gm_final_earnings_history',
-        promotedVideos: 'gm_final_promoted_videos',
-        scamLog: 'gm_final_scam_log'
+        videos: 'gm_ultimate_videos',
+        completedTasks: 'gm_ultimate_completed',
+        totalCompleted: 'gm_ultimate_total',
+        adminBalance: 'gm_ultimate_admin_balance',
+        clientCoins: 'gm_ultimate_client_coins',
+        activityLog: 'gm_ultimate_log',
+        engagementTasks: 'gm_ultimate_engagement',
+        completedEngagement: 'gm_ultimate_comp_eng',
+        commission: 'gm_ultimate_commission',
+        clientBanned: 'gm_ultimate_banned',
+        clientMessages: 'gm_ultimate_client_messages',
+        scamLog: 'gm_ultimate_scam_log',
+        sessionId: 'gm_ultimate_session',
+        deviceFingerprint: 'gm_ultimate_device',
+        taskAttempts: 'gm_ultimate_attempts',
+        lastTaskTime: 'gm_ultimate_last_task'
     };
-
-    const SERVICE_PRICES = { like: 10, share: 15, comment: 20, subscribe: 50 };
-    const SERVICE_NAMES = { views: 'Views', like: 'Likes', share: 'Shares', comment: 'Comments', subscribe: 'Subscribers' };
 
     let clientState = {
         videos: [], completedTasks: {}, engagementTasks: [], completedEngagement: {},
-        clientCoins: 0, totalCompleted: 0, messages: [], earningsHistory: [], promotedVideos: [],
-        scamCount: 0, isBanned: false
+        clientCoins: 0, totalCompleted: 0, messages: [], scamCount: 0, isBanned: false,
+        sessionId: null, deviceFingerprint: null, lastTaskTime: 0, taskAttempts: {}
     };
 
-    let activeTimers = {};
+    let activeTimer = null;
+    let timerInterval = null;
+    let currentTaskId = null;
 
-    // Generate random verification code
-    function generateVerificationCode() {
-        return Math.floor(100000 + Math.random() * 900000).toString();
+    // Generate unique session ID
+    function generateSessionId() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        }) + '-' + Date.now();
+    }
+
+    // Get device fingerprint
+    function getDeviceFingerprint() {
+        return btoa(`${navigator.userAgent}|${screen.width}x${screen.height}|${navigator.language}|${new Date().getTimezoneOffset()}`);
+    }
+
+    // Initialize security
+    function initSecurity() {
+        let sessionId = localStorage.getItem(STORAGE_KEYS.sessionId);
+        let deviceFingerprint = localStorage.getItem(STORAGE_KEYS.deviceFingerprint);
+        const currentFingerprint = getDeviceFingerprint();
+        
+        if (!sessionId) {
+            sessionId = generateSessionId();
+            localStorage.setItem(STORAGE_KEYS.sessionId, sessionId);
+        }
+        clientState.sessionId = sessionId;
+        
+        if (!deviceFingerprint) {
+            localStorage.setItem(STORAGE_KEYS.deviceFingerprint, currentFingerprint);
+            clientState.deviceFingerprint = currentFingerprint;
+        } else if (deviceFingerprint !== currentFingerprint) {
+            logScam('DEVICE_MISMATCH', 'Different device/browser detected! This is a security violation.');
+        } else {
+            clientState.deviceFingerprint = deviceFingerprint;
+        }
+        
+        // Load scam count
+        let scamLog = JSON.parse(localStorage.getItem(STORAGE_KEYS.scamLog)) || [];
+        clientState.scamCount = scamLog.length;
+        
+        // Check if banned
+        clientState.isBanned = localStorage.getItem(STORAGE_KEYS.clientBanned) === 'true';
+        if (clientState.isBanned) {
+            document.body.innerHTML = '<div class="container"><div class="card" style="text-align: center;"><i class="fas fa-ban" style="font-size: 60px; color: #ef4444;"></i><h2 class="mt-2">ACCOUNT PERMANENTLY BANNED</h2><p>Your account has been banned due to security violations.</p><p>Contact admin for assistance.</p></div></div>';
+            return false;
+        }
+        
+        // Rate limiting check
+        let attempts = JSON.parse(localStorage.getItem(STORAGE_KEYS.taskAttempts)) || {};
+        clientState.taskAttempts = attempts;
+        
+        return true;
     }
 
     // Log scam attempt
@@ -411,71 +336,67 @@
             type: scamType,
             details: details,
             taskInfo: taskInfo,
+            sessionId: clientState.sessionId,
             timestamp: new Date().toLocaleString()
         });
-        if (scamLog.length > 100) scamLog.pop();
         localStorage.setItem(STORAGE_KEYS.scamLog, JSON.stringify(scamLog));
         
-        // Update admin activity log
+        // Update admin log
         let activityLog = JSON.parse(localStorage.getItem(STORAGE_KEYS.activityLog)) || [];
         activityLog.unshift({
             id: Date.now(),
             type: 'scam_attempt',
             title: `🚨 SCAM: ${scamType}`,
             details: details,
+            sessionId: clientState.sessionId,
             timestamp: new Date().toLocaleString()
         });
-        if (activityLog.length > 500) activityLog.pop();
         localStorage.setItem(STORAGE_KEYS.activityLog, JSON.stringify(activityLog));
         
-        // Show warning to user
+        // Show warning
         const scamWarning = document.getElementById('scamWarning');
         const scamMessage = document.getElementById('scamMessage');
         if (scamWarning) {
             scamWarning.style.display = 'block';
-            scamMessage.innerHTML = `⚠️ ${scamType}: ${details}. This has been reported to admin.`;
-            setTimeout(() => {
-                scamWarning.style.display = 'none';
-            }, 5000);
+            scamMessage.innerHTML = `⚠️ ${scamType}: ${details}. This has been reported. ${3 - clientState.scamCount} attempts remaining before permanent ban.`;
+            setTimeout(() => { scamWarning.style.display = 'none'; }, 8000);
         }
         
-        // Auto-ban after 3 scams
-        if (clientState.scamCount >= 3) {
+        // Auto-ban after 2 scams (stricter)
+        if (clientState.scamCount >= 2) {
             localStorage.setItem(STORAGE_KEYS.clientBanned, 'true');
             clientState.isBanned = true;
             Swal.fire({
-                title: 'Account Permanently Banned!',
-                text: 'Your account has been banned due to multiple scam attempts. Contact admin.',
+                title: 'ACCOUNT PERMANENTLY BANNED!',
+                text: 'Your account has been banned due to multiple scam attempts. This decision is final.',
                 icon: 'error',
                 confirmButtonText: 'OK'
-            }).then(() => {
-                location.reload();
-            });
+            }).then(() => { location.reload(); });
         }
+        
+        updateSecurityScore();
     }
 
-    // Get channel info from YouTube
-    async function getYouTubeChannelInfo(videoId) {
-        try {
-            const response = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
-            const data = await response.json();
-            return {
-                channelName: data.author_name || 'YouTube Channel',
-                channelUrl: data.author_url || `https://youtube.com/channel/${videoId}`,
-                channelLogo: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
-                thumbnail: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
-            };
-        } catch(e) {
-            return {
-                channelName: 'YouTube Channel',
-                channelUrl: '#',
-                channelLogo: 'https://via.placeholder.com/40?text=YT',
-                thumbnail: null
-            };
+    // Check rate limiting
+    function checkRateLimit() {
+        const now = Date.now();
+        const lastTask = parseInt(localStorage.getItem(STORAGE_KEYS.lastTaskTime)) || 0;
+        if (now - lastTask < 30000) { // 30 seconds cooldown
+            logScam('RATE_LIMIT', 'Attempted to complete task too quickly');
+            return false;
         }
+        return true;
     }
 
-    // Extract YouTube video ID from URL
+    function updateRateLimit() {
+        localStorage.setItem(STORAGE_KEYS.lastTaskTime, Date.now());
+    }
+
+    function updateSecurityScore() {
+        const score = Math.max(0, 100 - (clientState.scamCount * 30));
+        document.getElementById('securityScore').innerHTML = score + '%';
+    }
+
     function extractYouTubeId(url) {
         const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/|youtube\.com\/embed\/)([^&\n?#]+)/;
         const match = url.match(regex);
@@ -487,6 +408,18 @@
         return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
     }
 
+    async function getChannelInfo(url) {
+        const videoId = extractYouTubeId(url);
+        if (videoId) {
+            return {
+                channelName: 'YouTube Channel',
+                channelLogo: `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`,
+                thumbnail: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+            };
+        }
+        return { channelName: 'YouTube Channel', channelLogo: 'https://via.placeholder.com/40', thumbnail: null };
+    }
+
     function loadData() {
         clientState.videos = JSON.parse(localStorage.getItem(STORAGE_KEYS.videos)) || [];
         clientState.completedTasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.completedTasks)) || {};
@@ -495,23 +428,11 @@
         clientState.clientCoins = parseInt(localStorage.getItem(STORAGE_KEYS.clientCoins)) || 0;
         clientState.totalCompleted = parseInt(localStorage.getItem(STORAGE_KEYS.totalCompleted)) || 0;
         clientState.messages = JSON.parse(localStorage.getItem(STORAGE_KEYS.clientMessages)) || [];
-        clientState.earningsHistory = JSON.parse(localStorage.getItem(STORAGE_KEYS.earningsHistory)) || [];
-        clientState.promotedVideos = JSON.parse(localStorage.getItem(STORAGE_KEYS.promotedVideos)) || [];
-        clientState.isBanned = localStorage.getItem(STORAGE_KEYS.clientBanned) === 'true';
-        
-        if (clientState.isBanned) {
-            document.body.innerHTML = '<div class="container"><div class="card" style="text-align: center;"><i class="fas fa-ban" style="font-size: 60px; color: #ef4444;"></i><h2 class="mt-2">Account Banned</h2><p>Your account has been permanently banned due to suspicious activity.</p><p>Contact admin for assistance.</p></div></div>';
-            return;
-        }
         
         updateUI();
         renderVideoTasks();
         renderEngagementTasks();
         renderMessages();
-        renderEarningsHistory();
-        renderPromotedVideos();
-        checkCoinsAndShowPromotion();
-        renderServices();
     }
 
     function saveClientData() {
@@ -519,552 +440,283 @@
         localStorage.setItem(STORAGE_KEYS.totalCompleted, clientState.totalCompleted);
         localStorage.setItem(STORAGE_KEYS.completedTasks, JSON.stringify(clientState.completedTasks));
         localStorage.setItem(STORAGE_KEYS.completedEngagement, JSON.stringify(clientState.completedEngagement));
-        localStorage.setItem(STORAGE_KEYS.earningsHistory, JSON.stringify(clientState.earningsHistory));
-        localStorage.setItem(STORAGE_KEYS.promotedVideos, JSON.stringify(clientState.promotedVideos));
     }
 
-    function addToHistory(title, type, coinsChange, isEarning = true) {
-        clientState.earningsHistory.unshift({
-            id: Date.now(), title: title, type: type, coins: coinsChange, isEarning: isEarning, timestamp: new Date().toLocaleString()
-        });
-        if (clientState.earningsHistory.length > 100) clientState.earningsHistory.pop();
-        localStorage.setItem(STORAGE_KEYS.earningsHistory, JSON.stringify(clientState.earningsHistory));
-        renderEarningsHistory();
-    }
-
-    function updateAdminOnSpending(coinsSpent) {
+    function updateAdminOnCompletion(coins) {
         let commission = parseInt(localStorage.getItem(STORAGE_KEYS.commission)) || 10;
-        let adminEarn = (coinsSpent * commission) / 100;
-        let currentAdminBalance = parseFloat(localStorage.getItem(STORAGE_KEYS.adminBalance)) || 0;
-        currentAdminBalance += adminEarn;
-        localStorage.setItem(STORAGE_KEYS.adminBalance, currentAdminBalance);
+        let adminEarn = (coins * commission) / 100;
+        let currentBalance = parseFloat(localStorage.getItem(STORAGE_KEYS.adminBalance)) || 0;
+        localStorage.setItem(STORAGE_KEYS.adminBalance, currentBalance + adminEarn);
     }
 
-    function updateAdminOnTaskCompletion(taskCoins) {
-        let commission = parseInt(localStorage.getItem(STORAGE_KEYS.commission)) || 10;
-        let adminEarn = (taskCoins * commission) / 100;
-        let currentAdminBalance = parseFloat(localStorage.getItem(STORAGE_KEYS.adminBalance)) || 0;
-        currentAdminBalance += adminEarn;
-        localStorage.setItem(STORAGE_KEYS.adminBalance, currentAdminBalance);
+    function addToHistory(title, type, coins) {
+        let history = JSON.parse(localStorage.getItem('gm_ultimate_earnings_history')) || [];
+        history.unshift({ id: Date.now(), title, type, coins, timestamp: new Date().toLocaleString() });
+        localStorage.setItem('gm_ultimate_earnings_history', JSON.stringify(history.slice(0, 100)));
     }
 
-    function checkCoinsAndShowPromotion() {
-        const promotionSection = document.getElementById('promotionSection');
-        if (clientState.clientCoins > 0) {
-            if(promotionSection) promotionSection.style.display = 'block';
-        } else {
-            if(promotionSection) promotionSection.style.display = 'none';
-        }
+    function animateCoins() {
+        const el = document.getElementById('clientCoins');
+        el.classList.add('coin-animation');
+        setTimeout(() => el.classList.remove('coin-animation'), 500);
     }
 
-    function renderServices() {
-        const container = document.getElementById('servicesGrid');
-        if(!container) return;
-        const hasCoins = clientState.clientCoins > 0;
-        const hasVideo = clientState.promotedVideos.length > 0;
-        
-        const services = [
-            { type: 'views', icon: 'fa-eye', color: '#06b6d4', name: 'Views', price: '1 Coin = 1 Second', desc: '60 coins = 60 seconds' },
-            { type: 'like', icon: 'fa-thumbs-up', color: '#3b82f6', name: 'Likes', price: '10 Coins per Like', desc: 'Get real likes' },
-            { type: 'share', icon: 'fa-share-alt', color: '#22c55e', name: 'Shares', price: '15 Coins per Share', desc: 'Increase reach' },
-            { type: 'comment', icon: 'fa-comment', color: '#f59e0b', name: 'Comments', price: '20 Coins per Comment', desc: 'Engage viewers' },
-            { type: 'subscribe', icon: 'fa-bell', color: '#ef4444', name: 'Subscribers', price: '50 Coins per Subscriber', desc: 'Grow channel' }
-        ];
-        
-        container.innerHTML = services.map(s => `
-            <div class="service-card ${!hasCoins || !hasVideo ? 'disabled' : ''}" onclick="${hasCoins && hasVideo ? `client.buyService('${s.type}')` : ''}">
-                <i class="fas ${s.icon}" style="font-size: 40px; margin-bottom: 10px; display: block; color: ${s.color};"></i>
-                <strong>${s.name}</strong>
-                <div class="price-tag">${s.price}</div>
-                <div>${s.desc}</div>
-                ${!hasCoins ? '<small class="text-danger mt-2">❌ Pehle coins earn karein!</small>' : (!hasVideo ? '<small class="text-danger mt-2">❌ Pehle video upload karein!</small>' : '')}
-            </div>
-        `).join('');
+    function updateUI() {
+        document.getElementById('clientCoins').innerHTML = clientState.clientCoins;
+        document.getElementById('completedCount').innerHTML = clientState.totalCompleted;
+        const availableVideos = clientState.videos.filter(v => !clientState.completedTasks[v.id]).length;
+        const availableEngagement = clientState.engagementTasks.filter(e => !clientState.completedEngagement[e.id]).length;
+        document.getElementById('availableTasks').innerHTML = availableVideos + availableEngagement;
+        document.getElementById('videoTasksCount').innerHTML = availableVideos;
+        document.getElementById('engagementTasksCount').innerHTML = availableEngagement;
     }
 
-    function buyService(serviceType) {
-        if (clientState.clientCoins === 0) {
-            Swal.fire('Cannot Buy!', 'Aapke paas coins nahi hain. Pehle videos dekh kar coins earn karein!', 'error');
-            return;
-        }
-        if (clientState.promotedVideos.length === 0) {
-            Swal.fire('No Video', 'Pehle apni video upload karein!', 'error');
-            return;
-        }
-        
-        let serviceName = SERVICE_NAMES[serviceType];
-        let pricePerUnit = SERVICE_PRICES[serviceType];
-        let isViews = (serviceType === 'views');
-        
-        Swal.fire({
-            title: `Buy ${serviceName}`,
-            html: `<div style="text-align: center;">
-                       <p>Select your video:</p>
-                       <select id="videoSelect" class="input" style="margin: 10px 0;">
-                           ${clientState.promotedVideos.map((v, i) => `<option value="${i}">${escapeHtml(v.title)}</option>`).join('')}
-                       </select>
-                       ${isViews ? `<p>Enter seconds:</p><input type="number" id="quantityInput" class="quantity-input" min="1" value="60"><p class="mt-2">1 coin = 1 second</p>` : `<p>Enter quantity:</p><input type="number" id="quantityInput" class="quantity-input" min="1" value="1"><p class="mt-2">${pricePerUnit} coins each</p>`}
-                   </div>`,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Confirm',
-            preConfirm: () => {
-                const selectedIndex = document.getElementById('videoSelect').value;
-                const quantity = parseInt(document.getElementById('quantityInput').value);
-                if (!quantity || quantity < 1) return false;
-                return { selectedIndex: parseInt(selectedIndex), quantity: quantity };
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const video = clientState.promotedVideos[result.value.selectedIndex];
-                const quantity = result.value.quantity;
-                let cost = isViews ? quantity : (quantity * pricePerUnit);
-                
-                if (clientState.clientCoins < cost) {
-                    Swal.fire('Insufficient Coins!', `Need ${cost} coins`, 'error');
-                    return;
-                }
-                
-                clientState.clientCoins -= cost;
-                
-                if (serviceType === 'views') {
-                    video.totalWatchTime = (video.totalWatchTime || 0) + quantity;
-                    video.views = (video.views || 0) + Math.floor(quantity / 30);
-                } else if (serviceType === 'like') video.likes = (video.likes || 0) + quantity;
-                else if (serviceType === 'share') video.shares = (video.shares || 0) + quantity;
-                else if (serviceType === 'comment') video.comments = (video.comments || 0) + quantity;
-                else if (serviceType === 'subscribe') video.subscribers = (video.subscribers || 0) + quantity;
-                
-                saveClientData();
-                updateAdminOnSpending(cost);
-                addToHistory(`${quantity} ${serviceName} for "${video.title}"`, 'Purchase', cost, false);
-                animateCoins();
-                updateUI();
-                renderPromotedVideos();
-                
-                Swal.fire('Success!', `You bought ${quantity} ${serviceName}!`, 'success');
-            }
-        });
-    }
-
-    function deleteOwnVideo(videoId) {
-        Swal.fire({
-            title: 'Delete Video?',
-            text: 'Kya aap apni ye video delete karna chahte hain?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, Delete'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                clientState.promotedVideos = clientState.promotedVideos.filter(v => v.id !== videoId);
-                saveClientData();
-                renderPromotedVideos();
-                renderServices();
-                Swal.fire('Deleted!', 'Video deleted.', 'success');
-            }
-        });
-    }
-
-    // VIDEO TASK - With Verification
-    function startVideoTask(taskId, taskTitle, taskUrl, watchTimeNeeded) {
-        if (clientState.completedTasks[taskId]) {
-            Swal.fire('Already Completed!', 'You have already completed this task.', 'info');
-            return;
-        }
-        
+    // ============= ULTRA SECURE VIDEO TASK =============
+    function startSecureVideoTask(taskId, taskTitle, taskUrl, watchTime) {
+        // Multiple security checks
         if (clientState.isBanned) {
-            Swal.fire('Account Banned!', 'Your account has been banned.', 'error');
+            Swal.fire('Banned!', 'Your account is permanently banned.', 'error');
+            return;
+        }
+        if (clientState.completedTasks[taskId]) {
+            Swal.fire('Already Done!', 'You已完成 this task already.', 'info');
+            return;
+        }
+        if (activeTimer) {
+            Swal.fire('Task Active!', 'Please complete current task first.', 'warning');
+            return;
+        }
+        if (!checkRateLimit()) {
+            Swal.fire('Slow Down!', 'Please wait 30 seconds between tasks.', 'warning');
             return;
         }
         
-        if (activeTimers[taskId]) {
-            Swal.fire('Task Already Started!', 'Complete current task first.', 'warning');
-            return;
-        }
+        const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+        let timeLeft = watchTime;
+        let tabHiddenCount = 0;
+        let visibilityInterval;
         
-        const verificationCode = generateVerificationCode();
-        
-        let timeLeft = watchTimeNeeded;
-        let interval;
-        let tabSwitchCount = 0;
-        let visibilityCheckInterval;
-        const thumbnail = getThumbnail(taskUrl);
-        
+        // Open YouTube
         window.open(taskUrl, '_blank');
         
         Swal.fire({
-            title: '🎬 Watch Video to Earn Coins!',
+            title: '🎬 SECURE WATCH MODE',
             html: `<div style="text-align: center;">
-                       ${thumbnail ? `<img src="${thumbnail}" style="width: 100%; border-radius: 12px; margin-bottom: 15px;">` : ''}
+                       <img src="${getThumbnail(taskUrl)}" style="width: 100%; border-radius: 12px; margin-bottom: 15px;">
                        <p><strong>${escapeHtml(taskTitle)}</strong></p>
-                       <div class="watch-timer" id="secureTimer">${timeLeft}</div>
-                       <div class="progress-bar mt-2">
-                           <div class="progress-fill" id="timerProgressFill" style="width: 0%"></div>
-                       </div>
-                       <p class="mt-2"><strong class="text-warning">💰 ${watchTimeNeeded} coins</strong></p>
-                       <p class="text-info"><i class="fas fa-shield-alt"></i> Tab switch karne par task cancel ho jayega!</p>
-                   </div>`,
-            icon: 'info',
-            showConfirmButton: false,
-            showCancelButton: true,
-            cancelButtonText: 'Cancel Task',
-            didOpen: () => {
-                const timerElement = document.getElementById('secureTimer');
-                const progressElement = document.getElementById('timerProgressFill');
-                
-                visibilityCheckInterval = setInterval(() => {
-                    if (document.hidden) {
-                        tabSwitchCount++;
-                        if (tabSwitchCount >= 2) {
-                            clearInterval(interval);
-                            clearInterval(visibilityCheckInterval);
-                            delete activeTimers[taskId];
-                            Swal.close();
-                            logScam('TAB_SWITCH_VIDEO', `User switched tab during video task: ${taskTitle}`, { taskId, taskTitle });
-                            Swal.fire({
-                                title: 'Task Cancelled!',
-                                text: 'Task cancelled because you switched tabs.',
-                                icon: 'error',
-                                confirmButtonText: 'OK'
-                            });
-                        }
-                    }
-                }, 1000);
-                
-                interval = setInterval(() => {
-                    if (document.hidden) return;
-                    
-                    timeLeft--;
-                    if (timerElement) timerElement.innerHTML = timeLeft;
-                    if (progressElement) {
-                        const percent = ((watchTimeNeeded - timeLeft) / watchTimeNeeded) * 100;
-                        progressElement.style.width = percent + '%';
-                    }
-                    
-                    if (timeLeft <= 0) {
-                        clearInterval(interval);
-                        clearInterval(visibilityCheckInterval);
-                        delete activeTimers[taskId];
-                        Swal.close();
-                        
-                        Swal.fire({
-                            title: '🔐 Verification Required',
-                            html: `<div style="text-align: center;">
-                                       <p>Timer complete! Enter the verification code to claim your coins.</p>
-                                       <div class="verification-code">${verificationCode}</div>
-                                       <input type="text" id="verificationInput" class="input" placeholder="Enter verification code" style="margin-top: 15px;">
-                                   </div>`,
-                            icon: 'question',
-                            showCancelButton: true,
-                            confirmButtonText: 'Verify & Claim Coins',
-                            cancelButtonText: 'Cancel',
-                            preConfirm: () => {
-                                const inputValue = document.getElementById('verificationInput').value;
-                                if (!inputValue) {
-                                    Swal.showValidationMessage('Please enter verification code');
-                                    return false;
-                                }
-                                if (inputValue !== verificationCode) {
-                                    logScam('INVALID_VIDEO_VERIFICATION', `Wrong verification code for video: ${taskTitle}`, { taskId, taskTitle });
-                                    Swal.showValidationMessage('Invalid verification code! This attempt has been logged.');
-                                    return false;
-                                }
-                                return true;
-                            }
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                if (!clientState.completedTasks[taskId]) {
-                                    clientState.completedTasks[taskId] = true;
-                                    clientState.clientCoins += watchTimeNeeded;
-                                    clientState.totalCompleted++;
-                                    
-                                    saveClientData();
-                                    updateAdminOnTaskCompletion(watchTimeNeeded);
-                                    addToHistory(taskTitle, 'Watch Task', watchTimeNeeded, true);
-                                    animateCoins();
-                                    updateUI();
-                                    renderVideoTasks();
-                                    checkCoinsAndShowPromotion();
-                                    renderServices();
-                                    
-                                    Swal.fire({ 
-                                        title: '🎉 Task Completed!', 
-                                        html: `You earned <strong class="text-warning">${watchTimeNeeded} coins</strong>!`, 
-                                        icon: 'success', 
-                                        timer: 3000, 
-                                        showConfirmButton: false 
-                                    });
-                                }
-                            }
-                        });
-                    }
-                }, 1000);
-                
-                activeTimers[taskId] = interval;
-            },
-            willClose: () => {
-                if (interval) clearInterval(interval);
-                if (visibilityCheckInterval) clearInterval(visibilityCheckInterval);
-                delete activeTimers[taskId];
-            }
-        });
-    }
-
-    // FIXED ENGAGEMENT TASK - Properly Working
-    async function completeEngagementTask(taskId, taskTarget, taskType, taskCoins, commentText) {
-        // Check if already completed
-        if (clientState.completedEngagement[taskId]) {
-            Swal.fire('Already Completed!', 'You have already completed this task.', 'info');
-            return;
-        }
-        
-        // Check if banned
-        if (clientState.isBanned) {
-            Swal.fire('Account Banned!', 'Your account has been banned.', 'error');
-            return;
-        }
-        
-        // Generate unique verification code
-        const verificationCode = generateVerificationCode();
-        
-        // Get action details
-        const actionText = { like:'Like', share:'Share', comment:'Comment', subscribe:'Subscribe' }[taskType];
-        const actionIcon = { like:'👍', share:'🔄', comment:'💬', subscribe:'🔔' }[taskType];
-        const actionColor = { like:'#3b82f6', share:'#22c55e', comment:'#f59e0b', subscribe:'#ef4444' }[taskType];
-        const instructions = taskType === 'comment' ? `Post a comment${commentText ? `: "${commentText}"` : ''}` : `Click the ${actionText} button on the video/channel`;
-        
-        // Extract video ID and get channel info
-        const videoId = extractYouTubeId(taskTarget);
-        let channelInfo = { channelName: 'YouTube Channel', channelLogo: 'https://via.placeholder.com/40?text=YT', thumbnail: null };
-        
-        if (videoId) {
-            channelInfo = await getYouTubeChannelInfo(videoId);
-        }
-        
-        // Show task dialog with verification
-        Swal.fire({
-            title: `${actionIcon} ${actionText} Task`,
-            html: `<div style="text-align: center;">
-                       ${channelInfo.thumbnail ? `<img src="${channelInfo.thumbnail}" style="width: 100%; border-radius: 12px; margin-bottom: 15px;">` : ''}
-                       <div class="channel-info" style="justify-content: center; background: rgba(0,0,0,0.5);">
-                           <img src="${channelInfo.channelLogo}" class="channel-logo" style="width: 50px; height: 50px;">
-                           <div>
-                               <strong style="font-size: 16px;">${escapeHtml(channelInfo.channelName)}</strong>
-                               <div class="text-info" style="font-size: 12px;">${actionText} this content</div>
-                           </div>
-                       </div>
-                       <p class="mt-2"><strong>Instructions:</strong> ${instructions}</p>
-                       <p><strong>Reward:</strong> <span class="text-warning" style="font-size: 20px;">${taskCoins} coins</span></p>
-                       <a href="${taskTarget}" target="_blank" class="btn" style="background: ${actionColor}; margin: 15px auto; display: inline-block; padding: 10px 20px; border-radius: 10px; color: white; text-decoration: none;">
-                           <i class="fas fa-external-link-alt"></i> Go to YouTube & Take Action
-                       </a>
-                       <div class="verification-code" style="background: #1a1a2e; padding: 15px; border-radius: 12px; margin: 10px 0;">
-                           <span style="font-size: 14px;">Verification Code:</span>
-                           <div style="font-size: 28px; font-weight: 800; letter-spacing: 5px;">${verificationCode}</div>
-                       </div>
-                       <p class="text-info mt-2">Action complete karne ke baad ye code enter karein!</p>
-                       <input type="text" id="engagementVerificationInput" class="input" placeholder="Enter verification code" style="margin-top: 10px;">
-                       <button class="btn btn-success mt-2" id="verifyEngagementBtn" style="width: 100%;">✅ Verify & Claim ${taskCoins} Coins</button>
+                       <div class="countdown-timer" id="secureCountdown">${timeLeft}</div>
+                       <div class="progress-bar mt-2"><div class="progress-fill" id="secureProgress" style="width: 0%"></div></div>
+                       <p class="mt-2"><strong class="text-warning">💰 ${watchTime} coins</strong></p>
+                       <p class="text-danger"><i class="fas fa-exclamation-triangle"></i> DO NOT SWITCH TABS - Task will cancel!</p>
                    </div>`,
             icon: 'info',
             showConfirmButton: false,
             showCancelButton: true,
             cancelButtonText: 'Cancel',
             didOpen: () => {
-                const verifyBtn = document.getElementById('verifyEngagementBtn');
-                const inputField = document.getElementById('engagementVerificationInput');
+                currentTaskId = taskId;
+                const timerEl = document.getElementById('secureCountdown');
+                const progressEl = document.getElementById('secureProgress');
+                
+                // Tab switch detection
+                visibilityInterval = setInterval(() => {
+                    if (document.hidden) {
+                        tabHiddenCount++;
+                        if (tabHiddenCount >= 1) {
+                            clearInterval(timerInterval);
+                            clearInterval(visibilityInterval);
+                            activeTimer = null;
+                            currentTaskId = null;
+                            Swal.close();
+                            logScam('TAB_SWITCH', `User switched tab during video task: ${taskTitle}`, { taskId, taskTitle });
+                            Swal.fire('Task Cancelled!', 'Task cancelled because you switched tabs. Do not switch tabs.', 'error');
+                        }
+                    }
+                }, 500);
+                
+                timerInterval = setInterval(() => {
+                    if (document.hidden) return;
+                    
+                    timeLeft--;
+                    if (timerEl) timerEl.innerHTML = timeLeft;
+                    if (progressEl) {
+                        const percent = ((watchTime - timeLeft) / watchTime) * 100;
+                        progressEl.style.width = percent + '%';
+                    }
+                    
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        clearInterval(visibilityInterval);
+                        activeTimer = null;
+                        Swal.close();
+                        
+                        // Verification step
+                        Swal.fire({
+                            title: '🔐 VERIFICATION REQUIRED',
+                            html: `<div style="text-align: center;">
+                                       <p>Enter the verification code to claim your coins:</p>
+                                       <div class="verification-code">${verificationCode}</div>
+                                       <input type="text" id="verifyCodeInput" class="input" placeholder="Enter code" style="margin-top: 15px;">
+                                   </div>`,
+                            input: 'text',
+                            inputPlaceholder: 'Enter verification code',
+                            showCancelButton: true,
+                            confirmButtonText: 'Claim Coins',
+                            preConfirm: (input) => {
+                                if (!input) return 'Please enter code';
+                                if (input !== verificationCode) {
+                                    logScam('INVALID_CODE', `Wrong verification code for video: ${taskTitle}`, { taskId, taskTitle });
+                                    return 'Invalid code! This attempt has been logged.';
+                                }
+                                return true;
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed && result.value === true) {
+                                if (!clientState.completedTasks[taskId]) {
+                                    clientState.completedTasks[taskId] = true;
+                                    clientState.clientCoins += watchTime;
+                                    clientState.totalCompleted++;
+                                    saveClientData();
+                                    updateAdminOnCompletion(watchTime);
+                                    addToHistory(taskTitle, 'Video Task', watchTime);
+                                    updateRateLimit();
+                                    animateCoins();
+                                    updateUI();
+                                    renderVideoTasks();
+                                    
+                                    Swal.fire('Success!', `You earned ${watchTime} coins!`, 'success');
+                                }
+                            }
+                        });
+                    }
+                }, 1000);
+                
+                activeTimer = timerInterval;
+            },
+            willClose: () => {
+                if (timerInterval) clearInterval(timerInterval);
+                if (visibilityInterval) clearInterval(visibilityInterval);
+                if (activeTimer === timerInterval) activeTimer = null;
+                currentTaskId = null;
+            }
+        });
+    }
+
+    // ============= ULTRA SECURE ENGAGEMENT TASK =============
+    async function startSecureEngagementTask(taskId, taskTarget, taskType, taskCoins, commentText) {
+        if (clientState.isBanned) {
+            Swal.fire('Banned!', 'Your account is permanently banned.', 'error');
+            return;
+        }
+        if (clientState.completedEngagement[taskId]) {
+            Swal.fire('Already Done!', 'You已完成 this task already.', 'info');
+            return;
+        }
+        if (!checkRateLimit()) {
+            Swal.fire('Slow Down!', 'Please wait 30 seconds between tasks.', 'warning');
+            return;
+        }
+        
+        const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+        const actionText = { like:'Like', share:'Share', comment:'Comment', subscribe:'Subscribe' }[taskType];
+        const actionIcon = { like:'👍', share:'🔄', comment:'💬', subscribe:'🔔' }[taskType];
+        const actionColor = { like:'#3b82f6', share:'#22c55e', comment:'#f59e0b', subscribe:'#ef4444' }[taskType];
+        
+        const channelInfo = await getChannelInfo(taskTarget);
+        
+        Swal.fire({
+            title: `${actionIcon} ${actionText} Task`,
+            html: `<div style="text-align: center;">
+                       ${channelInfo.thumbnail ? `<img src="${channelInfo.thumbnail}" style="width: 100%; border-radius: 12px; margin-bottom: 15px;">` : ''}
+                       <div class="channel-info">
+                           <img src="${channelInfo.channelLogo}" class="channel-logo">
+                           <div><strong>${escapeHtml(channelInfo.channelName)}</strong></div>
+                       </div>
+                       <p class="mt-2"><strong>Instructions:</strong> ${taskType === 'comment' ? `Post a comment: "${commentText || 'Great video!'}"` : `Click the ${actionText} button`}</p>
+                       <p><strong>Reward:</strong> <span class="text-warning" style="font-size: 24px;">${taskCoins} coins</span></p>
+                       <a href="${taskTarget}" target="_blank" class="btn" style="background: ${actionColor}; margin: 15px auto; display: inline-block;">
+                           <i class="fas fa-external-link-alt"></i> Go to YouTube & Take Action
+                       </a>
+                       <div class="verification-code">${verificationCode}</div>
+                       <p class="text-info">Action complete karne ke baad ye code enter karein!</p>
+                       <input type="text" id="engVerifyCode" class="input" placeholder="Enter verification code" style="margin-top: 10px;">
+                       <button class="btn btn-success mt-2" id="verifyEngBtn" style="width: 100%;">✅ Verify & Earn ${taskCoins} Coins</button>
+                   </div>`,
+            icon: 'info',
+            showConfirmButton: false,
+            showCancelButton: true,
+            cancelButtonText: 'Cancel',
+            didOpen: () => {
+                const verifyBtn = document.getElementById('verifyEngBtn');
+                const inputField = document.getElementById('engVerifyCode');
                 
                 if (verifyBtn) {
                     verifyBtn.onclick = () => {
                         const enteredCode = inputField ? inputField.value : '';
                         
                         if (!enteredCode) {
-                            Swal.fire('Error', 'Please enter the verification code', 'error');
+                            Swal.fire('Error', 'Please enter verification code', 'error');
                             return;
                         }
                         
                         if (enteredCode !== verificationCode) {
-                            logScam('INVALID_ENGAGEMENT_VERIFICATION', `Wrong verification code for ${actionText} task`, { taskId, taskType, taskTarget });
-                            Swal.fire('Invalid Code!', 'Verification code does not match. This attempt has been logged.', 'error');
+                            logScam('INVALID_ENGAGEMENT_CODE', `Wrong verification code for ${actionText} task`, { taskId, taskType });
+                            Swal.fire('Invalid Code!', 'This attempt has been logged.', 'error');
                             return;
                         }
                         
-                        // Close the current dialog
                         Swal.close();
                         
-                        // Complete the task and give coins
                         clientState.completedEngagement[taskId] = { completed: true, coins: taskCoins };
                         clientState.clientCoins += taskCoins;
                         clientState.totalCompleted++;
-                        
                         saveClientData();
-                        updateAdminOnTaskCompletion(taskCoins);
-                        addToHistory(`${actionText}: ${channelInfo.channelName}`, 'Engagement Task', taskCoins, true);
+                        updateAdminOnCompletion(taskCoins);
+                        addToHistory(`${actionText} on ${channelInfo.channelName}`, 'Engagement', taskCoins);
+                        updateRateLimit();
                         animateCoins();
                         updateUI();
                         renderEngagementTasks();
-                        checkCoinsAndShowPromotion();
-                        renderServices();
                         
-                        Swal.fire({
-                            title: '🎉 Task Completed!', 
-                            html: `You earned <strong class="text-warning">${taskCoins} coins</strong> for ${actionText}!`, 
-                            icon: 'success', 
-                            timer: 3000, 
-                            showConfirmButton: false 
-                        });
+                        Swal.fire('Success!', `You earned ${taskCoins} coins for ${actionText}!`, 'success');
                     };
                 }
             }
         });
     }
 
-    function previewVideo() {
-        const url = document.getElementById('promoVideoUrl')?.value.trim();
-        const videoId = extractYouTubeId(url);
-        const previewDiv = document.getElementById('uploadPreview');
-        
-        if (videoId && previewDiv) {
-            const thumbnail = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-            previewDiv.style.display = 'block';
-            previewDiv.innerHTML = `<img src="${thumbnail}" style="width: 100%; border-radius: 12px;">`;
-        } else if(previewDiv) {
-            previewDiv.style.display = 'none';
-        }
-    }
-
-    async function addPromotionVideo() {
-        if (clientState.clientCoins === 0) {
-            Swal.fire('Cannot Add!', 'Pehle coins earn karein!', 'error');
+    function renderVideoTasks() {
+        const container = document.getElementById('videoTasksList');
+        if (!container) return;
+        const available = clientState.videos.filter(v => !clientState.completedTasks[v.id]);
+        if (available.length === 0) {
+            container.innerHTML = '<div style="text-align:center;padding:40px;"><i class="fas fa-check-circle"></i><p>No tasks available</p></div>';
             return;
         }
-        
-        const title = document.getElementById('promoVideoTitle')?.value.trim();
-        const url = document.getElementById('promoVideoUrl')?.value.trim();
-        
-        if (!title || !url) {
-            Swal.fire('Error', 'Please enter both title and URL', 'error');
-            return;
-        }
-        
-        const videoId = extractYouTubeId(url);
-        if (!videoId) {
-            Swal.fire('Error', 'Invalid YouTube URL', 'error');
-            return;
-        }
-        
-        const thumbnail = getThumbnail(url);
-        const channelInfo = await getYouTubeChannelInfo(videoId);
-        
-        clientState.promotedVideos.unshift({
-            id: Date.now(), title, url, videoId, thumbnail,
-            channelName: channelInfo.channelName,
-            channelLogo: channelInfo.channelLogo,
-            views: 0, totalWatchTime: 0, likes: 0, shares: 0, comments: 0, subscribers: 0,
-            createdAt: new Date().toLocaleString()
-        });
-        
-        saveClientData();
-        renderPromotedVideos();
-        renderServices();
-        
-        if(document.getElementById('promoVideoTitle')) document.getElementById('promoVideoTitle').value = '';
-        if(document.getElementById('promoVideoUrl')) document.getElementById('promoVideoUrl').value = '';
-        if(document.getElementById('uploadPreview')) document.getElementById('uploadPreview').style.display = 'none';
-        
-        Swal.fire('Video Added!', 'Ready for promotion!', 'success');
-    }
-
-    function renderPromotedVideos() {
-        const container = document.getElementById('promotedVideosList');
-        if(!container) return;
-        if (clientState.promotedVideos.length === 0) {
-            container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-upload"></i><p>No videos added yet.</p></div>';
-            return;
-        }
-        
-        container.innerHTML = clientState.promotedVideos.map(video => `
-            <div class="promotion-card" style="position: relative;">
-                <button class="delete-btn" onclick="deleteOwnVideo(${video.id})"><i class="fas fa-trash-alt"></i></button>
-                <img src="${video.thumbnail}" class="video-thumbnail" onclick="window.open('${video.url}', '_blank')">
-                <div class="channel-info">
-                    <img src="${video.channelLogo}" class="channel-logo">
-                    <div><strong>${escapeHtml(video.channelName)}</strong><div class="text-info">${escapeHtml(video.title)}</div></div>
-                </div>
-                <div class="mt-2">
-                    <div class="flex-between"><span>👁️ Watch Time:</span><span>${(video.totalWatchTime || 0).toLocaleString()} sec</span></div>
-                    <div class="flex-between"><span>👍 Likes:</span><span>${video.likes || 0}</span></div>
-                    <div class="flex-between"><span>🔄 Shares:</span><span>${video.shares || 0}</span></div>
-                    <div class="flex-between"><span>💬 Comments:</span><span>${video.comments || 0}</span></div>
-                    <div class="flex-between"><span>🔔 Subscribers:</span><span>${video.subscribers || 0}</span></div>
-                </div>
-                <a href="${video.url}" target="_blank" class="btn btn-secondary mt-2" style="width:100%;"><i class="fab fa-youtube"></i> Watch</a>
+        container.innerHTML = available.map(task => `
+            <div class="task-card priority-${task.priority || 'low'}">
+                <img src="${getThumbnail(task.url)}" style="width:100%;border-radius:12px;margin-bottom:10px;">
+                <div class="flex-between"><strong>${escapeHtml(task.title)}</strong><span class="badge badge-warning">Pending</span></div>
+                <div class="mt-2">💰 ${task.watchTime} coins | ⏱️ ${task.watchTime} sec</div>
+                <button class="btn btn-primary mt-2" style="width:100%;" onclick="startSecureVideoTask(${task.id}, '${escapeHtml(task.title)}', '${escapeHtml(task.url)}', ${task.watchTime})">
+                    <i class="fab fa-youtube"></i> Start Secure Task (${task.watchTime} coins)
+                </button>
             </div>
         `).join('');
     }
 
-    function updateUI() {
-        document.getElementById('clientCoins').innerHTML = clientState.clientCoins;
-        document.getElementById('completedCount').innerHTML = clientState.totalCompleted;
-        const totalEarned = clientState.earningsHistory.filter(h => h.isEarning).reduce((sum, h) => sum + h.coins, 0);
-        document.getElementById('totalEarned').innerHTML = totalEarned;
-        
-        const availableVideoTasks = clientState.videos.filter(v => !clientState.completedTasks[v.id]).length;
-        const availableEngagementTasks = clientState.engagementTasks.filter(e => !clientState.completedEngagement[e.id]).length;
-        document.getElementById('availableTasks').innerHTML = availableVideoTasks + availableEngagementTasks;
-        document.getElementById('videoTasksCount').innerHTML = availableVideoTasks;
-        document.getElementById('engagementTasksCount').innerHTML = availableEngagementTasks;
-    }
-
-    function renderVideoTasks() {
-        const container = document.getElementById('videoTasksList');
-        if(!container) return;
-        const availableTasks = clientState.videos.filter(v => !clientState.completedTasks[v.id]);
-        if (availableTasks.length === 0) {
-            container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-check-circle"></i><p>No video tasks available.</p></div>';
-            return;
-        }
-        container.innerHTML = availableTasks.map(task => {
-            const thumbnail = getThumbnail(task.url);
-            return `
-                <div class="task-card priority-${task.priority || 'low'}">
-                    ${thumbnail ? `<img src="${thumbnail}" class="video-thumbnail" onclick="window.open('${task.url}', '_blank')">` : ''}
-                    <div class="flex-between"><strong><i class="fab fa-youtube" style="color:#ef4444;"></i> ${escapeHtml(task.title)}</strong><span class="badge badge-warning">Pending</span></div>
-                    <div class="mt-2">
-                        <div><i class="fas fa-coins"></i> Reward: <span class="text-warning">${task.watchTime} coins</span></div>
-                        <div><i class="fas fa-hourglass-half"></i> Watch Time: ${task.watchTime} seconds</div>
-                        <div class="text-info mt-1">🔒 Verification required after timer</div>
-                    </div>
-                    <button class="btn btn-primary mt-2" style="width:100%;" onclick="startVideoTask(${task.id}, '${escapeHtml(task.title)}', '${escapeHtml(task.url)}', ${task.watchTime})">
-                        <i class="fab fa-youtube"></i> Start Task (${task.watchTime} coins)
-                    </button>
-                </div>
-            `;
-        }).join('');
-    }
-
     async function renderEngagementTasks() {
         const container = document.getElementById('engagementTasksList');
-        if(!container) return;
-        const availableTasks = clientState.engagementTasks.filter(e => !clientState.completedEngagement[e.id]);
-        if (availableTasks.length === 0) {
-            container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-tasks"></i><p>No engagement tasks available.</p></div>';
+        if (!container) return;
+        const available = clientState.engagementTasks.filter(e => !clientState.completedEngagement[e.id]);
+        if (available.length === 0) {
+            container.innerHTML = '<div style="text-align:center;padding:40px;"><i class="fas fa-tasks"></i><p>No tasks available</p></div>';
             return;
         }
         
-        // Fetch channel info for each task
-        for (let task of availableTasks) {
+        for (let task of available) {
             if (!task.channelInfo) {
-                const videoId = extractYouTubeId(task.target);
-                if (videoId) {
-                    task.channelInfo = await getYouTubeChannelInfo(videoId);
-                } else {
-                    task.channelInfo = {
-                        channelName: 'YouTube Channel',
-                        channelLogo: 'https://via.placeholder.com/40?text=YT',
-                        thumbnail: null
-                    };
-                }
+                task.channelInfo = await getChannelInfo(task.target);
             }
         }
         
@@ -1072,22 +724,16 @@
         const typeNames = { like:'Like', share:'Share', comment:'Comment', subscribe:'Subscribe' };
         const colors = { like:'#3b82f6', share:'#22c55e', comment:'#f59e0b', subscribe:'#ef4444' };
         
-        container.innerHTML = availableTasks.map(task => `
-            <div class="task-card priority-${task.priority || 'low'}">
-                ${task.channelInfo?.thumbnail ? `<img src="${task.channelInfo.thumbnail}" class="video-thumbnail" style="cursor: pointer;" onclick="window.open('${task.target}', '_blank')">` : ''}
+        container.innerHTML = available.map(task => `
+            <div class="task-card">
+                ${task.channelInfo?.thumbnail ? `<img src="${task.channelInfo.thumbnail}" style="width:100%;border-radius:12px;margin-bottom:10px;">` : ''}
                 <div class="channel-info">
-                    <img src="${task.channelInfo?.channelLogo}" class="channel-logo" onerror="this.src='https://via.placeholder.com/40'">
-                    <div>
-                        <strong>${escapeHtml(task.channelInfo?.channelName || 'YouTube Channel')}</strong>
-                        <div class="text-info" style="font-size: 11px;">${typeNames[task.type]} Task</div>
-                    </div>
+                    <img src="${task.channelInfo?.channelLogo}" class="channel-logo">
+                    <div><strong>${escapeHtml(task.channelInfo?.channelName || 'Channel')}</strong><div class="text-info">${typeNames[task.type]} Task</div></div>
                 </div>
-                <div class="mt-2">
-                    <div><i class="fas fa-coins"></i> Reward: <span class="text-warning">${task.coins} coins</span></div>
-                    ${task.commentText ? `<div class="text-info mt-1"><i class="fas fa-comment"></i> Suggested: "${escapeHtml(task.commentText)}"</div>` : ''}
-                </div>
-                <div class="text-info mt-1">🔒 Verification code required after action</div>
-                <button class="btn mt-2" style="width:100%; background: ${colors[task.type]}; color: white; border: none; padding: 12px; border-radius: 14px; cursor: pointer;" onclick="completeEngagementTask(${task.id}, '${escapeHtml(task.target)}', '${task.type}', ${task.coins}, '${escapeHtml(task.commentText || '')}')">
+                <div class="mt-2">💰 ${task.coins} coins</div>
+                ${task.commentText ? `<div class="text-info">💬 "${escapeHtml(task.commentText)}"</div>` : ''}
+                <button class="btn mt-2" style="width:100%; background: ${colors[task.type]}; color:white;" onclick="startSecureEngagementTask(${task.id}, '${escapeHtml(task.target)}', '${task.type}', ${task.coins}, '${escapeHtml(task.commentText || '')}')">
                     <i class="fas ${task.type === 'like' ? 'fa-thumbs-up' : task.type === 'share' ? 'fa-share-alt' : task.type === 'comment' ? 'fa-comment' : 'fa-bell'}"></i>
                     Take Action & Earn ${task.coins} Coins
                 </button>
@@ -1097,73 +743,36 @@
 
     function renderMessages() {
         const container = document.getElementById('messagesList');
-        if(!container) return;
+        if (!container) return;
         if (clientState.messages.length === 0) {
-            container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-inbox"></i><p>No messages from admin.</p></div>';
+            container.innerHTML = '<div style="text-align:center;padding:40px;"><i class="fas fa-inbox"></i><p>No messages</p></div>';
             return;
         }
         container.innerHTML = clientState.messages.map(msg => `
-            <div style="background: rgba(10,20,35,0.8); border-radius: 16px; padding: 15px; margin-bottom: 12px; border-left: 3px solid #3b82f6;">
-                <div class="flex-between"><span class="badge badge-info"><i class="fas fa-user-shield"></i> Admin</span><span style="font-size:11px;">${msg.timestamp}</span></div>
+            <div style="background:rgba(10,20,35,0.8);border-radius:16px;padding:15px;margin-bottom:12px;border-left:3px solid #3b82f6;">
+                <div class="flex-between"><span class="badge badge-info">Admin</span><span style="font-size:11px;">${msg.timestamp}</span></div>
                 <div class="mt-2">${escapeHtml(msg.message)}</div>
             </div>
         `).join('');
     }
 
-    function renderEarningsHistory() {
-        const container = document.getElementById('earningsHistory');
-        if(!container) return;
-        if (clientState.earningsHistory.length === 0) {
-            container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-chart-line"></i><p>No activity yet. Complete tasks to start earning!</p></div>';
-            return;
-        }
-        container.innerHTML = clientState.earningsHistory.map(item => `
-            <div style="display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                <div><strong>${escapeHtml(item.title)}</strong><div style="font-size:11px;">${item.type} • ${item.timestamp}</div></div>
-                <div class="${item.isEarning ? 'text-warning' : 'text-danger'}">${item.isEarning ? '+' : '-'}${item.coins} 🪙</div>
-            </div>
-        `).join('');
-    }
-
-    function animateCoins() {
-        const coinElement = document.getElementById('clientCoins');
-        if(coinElement) {
-            coinElement.classList.add('coin-animation');
-            setTimeout(() => coinElement.classList.remove('coin-animation'), 500);
-        }
-    }
-
-    function updateDateTime() { 
-        const el = document.getElementById('currentDateTime');
-        if(el) el.innerHTML = new Date().toLocaleString();
-    }
+    function escapeHtml(text) { if (!text) return ''; const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+    function updateDateTime() { document.getElementById('currentDateTime').innerHTML = new Date().toLocaleString(); }
     setInterval(updateDateTime, 1000);
-
-    function escapeHtml(text) { 
-        if (!text) return ''; 
-        const div = document.createElement('div'); 
-        div.textContent = text; 
-        return div.innerHTML; 
-    }
 
     const client = {
         toggleTheme() { document.body.classList.toggle('light-mode'); },
         showHelp() {
-            Swal.fire('Secure System Guide', 
-                '🔒 SECURITY FEATURES:\n\n📹 VIDEO TASKS:\n• Timer complete hone ke baad VERIFICATION CODE enter karna hoga\n• Tab switch karne par task cancel ho jayega\n\n' +
-                '🎯 ENGAGEMENT TASKS (FIXED):\n• Channel ka logo properly show hoga\n• Video thumbnail show hogi\n• Action complete karne ke baad VERIFICATION CODE enter karna hoga\n• Wrong code = Scam report\n\n' +
-                '⚠️ 3 SCAM ATTEMPTS = PERMANENT BAN', 'info');
-        },
-        addPromotionVideo() { addPromotionVideo(); },
-        buyService(serviceType) { buyService(serviceType); },
-        previewVideo() { previewVideo(); }
+            Swal.fire('ULTIMATE SECURITY SYSTEM', 
+                '🔒 SECURITY FEATURES:\n\n• Tab switch = Auto cancel + Scam report\n• Verification code required for ALL tasks\n• 30 second cooldown between tasks\n• Device fingerprint tracking\n• Session ID tracking\n• 2 scam attempts = Permanent ban\n• Rate limiting active\n\n✅ Follow instructions exactly to earn coins!', 'info');
+        }
     };
 
-    window.startVideoTask = startVideoTask;
-    window.completeEngagementTask = completeEngagementTask;
-    window.deleteOwnVideo = deleteOwnVideo;
+    window.startSecureVideoTask = startSecureVideoTask;
+    window.startSecureEngagementTask = startSecureEngagementTask;
     window.client = client;
 
+    if (!initSecurity()) return;
     loadData();
     updateDateTime();
 </script>
