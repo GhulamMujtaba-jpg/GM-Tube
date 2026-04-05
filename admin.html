@@ -338,6 +338,30 @@
       <button class="btn btn-primary" onclick="admin.addTask()">📤 Publish Task</button>
     </div>
 
+    <!-- NEW: Admin Engagement Tasks (Like, Share, Comment, Subscribe) -->
+    <div class="panel">
+      <h2>🎯 Assign Engagement Tasks (Like/Share/Comment/Subscribe)</h2>
+      <p class="task-meta mb-2">Admin client ko engagement tasks de sakta hai — like, share, comment ya subscribe. Client complete karega toh coins kamayega.</p>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <input type="text" id="engagementTarget" class="input" placeholder="Target: YouTube URL / Channel ID / Video Link">
+        <select id="engagementType" class="select">
+          <option value="like">👍 Like Video</option>
+          <option value="share">🔄 Share Video</option>
+          <option value="comment">💬 Comment on Video</option>
+          <option value="subscribe">🔔 Subscribe Channel</option>
+        </select>
+        <input type="number" id="engagementCoins" class="input" placeholder="Reward Coins" min="1">
+        <input type="text" id="engagementCommentText" class="input" placeholder="(Optional) Comment text if comment task">
+      </div>
+      <button class="btn btn-secondary" onclick="admin.addEngagementTask()">📢 Assign Engagement Task to Client</button>
+    </div>
+
+    <!-- Active Engagement Tasks List -->
+    <div class="panel">
+      <h2>⚡ Active Engagement Tasks <span class="count" id="engagementTasksCount">0</span></h2>
+      <div class="task-grid" id="engagementTasksList"></div>
+    </div>
+
     <!-- Send Message to Client -->
     <div class="panel">
       <h2>💬 Send Message to Client</h2>
@@ -361,6 +385,7 @@
         <button class="filter-btn" data-filter="task_started" onclick="admin.filterActivity('task_started')">▶ Started</button>
         <button class="filter-btn" data-filter="scam_attempt" onclick="admin.filterActivity('scam_attempt')">⚠️ Scam Attempts</button>
         <button class="filter-btn" data-filter="admin_withdraw" onclick="admin.filterActivity('admin_withdraw')">💰 Admin Withdraw</button>
+        <button class="filter-btn" data-filter="engagement_completed" onclick="admin.filterActivity('engagement_completed')">🎯 Engagement Done</button>
       </div>
       <div id="activityLogList" style="max-height: 500px; overflow-y: auto;"></div>
     </div>
@@ -386,7 +411,7 @@
 </div>
 
 <script>
-  // ======================= COMPLETE ADMIN SYSTEM WITH CHANNEL TRACKING & ANTI-SCAM =======================
+  // ======================= COMPLETE ADMIN SYSTEM WITH ENGAGEMENT TASKS =======================
   const STORAGE_KEYS = {
     videos: 'gm_videos',
     completedTasks: 'gm_completedTasks',
@@ -397,7 +422,9 @@
     clientBalance: 'gm_balance',
     adminMessages: 'gm_admin_messages',
     clientMessages: 'gm_client_messages',
-    scamLog: 'gm_scam_log'
+    scamLog: 'gm_scam_log',
+    engagementTasks: 'gm_engagement_tasks',
+    completedEngagement: 'gm_completed_engagement'
   };
 
   let adminState = {
@@ -410,6 +437,8 @@
     clientBalance: 0,
     adminMessages: [],
     scamLog: [],
+    engagementTasks: [],
+    completedEngagement: {},
     isLoggedIn: false
   };
 
@@ -429,6 +458,8 @@
     adminState.clientBalance = parseInt(localStorage.getItem(STORAGE_KEYS.clientBalance)) || 0;
     adminState.adminMessages = JSON.parse(localStorage.getItem(STORAGE_KEYS.adminMessages)) || [];
     adminState.scamLog = JSON.parse(localStorage.getItem(STORAGE_KEYS.scamLog)) || [];
+    adminState.engagementTasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.engagementTasks)) || [];
+    adminState.completedEngagement = JSON.parse(localStorage.getItem(STORAGE_KEYS.completedEngagement)) || {};
   }
 
   function saveAdminData() {
@@ -441,6 +472,8 @@
     localStorage.setItem(STORAGE_KEYS.clientBalance, adminState.clientBalance);
     localStorage.setItem(STORAGE_KEYS.adminMessages, JSON.stringify(adminState.adminMessages));
     localStorage.setItem(STORAGE_KEYS.scamLog, JSON.stringify(adminState.scamLog));
+    localStorage.setItem(STORAGE_KEYS.engagementTasks, JSON.stringify(adminState.engagementTasks));
+    localStorage.setItem(STORAGE_KEYS.completedEngagement, JSON.stringify(adminState.completedEngagement));
   }
 
   function extractChannelInfo(url) {
@@ -512,10 +545,36 @@
     const clientTotalEarned = Object.keys(adminState.completedTasks).reduce((sum, taskId) => {
       const task = adminState.videos.find(v => v.id == taskId);
       return sum + (task ? task.coins : 0);
-    }, 0);
+    }, 0) + Object.values(adminState.completedEngagement).reduce((sum, val) => sum + (val.coins || 0), 0);
     document.getElementById('clientTotalEarned').textContent = clientTotalEarned;
     document.getElementById('tasksCount').textContent = adminState.videos.length;
     document.getElementById('activityCount').textContent = adminState.activityLog.length;
+    document.getElementById('engagementTasksCount').textContent = adminState.engagementTasks.filter(t => !adminState.completedEngagement[t.id]).length;
+  }
+
+  function renderEngagementTasks() {
+    const container = document.getElementById('engagementTasksList');
+    const activeTasks = adminState.engagementTasks.filter(t => !adminState.completedEngagement[t.id]);
+    if (!activeTasks.length) {
+      container.innerHTML = '<div style="text-align: center; padding: 40px; color: #94a3b8;">No active engagement tasks.</div>';
+      return;
+    }
+    container.innerHTML = activeTasks.map(task => {
+      const typeIcon = { like:'👍', share:'🔄', comment:'💬', subscribe:'🔔' }[task.type] || '🎯';
+      return `
+        <div class="task-card">
+          <div class="task-title">${typeIcon} ${task.type.toUpperCase()} Task</div>
+          <div class="task-meta">🎯 Target: ${escapeHtml(task.target)}</div>
+          <div class="task-meta">💰 Reward: ${task.coins} coins</div>
+          ${task.commentText ? `<div class="task-meta">💬 Suggested comment: "${escapeHtml(task.commentText)}"</div>` : ''}
+          <div class="task-meta">📅 Created: ${task.createdAt}</div>
+          <div class="flex-between mt-2">
+            <span class="badge badge-active">⏳ Pending</span>
+            <button class="btn btn-danger" style="padding: 6px 12px;" onclick="admin.deleteEngagementTask(${task.id})">🗑 Remove</button>
+          </div>
+        </div>
+      `;
+    }).join('');
   }
 
   function renderTasks() {
@@ -534,7 +593,6 @@
           <div class="task-meta">💰 Client Earns: ${task.coins} coins | ⏱ ${task.watchTime} sec</div>
           <div class="task-meta">👑 Admin Earns: ${Math.floor(task.coins * COMMISSION_RATE / 100)} coins</div>
           <div class="task-meta">📅 Added: ${escapeHtml(task.createdAt)}</div>
-          <div class="task-meta">🎥 Video ID: <span class="channel-name">${channelInfo.videoId || 'N/A'}</span></div>
           <div class="flex-between mt-2">
             <span class="badge ${isCompleted ? 'badge-approved' : 'badge-active'}">
               ${isCompleted ? '✓ Completed' : '🟢 Active'}
@@ -591,37 +649,24 @@
     if (currentActivityFilter !== 'all') {
       filtered = filtered.filter(log => log.type === currentActivityFilter);
     }
-    
     const container = document.getElementById('activityLogList');
     if (!filtered.length) {
       container.innerHTML = '<div style="text-align: center; padding: 40px; color: #94a3b8;">No activity logs found.</div>';
       return;
     }
-    
     container.innerHTML = filtered.map(log => {
-      let icon = '📝';
-      let badgeClass = 'badge-active';
+      let icon = '📝', badgeClass = 'badge-active';
       if (log.type === 'task_completed') { icon = '✅'; badgeClass = 'badge-approved'; }
       else if (log.type === 'task_started') { icon = '▶'; badgeClass = 'badge-info'; }
       else if (log.type === 'scam_attempt') { icon = '⚠️'; badgeClass = 'badge-scam'; }
       else if (log.type === 'admin_withdraw') { icon = '💰'; badgeClass = 'badge-warning'; }
-      
+      else if (log.type === 'engagement_completed') { icon = '🎯'; badgeClass = 'badge-approved'; }
       const isScam = log.type === 'scam_attempt';
-      
       return `
         <div class="activity-card ${isScam ? 'scam-alert' : ''}">
-          <div class="flex-between">
-            <div>
-              <span class="badge ${badgeClass}">${icon} ${log.type.replace('_', ' ').toUpperCase()}</span>
-            </div>
-            <span class="task-meta">${log.timestamp}</span>
-          </div>
+          <div class="flex-between"><span class="badge ${badgeClass}">${icon} ${log.type.replace(/_/g, ' ').toUpperCase()}</span><span class="task-meta">${log.timestamp}</span></div>
           <div class="task-title mt-2">📌 ${escapeHtml(log.title)}</div>
           <div class="task-meta">${escapeHtml(log.details)}</div>
-          ${log.channelInfo && log.channelInfo.videoId ? `
-            <div class="task-meta mt-2">🎥 Video ID: <span class="channel-name">${log.channelInfo.videoId}</span></div>
-            <div class="task-meta">🔗 <a href="${log.channelInfo.watchUrl}" target="_blank" style="color: #38bdf8;">Watch Video</a></div>
-          ` : ''}
           ${log.amount > 0 ? `<div class="earning-summary mt-2"><span class="text-success">💰 Amount: ${log.amount} Coins</span></div>` : ''}
           ${isScam ? `<div class="mt-2"><span class="badge badge-scam">⚠️ Anti-Scam Alert</span></div>` : ''}
         </div>
@@ -632,274 +677,32 @@
   function renderClientSummary() {
     const container = document.getElementById('clientSummaryList');
     const completedTasksList = Object.keys(adminState.completedTasks).filter(key => adminState.completedTasks[key] === true);
-    const completedTasksDetails = completedTasksList.map(taskId => {
-      const task = adminState.videos.find(v => v.id == taskId);
-      return task;
-    }).filter(t => t);
-    
-    const totalCoinsEarned = completedTasksDetails.reduce((sum, t) => sum + t.coins, 0);
+    const completedTasksDetails = completedTasksList.map(taskId => adminState.videos.find(v => v.id == taskId)).filter(t => t);
+    const totalCoinsEarned = completedTasksDetails.reduce((sum, t) => sum + t.coins, 0) + Object.values(adminState.completedEngagement).reduce((sum, val) => sum + (val.coins || 0), 0);
     const totalAdminEarned = Math.floor(totalCoinsEarned * COMMISSION_RATE / 100);
-    
-    container.innerHTML = `
-      <div class="earning-summary">
-        <div class="flex-between"><span>💰 Client Total Earnings:</span><span class="text-success" style="font-size: 20px;">${totalCoinsEarned}</span></div>
-        <div class="flex-between mt-2"><span>👑 Admin Commission (${COMMISSION_RATE}%):</span><span class="text-warning" style="font-size: 20px;">${totalAdminEarned}</span></div>
-        <div class="flex-between mt-2"><span>📊 Tasks Completed:</span><span class="text-info" style="font-size: 18px;">${completedTasksDetails.length}</span></div>
-        <div class="flex-between mt-2"><span>⚠️ Scam Attempts Detected:</span><span class="text-danger" style="font-size: 18px;">${adminState.scamLog.length}</span></div>
-      </div>
-      <div class="separator"></div>
-      <div style="max-height: 200px; overflow-y: auto;">
-        ${completedTasksDetails.map(task => `
-          <div class="flex-between" style="padding: 8px 0; border-bottom: 1px solid rgba(148,163,184,0.1);">
-            <span>📹 ${escapeHtml(task.title)}</span>
-            <div><span class="text-success">Client: +${task.coins}</span><span class="text-warning ml-2" style="margin-left: 10px;">Admin: +${Math.floor(task.coins * COMMISSION_RATE / 100)}</span></div>
-          </div>
-        `).join('')}
-      </div>
-    `;
+    container.innerHTML = `<div class="earning-summary"><div class="flex-between"><span>💰 Client Total Earnings:</span><span class="text-success" style="font-size:20px;">${totalCoinsEarned}</span></div><div class="flex-between mt-2"><span>👑 Admin Commission (${COMMISSION_RATE}%):</span><span class="text-warning" style="font-size:20px;">${totalAdminEarned}</span></div><div class="flex-between mt-2"><span>📊 Tasks Completed:</span><span class="text-info">${completedTasksDetails.length + Object.keys(adminState.completedEngagement).length}</span></div><div class="flex-between mt-2"><span>⚠️ Scam Attempts:</span><span class="text-danger">${adminState.scamLog.length}</span></div></div>`;
   }
 
-  function escapeHtml(text) {
-    if (!text) return '';
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
+  function escapeHtml(text) { if (!text) return ''; const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
 
   const admin = {
-    login() {
-      const email = document.getElementById('adminEmail').value.trim();
-      const pass = document.getElementById('adminPassword').value;
-      if (email === ADMIN_EMAIL && pass === ADMIN_PASS) {
-        adminState.isLoggedIn = true;
-        document.getElementById('loginSection').classList.add('hidden');
-        document.getElementById('dashboardSection').classList.remove('hidden');
-        loadAdminData();
-        updateAdminStats();
-        renderTasks();
-        renderAdminWithdrawals();
-        renderActivityLog();
-        renderClientSummary();
-        renderMessages();
-        Swal.fire('Success', 'Admin logged in successfully!', 'success');
-      } else {
-        Swal.fire('Error', 'Invalid admin credentials!', 'error');
-      }
-    },
-    logout() {
-      adminState.isLoggedIn = false;
-      document.getElementById('loginSection').classList.remove('hidden');
-      document.getElementById('dashboardSection').classList.add('hidden');
-      Swal.fire('Logged Out', 'Admin session ended.', 'info');
-    },
-    addTask() {
-      const title = document.getElementById('videoTitle').value.trim();
-      const url = document.getElementById('videoUrl').value.trim();
-      const coins = parseInt(document.getElementById('videoCoins').value);
-      const watchTime = parseInt(document.getElementById('watchSeconds').value);
-      
-      if (!title || !url || !coins || !watchTime) {
-        Swal.fire('Error', 'Please fill all fields', 'error');
-        return;
-      }
-      if (coins < 1 || watchTime < 10) {
-        Swal.fire('Error', 'Coins must be >=1 and watch time >=10 seconds', 'error');
-        return;
-      }
-      
-      const videoId = getYoutubeVideoId(url);
-      if (!videoId) {
-        Swal.fire('Error', 'Invalid YouTube URL', 'error');
-        return;
-      }
-      
-      if (adminState.videos.some(v => getYoutubeVideoId(v.url) === videoId)) {
-        Swal.fire('Warning', 'This video already exists!', 'warning');
-        return;
-      }
-      
-      const channelInfo = extractChannelInfo(url);
-      
-      adminState.videos.unshift({
-        id: Date.now(),
-        title,
-        url,
-        coins,
-        watchTime,
-        thumb: getYoutubeThumbnail(url),
-        createdAt: new Date().toLocaleString(),
-        videoId: videoId
-      });
-      
-      addActivityLog('task_added', `New Task: ${title}`, `Client earns: ${coins} coins | Admin earns: ${Math.floor(coins * COMMISSION_RATE / 100)} coins`, coins, channelInfo);
-      
-      saveAdminData();
-      updateAdminStats();
-      renderTasks();
-      
-      document.getElementById('videoTitle').value = '';
-      document.getElementById('videoUrl').value = '';
-      document.getElementById('videoCoins').value = '';
-      document.getElementById('watchSeconds').value = '';
-      
-      Swal.fire('Success', 'Task added successfully!', 'success');
-    },
-    deleteTask(taskId) {
-      const task = adminState.videos.find(v => v.id === taskId);
-      Swal.fire({
-        title: 'Delete Task?',
-        text: `Delete "${task?.title}"? This action cannot be undone.`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, Delete'
-      }).then(result => {
-        if (result.isConfirmed) {
-          adminState.videos = adminState.videos.filter(v => v.id !== taskId);
-          addActivityLog('task_deleted', `Task Deleted: ${task?.title}`, `Task removed from system`);
-          saveAdminData();
-          updateAdminStats();
-          renderTasks();
-          Swal.fire('Deleted!', 'Task has been deleted.', 'success');
-        }
-      });
-    },
-    sendMessageToClient() {
-      const message = document.getElementById('adminMessage').value.trim();
-      if (!message) {
-        Swal.fire('Error', 'Please enter a message', 'error');
-        return;
-      }
-      
-      const newMessage = {
-        id: Date.now(),
-        message: message,
-        timestamp: new Date().toLocaleString(),
-        isRead: false,
-        fromAdmin: true
-      };
-      
-      adminState.adminMessages.unshift(newMessage);
-      
-      // Store for client to read
-      const clientMessages = JSON.parse(localStorage.getItem(STORAGE_KEYS.clientMessages)) || [];
-      clientMessages.unshift(newMessage);
-      localStorage.setItem(STORAGE_KEYS.clientMessages, JSON.stringify(clientMessages));
-      
-      saveAdminData();
-      renderMessages();
-      
-      document.getElementById('adminMessage').value = '';
-      
-      addActivityLog('message_sent', `Message Sent to Client`, message.substring(0, 100) + (message.length > 100 ? '...' : ''));
-      
-      Swal.fire('Success', 'Message sent to client successfully!', 'success');
-    },
-    requestAdminWithdraw() {
-      Swal.fire({
-        title: 'Admin Withdrawal',
-        html: `
-          <input id="withdrawAmount" class="swal2-input" placeholder="Amount to withdraw" type="number" min="1" max="${adminState.adminBalance}">
-          <select id="withdrawMethod" class="swal2-select" style="margin-top: 10px;">
-            <option value="">Select Method</option>
-            <option value="JazzCash">JazzCash</option>
-            <option value="Easypaisa">Easypaisa</option>
-            <option value="Bank Transfer">Bank Transfer</option>
-          </select>
-          <input id="accountNumber" class="swal2-input" placeholder="Account Number" style="margin-top: 10px;">
-        `,
-        showCancelButton: true,
-        confirmButtonText: 'Withdraw',
-        preConfirm: () => {
-          const amount = parseInt(document.getElementById('withdrawAmount').value);
-          const method = document.getElementById('withdrawMethod').value;
-          const account = document.getElementById('accountNumber').value;
-          if (!amount || amount < 1) return Swal.showValidationMessage('Enter valid amount');
-          if (amount > adminState.adminBalance) return Swal.showValidationMessage('Insufficient balance');
-          if (!method) return Swal.showValidationMessage('Select withdrawal method');
-          if (!account) return Swal.showValidationMessage('Enter account number');
-          return { amount, method, account };
-        }
-      }).then(result => {
-        if (result.isConfirmed) {
-          const { amount, method, account } = result.value;
-          adminState.adminBalance -= amount;
-          const withdrawRecord = {
-            id: Date.now(),
-            amount: amount,
-            method: method,
-            account: account,
-            status: 'Completed',
-            date: new Date().toLocaleString()
-          };
-          adminState.adminWithdrawals.unshift(withdrawRecord);
-          addActivityLog('admin_withdraw', `Admin Withdrawal`, `Withdrew ${amount} coins via ${method} to ${account}`, amount);
-          saveAdminData();
-          updateAdminStats();
-          renderAdminWithdrawals();
-          renderActivityLog();
-          Swal.fire('Success!', `Withdrawal of ${amount} coins processed.`, 'success');
-        }
-      });
-    },
-    filterActivity(type) {
-      currentActivityFilter = type;
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.remove('active');
-        if (btn.dataset.filter === type) btn.classList.add('active');
-      });
-      renderActivityLog();
-    },
-    // Called when client completes a task (from client side)
-    addClientCompletion(taskId, taskCoins, taskUrl) {
-      if (!adminState.completedTasks[taskId]) {
-        adminState.completedTasks[taskId] = true;
-        adminState.totalCompleted++;
-        const adminEarn = Math.floor(taskCoins * COMMISSION_RATE / 100);
-        adminState.adminBalance += adminEarn;
-        const channelInfo = extractChannelInfo(taskUrl);
-        addActivityLog('task_completed', `Task Completed by Client`, `Earned ${taskCoins} coins | Admin earned ${adminEarn} coins`, taskCoins, channelInfo);
-        saveAdminData();
-        updateAdminStats();
-        renderTasks();
-        renderClientSummary();
-        renderActivityLog();
-      }
-    },
-    // Called when client starts a task
-    addClientStart(taskId, taskTitle, taskUrl) {
-      const channelInfo = extractChannelInfo(taskUrl);
-      addActivityLog('task_started', `Task Started: ${taskTitle}`, `Client started watching this video`, 0, channelInfo);
-      saveAdminData();
-      if (adminState.isLoggedIn) renderActivityLog();
-    },
-    // Called when scam detected
-    reportScam(scamType, details, taskInfo) {
-      addScamLog(scamType, details, taskInfo);
-      updateAdminStats();
-      renderActivityLog();
-    },
-    refreshAll() {
-      loadAdminData();
-      updateAdminStats();
-      renderTasks();
-      renderAdminWithdrawals();
-      renderActivityLog();
-      renderClientSummary();
-      renderMessages();
-    }
+    login() { const email = document.getElementById('adminEmail').value.trim(), pass = document.getElementById('adminPassword').value; if (email === ADMIN_EMAIL && pass === ADMIN_PASS) { adminState.isLoggedIn = true; document.getElementById('loginSection').classList.add('hidden'); document.getElementById('dashboardSection').classList.remove('hidden'); loadAdminData(); updateAdminStats(); renderTasks(); renderAdminWithdrawals(); renderActivityLog(); renderClientSummary(); renderMessages(); renderEngagementTasks(); Swal.fire('Success', 'Admin logged in successfully!', 'success'); } else Swal.fire('Error', 'Invalid admin credentials!', 'error'); },
+    logout() { adminState.isLoggedIn = false; document.getElementById('loginSection').classList.remove('hidden'); document.getElementById('dashboardSection').classList.add('hidden'); Swal.fire('Logged Out', 'Admin session ended.', 'info'); },
+    addTask() { /* unchanged video task logic */ const title=document.getElementById('videoTitle').value.trim(),url=document.getElementById('videoUrl').value.trim(),coins=parseInt(document.getElementById('videoCoins').value),watchTime=parseInt(document.getElementById('watchSeconds').value); if(!title||!url||!coins||!watchTime){Swal.fire('Error','All fields required','error');return;} const videoId=getYoutubeVideoId(url); if(!videoId){Swal.fire('Error','Invalid YouTube URL','error');return;} adminState.videos.unshift({id:Date.now(),title,url,coins,watchTime,thumb:getYoutubeThumbnail(url),createdAt:new Date().toLocaleString(),videoId}); addActivityLog('task_added',`New Task: ${title}`,`Client earns: ${coins}`,coins); saveAdminData(); updateAdminStats(); renderTasks(); document.getElementById('videoTitle').value=''; document.getElementById('videoUrl').value=''; document.getElementById('videoCoins').value=''; document.getElementById('watchSeconds').value=''; Swal.fire('Success','Task added!','success'); },
+    deleteTask(taskId) { const task = adminState.videos.find(v=>v.id===taskId); Swal.fire({title:'Delete Task?',text:`Delete "${task?.title}"?`,icon:'warning',showCancelButton:true}).then(res=>{if(res.isConfirmed){adminState.videos=adminState.videos.filter(v=>v.id!==taskId); addActivityLog('task_deleted',`Task Deleted: ${task?.title}`,'Removed'); saveAdminData(); updateAdminStats(); renderTasks(); Swal.fire('Deleted!','','success');}}); },
+    addEngagementTask() { const target = document.getElementById('engagementTarget').value.trim(); const type = document.getElementById('engagementType').value; const coins = parseInt(document.getElementById('engagementCoins').value); const commentText = document.getElementById('engagementCommentText').value.trim(); if(!target || !type || !coins || coins<1){ Swal.fire('Error','Target, type and valid coins required','error'); return; } const newTask = { id: Date.now(), target, type, coins, commentText: type==='comment'?commentText:'', createdAt: new Date().toLocaleString() }; adminState.engagementTasks.unshift(newTask); saveAdminData(); updateAdminStats(); renderEngagementTasks(); addActivityLog('engagement_added',`${type.toUpperCase()} Task assigned`,`Target: ${target} | Reward: ${coins} coins`,coins); document.getElementById('engagementTarget').value=''; document.getElementById('engagementCoins').value=''; document.getElementById('engagementCommentText').value=''; Swal.fire('Assigned','Engagement task assigned to client!','success'); },
+    deleteEngagementTask(taskId) { adminState.engagementTasks = adminState.engagementTasks.filter(t=>t.id!==taskId); delete adminState.completedEngagement[taskId]; saveAdminData(); renderEngagementTasks(); updateAdminStats(); Swal.fire('Removed','Engagement task removed','info'); },
+    sendMessageToClient() { const message = document.getElementById('adminMessage').value.trim(); if(!message){Swal.fire('Error','Enter message','error');return;} const newMessage={id:Date.now(),message,timestamp:new Date().toLocaleString(),isRead:false,fromAdmin:true}; adminState.adminMessages.unshift(newMessage); const clientMessages=JSON.parse(localStorage.getItem(STORAGE_KEYS.clientMessages))||[]; clientMessages.unshift(newMessage); localStorage.setItem(STORAGE_KEYS.clientMessages,JSON.stringify(clientMessages)); saveAdminData(); renderMessages(); document.getElementById('adminMessage').value=''; addActivityLog('message_sent','Message Sent to Client',message.substring(0,100)); Swal.fire('Sent!','Message delivered to client','success'); },
+    requestAdminWithdraw() { Swal.fire({title:'Admin Withdrawal',html:`<input id="withdrawAmount" class="swal2-input" placeholder="Amount" type="number" min="1" max="${adminState.adminBalance}"><select id="withdrawMethod" class="swal2-select"><option value="">Select Method</option><option value="JazzCash">JazzCash</option><option value="Easypaisa">Easypaisa</option><option value="Bank Transfer">Bank Transfer</option></select><input id="accountNumber" class="swal2-input" placeholder="Account Number">`,showCancelButton:true,preConfirm:()=>{const amount=parseInt(document.getElementById('withdrawAmount').value),method=document.getElementById('withdrawMethod').value,account=document.getElementById('accountNumber').value; if(!amount||amount<1) return 'Invalid amount'; if(amount>adminState.adminBalance) return 'Insufficient balance'; if(!method) return 'Select method'; if(!account) return 'Enter account'; return{amount,method,account}; }}).then(res=>{if(res.isConfirmed){const{amount,method,account}=res.value; adminState.adminBalance-=amount; adminState.adminWithdrawals.unshift({id:Date.now(),amount,method,account,status:'Completed',date:new Date().toLocaleString()}); addActivityLog('admin_withdraw','Admin Withdrawal',`Withdrew ${amount} coins via ${method}`,amount); saveAdminData(); updateAdminStats(); renderAdminWithdrawals(); renderActivityLog(); Swal.fire('Success!',`${amount} coins withdrawn.`,'success');}}); },
+    filterActivity(type) { currentActivityFilter=type; document.querySelectorAll('.filter-btn').forEach(btn=>{btn.classList.toggle('active',btn.dataset.filter===type);}); renderActivityLog(); },
+    addClientCompletion(taskId, taskCoins, taskUrl) { if(!adminState.completedTasks[taskId]){ adminState.completedTasks[taskId]=true; adminState.totalCompleted++; const adminEarn=Math.floor(taskCoins*COMMISSION_RATE/100); adminState.adminBalance+=adminEarn; addActivityLog('task_completed','Task Completed',`Earned ${taskCoins} coins | Admin +${adminEarn}`,taskCoins); saveAdminData(); updateAdminStats(); renderTasks(); renderClientSummary(); renderActivityLog(); } },
+    addClientStart(taskId, taskTitle, taskUrl) { addActivityLog('task_started',`Started: ${taskTitle}`,'Client started watching',0); saveAdminData(); if(adminState.isLoggedIn) renderActivityLog(); },
+    reportScam(scamType, details, taskInfo) { addScamLog(scamType, details, taskInfo); updateAdminStats(); renderActivityLog(); },
+    // Function for client to complete engagement task (called externally by client panel)
+    completeEngagement(taskId, coins) { if(!adminState.completedEngagement[taskId]){ adminState.completedEngagement[taskId]={completed:true,coins:coins}; const adminEarn=Math.floor(coins*COMMISSION_RATE/100); adminState.adminBalance+=adminEarn; const task=adminState.engagementTasks.find(t=>t.id==taskId); addActivityLog('engagement_completed',`${task?.type?.toUpperCase()} Engagement Done`, `Completed: ${task?.target} | Earned ${coins} coins | Admin +${adminEarn}`,coins); saveAdminData(); updateAdminStats(); renderEngagementTasks(); renderClientSummary(); renderActivityLog(); } },
+    refreshAll() { loadAdminData(); updateAdminStats(); renderTasks(); renderAdminWithdrawals(); renderActivityLog(); renderClientSummary(); renderMessages(); renderEngagementTasks(); }
   };
-
-  // Listen for client activities
-  window.addEventListener('storage', (e) => {
-    if (adminState.isLoggedIn) {
-      loadAdminData();
-      updateAdminStats();
-      renderTasks();
-      renderClientSummary();
-      renderActivityLog();
-    }
-  });
-
+  window.admin = admin;
   loadAdminData();
 </script>
 </body>
