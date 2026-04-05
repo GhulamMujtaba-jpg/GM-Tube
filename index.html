@@ -171,11 +171,11 @@
             transition: width 0.5s;
         }
         .watch-timer {
-            font-size: 24px;
+            font-size: 36px;
             font-weight: 800;
             color: #22c55e;
             text-align: center;
-            padding: 10px;
+            padding: 20px;
         }
         .quantity-input {
             width: 120px;
@@ -233,6 +233,7 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s;
+            z-index: 10;
         }
         .delete-btn:hover {
             background: #dc2626;
@@ -246,6 +247,19 @@
         .thumbnail-preview img {
             width: 100%;
             border-radius: 8px;
+        }
+        .countdown-circle {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .timer-animation {
+            animation: pulse 1s infinite;
         }
         @media (max-width: 768px) {
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
@@ -261,7 +275,7 @@
 </div>
 
 <div class="container">
-    <!-- Header - No Reset Button Now -->
+    <!-- Header -->
     <div class="card">
         <div class="flex-between">
             <div>
@@ -314,7 +328,7 @@
         </div>
         <p style="color: #94a3b8; margin-bottom: 20px;">Apni video upload karein aur apne coins se <strong>Views, Likes, Shares, Comments aur Subscribers</strong> lein!</p>
         
-        <!-- Upload Video Form with Live Preview -->
+        <!-- Upload Video Form -->
         <div style="background: rgba(0,0,0,0.3); border-radius: 20px; padding: 20px; margin-bottom: 25px;">
             <h3><i class="fas fa-upload"></i> Upload Your Video</h3>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
@@ -329,30 +343,28 @@
         <h3><i class="fas fa-gem"></i> Buy Promotion Services</h3>
         <div class="service-grid" id="servicesGrid"></div>
 
-        <!-- My Promoted Videos List - Client Sirf Apni Videos Delete Kar Sakta Hai -->
+        <!-- My Promoted Videos List -->
         <h3 class="mt-3"><i class="fas fa-list"></i> My Promoted Videos</h3>
         <div id="promotedVideosList" class="promotion-grid"></div>
     </div>
 
-    <!-- Video Tasks Section - Admin Ke Tasks (Client Delete Nahi Kar Sakta) -->
+    <!-- Video Tasks Section - Countdown Starts Immediately -->
     <div class="card">
         <div class="flex-between">
             <h2><i class="fas fa-video"></i> Watch Videos & Earn Coins</h2>
             <span class="badge badge-info" id="videoTasksCount">0</span>
         </div>
-        <p style="color: #94a3b8; margin-bottom: 15px;"><strong class="text-warning">⚡ 1 second watch time = 1 coin! 60 seconds = 60 coins!</strong></p>
-        <p class="text-info mb-2"><i class="fas fa-lock"></i> Yeh tasks admin ne diye hain - delete nahi kar sakte</p>
+        <p style="color: #94a3b8; margin-bottom: 15px;"><strong class="text-warning">⚡ Video open kiye bina timer start ho jayega! 1 second = 1 coin!</strong></p>
         <div id="videoTasksList" class="task-grid"></div>
     </div>
 
-    <!-- Engagement Tasks Section - Admin Ke Tasks (Client Delete Nahi Kar Sakta) -->
+    <!-- Engagement Tasks Section - Take Action Button -->
     <div class="card">
         <div class="flex-between">
             <h2><i class="fas fa-heart"></i> Engagement Tasks (Earn Bonus Coins)</h2>
             <span class="badge badge-info" id="engagementTasksCount">0</span>
         </div>
-        <p style="color: #94a3b8; margin-bottom: 15px;"><strong>👍 Like | 🔄 Share | 💬 Comment | 🔔 Subscribe</strong> to earn bonus coins!</p>
-        <p class="text-info mb-2"><i class="fas fa-lock"></i> Yeh tasks admin ne diye hain - delete nahi kar sakte</p>
+        <p style="color: #94a3b8; margin-bottom: 15px;"><strong>👍 Like | 🔄 Share | 💬 Comment | 🔔 Subscribe</strong> - Click "Take Action" to complete task!</p>
         <div id="engagementTasksList" class="task-grid"></div>
     </div>
 
@@ -396,6 +408,8 @@
         clientCoins: 0, totalCompleted: 0, messages: [], earningsHistory: [], promotedVideos: []
     };
 
+    let activeTimers = {};
+
     async function fetchChannelInfo(videoId) {
         try {
             const response = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
@@ -408,6 +422,22 @@
         } catch(e) {
             return { channelName: 'YouTube Channel', channelUrl: '#', channelLogo: 'https://via.placeholder.com/40?text=YT' };
         }
+    }
+
+    async function fetchEngagementChannelInfo(url) {
+        try {
+            const videoId = extractYouTubeId(url);
+            if (videoId) {
+                const response = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
+                const data = await response.json();
+                return {
+                    channelName: data.author_name || 'YouTube Channel',
+                    channelLogo: `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`,
+                    thumbnail: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+                };
+            }
+        } catch(e) {}
+        return { channelName: 'YouTube Channel', channelLogo: 'https://via.placeholder.com/40?text=YT', thumbnail: null };
     }
 
     function extractYouTubeId(url) {
@@ -634,7 +664,8 @@
         });
     }
 
-    function completeVideoTask(taskId, taskTitle, taskUrl, watchTimeNeeded) {
+    // Complete Video Task - Timer starts immediately without opening video
+    function startVideoTask(taskId, taskTitle, taskUrl, watchTimeNeeded) {
         if (clientState.completedTasks[taskId]) {
             Swal.fire('Already Completed!', 'You have already completed this task.', 'info');
             return;
@@ -647,29 +678,30 @@
         }
         
         let coinsToEarn = watchTimeNeeded;
-        let timerInterval;
         let timeLeft = watchTimeNeeded;
+        let timerInterval;
         const thumbnail = getThumbnail(taskUrl);
+        
+        // Open YouTube video in new tab
+        window.open(taskUrl, '_blank');
         
         Swal.fire({
             title: '🎬 Watch Video to Earn Coins!',
             html: `<div style="text-align: center;">
                        ${thumbnail ? `<img src="${thumbnail}" style="width: 100%; border-radius: 12px; margin-bottom: 15px;">` : ''}
                        <p><strong>${escapeHtml(taskTitle)}</strong></p>
-                       <a href="${taskUrl}" target="_blank" class="btn btn-primary" style="display: inline-block; margin-bottom: 15px;">
-                           <i class="fab fa-youtube"></i> Open YouTube Video
-                       </a>
-                       <div class="watch-timer" id="watchTimer">${timeLeft} seconds remaining</div>
+                       <div class="watch-timer timer-animation" id="watchTimer">${timeLeft}</div>
                        <div class="progress-bar mt-2">
                            <div class="progress-fill" id="timerProgress" style="width: 0%"></div>
                        </div>
                        <p class="mt-2"><strong class="text-warning">💰 ${watchTimeNeeded} coins</strong> waiting for you!</p>
-                       <p class="text-info">1 second watch = 1 coin! Watch full ${watchTimeNeeded} seconds to earn!</p>
+                       <p class="text-info">⏱️ Timer automatically chal raha hai! Video YouTube par open ho gayi hai.</p>
+                       <p class="text-info">Timer complete hone par coins automatically add ho jayenge!</p>
                    </div>`,
             icon: 'info',
             showConfirmButton: false,
             showCancelButton: true,
-            cancelButtonText: 'Cancel',
+            cancelButtonText: 'Cancel Task',
             didOpen: () => {
                 const timerElement = document.getElementById('watchTimer');
                 const progressElement = document.getElementById('timerProgress');
@@ -677,7 +709,7 @@
                 timerInterval = setInterval(() => {
                     timeLeft--;
                     if (timerElement) {
-                        timerElement.innerHTML = `${timeLeft} seconds remaining`;
+                        timerElement.innerHTML = timeLeft;
                         const percent = ((watchTimeNeeded - timeLeft) / watchTimeNeeded) * 100;
                         if (progressElement) progressElement.style.width = percent + '%';
                     }
@@ -699,15 +731,24 @@
                         checkCoinsAndShowPromotion();
                         renderServices();
                         
-                        Swal.fire({ title: '🎉 Task Completed!', html: `You earned <strong class="text-warning">${coinsToEarn} coins</strong>!`, icon: 'success', timer: 3000, showConfirmButton: false });
+                        Swal.fire({ 
+                            title: '🎉 Task Completed!', 
+                            html: `You earned <strong class="text-warning">${coinsToEarn} coins</strong>!`, 
+                            icon: 'success', 
+                            timer: 3000, 
+                            showConfirmButton: false 
+                        });
                     }
                 }, 1000);
             },
-            willClose: () => { if (timerInterval) clearInterval(timerInterval); }
+            willClose: () => {
+                if (timerInterval) clearInterval(timerInterval);
+            }
         });
     }
 
-    function completeEngagementTask(taskId, taskTarget, taskType, taskCoins, commentText) {
+    // Complete Engagement Task with Take Action button
+    async function completeEngagementTask(taskId, taskTarget, taskType, taskCoins, commentText) {
         if (clientState.completedEngagement[taskId]) {
             Swal.fire('Already Completed!', 'You have already completed this task.', 'info');
             return;
@@ -720,31 +761,56 @@
         }
         
         let actionText = { like:'Like', share:'Share', comment:'Comment', subscribe:'Subscribe' }[taskType];
+        let actionIcon = { like:'👍', share:'🔄', comment:'💬', subscribe:'🔔' }[taskType];
         let instructions = taskType === 'comment' ? `Post a comment${commentText ? `: "${commentText}"` : ''}` : `Click the ${actionText} button`;
         
+        // Fetch channel info for engagement task
+        const channelInfo = await fetchEngagementChannelInfo(taskTarget);
+        
         Swal.fire({
-            title: `${actionText} Task`,
-            html: `<div style="text-align: left;"><p><strong>Task:</strong> ${actionText} this content</p><p><strong>Target:</strong> <a href="${taskTarget}" target="_blank" style="color: #3b82f6;">Open Link</a></p><p><strong>Instructions:</strong> ${instructions}</p><p><strong>Reward:</strong> <span class="text-warning">${taskCoins} coins</span></p><br><small>After completing, click confirm below.</small></div>`,
+            title: `${actionIcon} ${actionText} Task`,
+            html: `<div style="text-align: center;">
+                       ${channelInfo.thumbnail ? `<img src="${channelInfo.thumbnail}" style="width: 100%; border-radius: 12px; margin-bottom: 15px;">` : ''}
+                       <div class="channel-info" style="justify-content: center;">
+                           <img src="${channelInfo.channelLogo}" class="channel-logo" onerror="this.src='https://via.placeholder.com/40'">
+                           <div>
+                               <strong>${escapeHtml(channelInfo.channelName)}</strong>
+                           </div>
+                       </div>
+                       <p class="mt-2"><strong>Target:</strong> <a href="${taskTarget}" target="_blank" style="color: #3b82f6;">Open Link</a></p>
+                       <p><strong>Instructions:</strong> ${instructions}</p>
+                       <p><strong>Reward:</strong> <span class="text-warning">${taskCoins} coins</span></p>
+                       <br>
+                       <button class="btn btn-primary" id="takeActionBtn" style="margin: 10px auto;">
+                           <i class="fas ${taskType === 'like' ? 'fa-thumbs-up' : taskType === 'share' ? 'fa-share-alt' : taskType === 'comment' ? 'fa-comment' : 'fa-bell'}"></i>
+                           Take Action & Complete Task
+                       </button>
+                   </div>`,
             icon: 'info',
+            showConfirmButton: false,
             showCancelButton: true,
-            confirmButtonText: '<i class="fas fa-check"></i> I completed it!',
-            cancelButtonText: 'Cancel'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                clientState.completedEngagement[taskId] = { completed: true, coins: taskCoins };
-                clientState.clientCoins += taskCoins;
-                clientState.totalCompleted++;
-                
-                saveClientData();
-                updateAdminOnTaskCompletion(taskCoins);
-                addToHistory(`${actionText}: ${taskTarget.substring(0, 30)}`, 'Engagement Task', taskCoins, true);
-                animateCoins();
-                updateUI();
-                renderEngagementTasks();
-                checkCoinsAndShowPromotion();
-                renderServices();
-                
-                Swal.fire('Task Completed!', `You earned ${taskCoins} coins!`, 'success');
+            cancelButtonText: 'Cancel',
+            didOpen: () => {
+                const takeActionBtn = document.getElementById('takeActionBtn');
+                takeActionBtn.onclick = () => {
+                    window.open(taskTarget, '_blank');
+                    Swal.close();
+                    
+                    clientState.completedEngagement[taskId] = { completed: true, coins: taskCoins };
+                    clientState.clientCoins += taskCoins;
+                    clientState.totalCompleted++;
+                    
+                    saveClientData();
+                    updateAdminOnTaskCompletion(taskCoins);
+                    addToHistory(`${actionText}: ${taskTarget.substring(0, 30)}`, 'Engagement Task', taskCoins, true);
+                    animateCoins();
+                    updateUI();
+                    renderEngagementTasks();
+                    checkCoinsAndShowPromotion();
+                    renderServices();
+                    
+                    Swal.fire('Task Completed!', `You earned ${taskCoins} coins!`, 'success');
+                };
             }
         });
     }
@@ -873,27 +939,51 @@
                 <div class="task-card priority-${task.priority || 'low'}">
                     ${thumbnail ? `<img src="${thumbnail}" class="video-thumbnail" onclick="window.open('${task.url}', '_blank')" style="cursor: pointer;">` : ''}
                     <div class="flex-between"><strong><i class="fab fa-youtube" style="color: #ef4444;"></i> ${escapeHtml(task.title)}</strong><span class="badge badge-warning"><i class="fas fa-clock"></i> Pending</span></div>
-                    <div class="mt-2"><div><i class="fas fa-coins"></i> Reward: <span class="text-warning">${task.watchTime} coins</span></div><div><i class="fas fa-hourglass-half"></i> Watch Time: ${task.watchTime} seconds</div><div class="text-info mt-1">⚡ 1 second = 1 coin!</div></div>
-                    <button class="btn btn-primary mt-2" style="width: 100%;" onclick="completeVideoTask(${task.id}, '${escapeHtml(task.title)}', '${escapeHtml(task.url)}', ${task.watchTime})"><i class="fab fa-youtube"></i> Watch & Earn ${task.watchTime} Coins</button>
+                    <div class="mt-2"><div><i class="fas fa-coins"></i> Reward: <span class="text-warning">${task.watchTime} coins</span></div><div><i class="fas fa-hourglass-half"></i> Watch Time: ${task.watchTime} seconds</div><div class="text-info mt-1">⚡ 1 second = 1 coin! Timer automatically start hoga!</div></div>
+                    <button class="btn btn-primary mt-2" style="width: 100%;" onclick="startVideoTask(${task.id}, '${escapeHtml(task.title)}', '${escapeHtml(task.url)}', ${task.watchTime})">
+                        <i class="fab fa-youtube"></i> Start Task & Earn ${task.watchTime} Coins
+                    </button>
                 </div>
             `;
         }).join('');
     }
 
-    function renderEngagementTasks() {
+    async function renderEngagementTasks() {
         const container = document.getElementById('engagementTasksList');
         const availableTasks = clientState.engagementTasks.filter(e => !clientState.completedEngagement[e.id]);
         if (availableTasks.length === 0) {
             container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-tasks" style="font-size: 48px; color: #3b82f6;"></i><p style="margin-top: 15px;">No engagement tasks available.</p></div>';
             return;
         }
+        
         const icons = { like:'👍', share:'🔄', comment:'💬', subscribe:'🔔' };
         const typeNames = { like:'Like', share:'Share', comment:'Comment', subscribe:'Subscribe' };
+        const colors = { like:'#3b82f6', share:'#22c55e', comment:'#f59e0b', subscribe:'#ef4444' };
+        
+        // Fetch channel info for each task
+        for (let task of availableTasks) {
+            if (!task.channelInfo) {
+                const channelInfo = await fetchEngagementChannelInfo(task.target);
+                task.channelInfo = channelInfo;
+            }
+        }
+        
         container.innerHTML = availableTasks.map(task => `
             <div class="task-card priority-${task.priority || 'low'}">
-                <div class="flex-between"><strong>${icons[task.type]} ${typeNames[task.type]} Task</strong><span class="badge badge-warning"><i class="fas fa-clock"></i> Pending</span></div>
-                <div class="mt-2"><div><i class="fas fa-link"></i> Target: <a href="${escapeHtml(task.target)}" target="_blank" style="color: #3b82f6;">Open Link</a></div><div><i class="fas fa-coins"></i> Reward: <span class="text-warning">${task.coins} coins</span></div>${task.commentText ? `<div><i class="fas fa-comment"></i> Suggested: "${escapeHtml(task.commentText)}"</div>` : ''}</div>
-                <button class="btn btn-secondary mt-2" style="width: 100%;" onclick="completeEngagementTask(${task.id}, '${escapeHtml(task.target)}', '${task.type}', ${task.coins}, '${escapeHtml(task.commentText || '')}')"><i class="fas ${task.type === 'like' ? 'fa-thumbs-up' : task.type === 'share' ? 'fa-share' : task.type === 'comment' ? 'fa-comment' : 'fa-bell'}"></i> Complete & Earn ${task.coins} Coins</button>
+                ${task.channelInfo?.thumbnail ? `<img src="${task.channelInfo.thumbnail}" class="video-thumbnail" onclick="window.open('${task.target}', '_blank')" style="cursor: pointer;">` : ''}
+                <div class="channel-info">
+                    <img src="${task.channelInfo?.channelLogo || 'https://via.placeholder.com/40'}" class="channel-logo" onerror="this.src='https://via.placeholder.com/40'">
+                    <div>
+                        <strong>${escapeHtml(task.channelInfo?.channelName || 'YouTube Channel')}</strong>
+                        <div class="text-info" style="font-size: 11px;">${typeNames[task.type]} Task</div>
+                    </div>
+                </div>
+                <div class="flex-between mt-2"><strong>${icons[task.type]} ${typeNames[task.type]} Task</strong><span class="badge badge-warning"><i class="fas fa-clock"></i> Pending</span></div>
+                <div class="mt-2"><div><i class="fas fa-link"></i> Target: <a href="${escapeHtml(task.target)}" target="_blank" style="color: ${colors[task.type]};">Open Link</a></div><div><i class="fas fa-coins"></i> Reward: <span class="text-warning">${task.coins} coins</span></div>${task.commentText ? `<div><i class="fas fa-comment"></i> Suggested: "${escapeHtml(task.commentText)}"</div>` : ''}</div>
+                <button class="btn btn-secondary mt-2" style="width: 100%; background: ${colors[task.type]};" onclick="completeEngagementTask(${task.id}, '${escapeHtml(task.target)}', '${task.type}', ${task.coins}, '${escapeHtml(task.commentText || '')}')">
+                    <i class="fas ${task.type === 'like' ? 'fa-thumbs-up' : task.type === 'share' ? 'fa-share-alt' : task.type === 'comment' ? 'fa-comment' : 'fa-bell'}"></i>
+                    Take Action & Earn ${task.coins} Coins
+                </button>
             </div>
         `).join('');
     }
@@ -931,9 +1021,9 @@
         toggleTheme() { document.body.classList.toggle('light-mode'); },
         showHelp() {
             Swal.fire('Complete Guide', 
-                '💰 EARN COINS FIRST:\n• Watch YouTube videos - 1 second = 1 coin!\n• Complete Like/Share/Comment/Subscribe tasks\n\n' +
-                '✅ JAB COINS HO JAYEIN TAB:\n• Upload your YouTube video\n• Buy Views (1 coin = 1 second watch time)\n• Buy Likes (10 coins each)\n• Buy Shares (15 coins each)\n• Buy Comments (20 coins each)\n• Buy Subscribers (50 coins each)\n\n' +
-                '🗑️ DELETE OPTION:\n• Sirf apni upload ki hui videos delete kar sakte ho\n• Admin ke tasks delete nahi kar sakte', 'info');
+                '💰 EARN COINS:\n• Click "Start Task" on video tasks - Timer automatically starts!\n• Video YouTube par open ho jayegi, timer background mein chalega\n• 1 second = 1 coin! Timer complete hone par coins milenge\n• Engagement tasks mein "Take Action" button click karein\n\n' +
+                '✅ PROMOTE YOUR VIDEO:\n• Upload your YouTube video\n• Buy Views, Likes, Shares, Comments, Subscribers\n\n' +
+                '🗑️ Sirf apni upload ki hui videos delete kar sakte ho', 'info');
         },
         addPromotionVideo() { addPromotionVideo(); },
         buyService(serviceType) { buyService(serviceType); },
@@ -941,7 +1031,7 @@
     };
 
     // Make functions global
-    window.completeVideoTask = completeVideoTask;
+    window.startVideoTask = startVideoTask;
     window.completeEngagementTask = completeEngagementTask;
     window.deleteOwnVideo = deleteOwnVideo;
     window.client = client;
