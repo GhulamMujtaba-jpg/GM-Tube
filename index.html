@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GM Client Panel - Secure Anti-Scam System</title>
+    <title>GM Client Panel - Earn Coins by Watching Videos</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -169,7 +169,7 @@
             transition: width 0.5s;
         }
         .watch-timer {
-            font-size: 36px;
+            font-size: 48px;
             font-weight: 800;
             color: #22c55e;
             text-align: center;
@@ -257,8 +257,8 @@
     <div class="card">
         <div class="flex-between">
             <div>
-                <h1 style="font-size: 28px;"><i class="fas fa-shield-alt"></i> GM Secure Client Dashboard</h1>
-                <p style="color: #94a3b8; margin-top: 5px;"><span class="security-badge"><i class="fas fa-lock"></i> Anti-Scam Protected</span> <span class="security-badge"><i class="fas fa-fingerprint"></i> Activity Tracked</span></p>
+                <h1 style="font-size: 28px;"><i class="fas fa-shield-alt"></i> GM Client Dashboard</h1>
+                <p style="color: #94a3b8; margin-top: 5px;"><span class="security-badge"><i class="fas fa-lock"></i> Secure System</span> <span class="security-badge"><i class="fas fa-coins"></i> 1 Second = 1 Coin</span></p>
             </div>
             <div>
                 <span id="currentDateTime" style="margin-right: 20px; font-size: 14px;"></span>
@@ -290,13 +290,6 @@
         </div>
     </div>
 
-    <!-- Security Warning if scam detected -->
-    <div id="scamWarning" class="warning-box" style="display: none; background: #ef444420; border-color: #ef4444;">
-        <i class="fas fa-exclamation-triangle" style="font-size: 40px; color: #ef4444;"></i>
-        <h3 class="mt-2">⚠️ SCAM DETECTED!</h3>
-        <p class="mt-2" id="scamMessage">Your activity has been flagged. This has been reported to admin.</p>
-    </div>
-
     <!-- Promote Your Video Section -->
     <div id="promotionSection" class="card" style="display: none;">
         <div class="flex-between">
@@ -325,7 +318,7 @@
             <h2><i class="fas fa-video"></i> Watch Videos & Earn Coins</h2>
             <span class="badge badge-info" id="videoTasksCount">0</span>
         </div>
-        <p style="color: #94a3b8; margin-bottom: 15px;"><strong class="text-warning">⚡ Secure System: Tab switch detection + Duplicate prevention!</strong></p>
+        <p style="color: #94a3b8; margin-bottom: 15px;"><strong class="text-warning">⚡ Timer complete hone par apne aap coins mil jayenge! 1 second = 1 coin!</strong></p>
         <div id="videoTasksList" class="task-grid"></div>
     </div>
 
@@ -368,9 +361,7 @@
         clientMessages: 'gm_final_client_messages',
         earningsHistory: 'gm_final_earnings_history',
         promotedVideos: 'gm_final_promoted_videos',
-        scamLog: 'gm_final_scam_log',
-        sessionId: 'gm_final_session_id',
-        deviceFingerprint: 'gm_final_device_fingerprint'
+        scamLog: 'gm_final_scam_log'
     };
 
     const SERVICE_PRICES = { like: 10, share: 15, comment: 20, subscribe: 50 };
@@ -378,112 +369,10 @@
 
     let clientState = {
         videos: [], completedTasks: {}, engagementTasks: [], completedEngagement: {},
-        clientCoins: 0, totalCompleted: 0, messages: [], earningsHistory: [], promotedVideos: [],
-        scamAttempts: 0, isBanned: false
+        clientCoins: 0, totalCompleted: 0, messages: [], earningsHistory: [], promotedVideos: []
     };
 
     let activeTimers = {};
-    let tabHidden = false;
-    let scamDetected = false;
-
-    // Generate unique session ID
-    function generateSessionId() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
-    }
-
-    // Get device fingerprint
-    function getDeviceFingerprint() {
-        return `${navigator.userAgent.substring(0, 100)}|${screen.width}x${screen.height}|${navigator.language}`;
-    }
-
-    // Initialize security
-    function initSecurity() {
-        let sessionId = localStorage.getItem(STORAGE_KEYS.sessionId);
-        let deviceFingerprint = localStorage.getItem(STORAGE_KEYS.deviceFingerprint);
-        const currentFingerprint = getDeviceFingerprint();
-        
-        if (!sessionId) {
-            sessionId = generateSessionId();
-            localStorage.setItem(STORAGE_KEYS.sessionId, sessionId);
-        }
-        
-        if (!deviceFingerprint) {
-            localStorage.setItem(STORAGE_KEYS.deviceFingerprint, currentFingerprint);
-        } else if (deviceFingerprint !== currentFingerprint) {
-            logScam('DEVICE_MISMATCH', 'Different device/browser detected');
-        }
-        
-        // Tab visibility detection
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                tabHidden = true;
-                for (let timerId in activeTimers) {
-                    if (activeTimers[timerId] && activeTimers[timerId].interval) {
-                        clearInterval(activeTimers[timerId].interval);
-                        activeTimers[timerId].paused = true;
-                        logScam('TAB_SWITCH', 'User switched tab during task');
-                    }
-                }
-            } else {
-                tabHidden = false;
-            }
-        });
-    }
-
-    // Log scam attempt
-    function logScam(scamType, details) {
-        let scamLog = JSON.parse(localStorage.getItem(STORAGE_KEYS.scamLog)) || [];
-        scamLog.unshift({
-            id: Date.now(),
-            type: scamType,
-            details: details,
-            timestamp: new Date().toLocaleString()
-        });
-        if (scamLog.length > 100) scamLog.pop();
-        localStorage.setItem(STORAGE_KEYS.scamLog, JSON.stringify(scamLog));
-        
-        clientState.scamAttempts++;
-        
-        // Show warning to user
-        const scamWarning = document.getElementById('scamWarning');
-        const scamMessage = document.getElementById('scamMessage');
-        if (scamWarning) {
-            scamWarning.style.display = 'block';
-            scamMessage.innerHTML = `⚠️ ${scamType}: ${details}. This has been reported to admin.`;
-            setTimeout(() => {
-                scamWarning.style.display = 'none';
-            }, 5000);
-        }
-        
-        // Update admin activity log
-        let activityLog = JSON.parse(localStorage.getItem(STORAGE_KEYS.activityLog)) || [];
-        activityLog.unshift({
-            id: Date.now(),
-            type: 'scam_attempt',
-            title: `SCAM: ${scamType}`,
-            details: details,
-            timestamp: new Date().toLocaleString()
-        });
-        if (activityLog.length > 500) activityLog.pop();
-        localStorage.setItem(STORAGE_KEYS.activityLog, JSON.stringify(activityLog));
-        
-        // If too many scams, ban client
-        if (clientState.scamAttempts >= 3) {
-            localStorage.setItem(STORAGE_KEYS.clientBanned, 'true');
-            clientState.isBanned = true;
-            Swal.fire({
-                title: 'Account Banned!',
-                text: 'Your account has been banned due to multiple scam attempts. Contact admin.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            }).then(() => {
-                location.reload();
-            });
-        }
-    }
 
     async function fetchChannelInfo(videoId) {
         try {
@@ -536,12 +425,6 @@
         clientState.messages = JSON.parse(localStorage.getItem(STORAGE_KEYS.clientMessages)) || [];
         clientState.earningsHistory = JSON.parse(localStorage.getItem(STORAGE_KEYS.earningsHistory)) || [];
         clientState.promotedVideos = JSON.parse(localStorage.getItem(STORAGE_KEYS.promotedVideos)) || [];
-        clientState.isBanned = localStorage.getItem(STORAGE_KEYS.clientBanned) === 'true';
-        
-        if (clientState.isBanned) {
-            document.body.innerHTML = '<div class="container"><div class="card" style="text-align: center;"><i class="fas fa-ban" style="font-size: 60px; color: #ef4444;"></i><h2 class="mt-2">Account Banned</h2><p>Your account has been banned due to suspicious activity.</p><p>Contact admin for assistance.</p></div></div>';
-            return;
-        }
         
         updateUI();
         renderVideoTasks();
@@ -589,11 +472,8 @@
 
     function checkCoinsAndShowPromotion() {
         const promotionSection = document.getElementById('promotionSection');
-        const noCoinsWarning = document.getElementById('noCoinsWarning');
-        
         if (clientState.clientCoins > 0) {
             if(promotionSection) promotionSection.style.display = 'block';
-            if(noCoinsWarning) noCoinsWarning.style.display = 'none';
         } else {
             if(promotionSection) promotionSection.style.display = 'none';
         }
@@ -707,13 +587,15 @@
         });
     }
 
-    // Secure Video Task - Anti Scam
+    // FIXED: Video Task with proper coin earning
     function startVideoTask(taskId, taskTitle, taskUrl, watchTimeNeeded) {
+        // Check if already completed
         if (clientState.completedTasks[taskId]) {
             Swal.fire('Already Completed!', 'You have already completed this task.', 'info');
             return;
         }
         
+        // Check if banned
         let isBanned = localStorage.getItem(STORAGE_KEYS.clientBanned) === 'true';
         if (isBanned) {
             Swal.fire('Account Banned!', 'Your account has been banned.', 'error');
@@ -727,13 +609,11 @@
         }
         
         let timeLeft = watchTimeNeeded;
-        let tabSwitchCount = 0;
         let interval;
-        let startTime = Date.now();
-        
+        const coinsToEarn = watchTimeNeeded;
         const thumbnail = getThumbnail(taskUrl);
         
-        // Open YouTube video
+        // Open YouTube video in new tab
         window.open(taskUrl, '_blank');
         
         Swal.fire({
@@ -741,56 +621,48 @@
             html: `<div style="text-align: center;">
                        ${thumbnail ? `<img src="${thumbnail}" style="width: 100%; border-radius: 12px; margin-bottom: 15px;">` : ''}
                        <p><strong>${escapeHtml(taskTitle)}</strong></p>
-                       <div class="watch-timer" id="secureTimer">${timeLeft}</div>
-                       <div class="progress-bar mt-2"><div class="progress-fill" id="timerProgress" style="width: 0%"></div></div>
-                       <p class="mt-2"><strong class="text-warning">💰 ${watchTimeNeeded} coins</strong></p>
-                       <p class="text-info"><i class="fas fa-shield-alt"></i> Secure Mode: Tab switch will cancel task!</p>
+                       <div class="watch-timer" id="watchTimerDisplay">${timeLeft}</div>
+                       <div class="progress-bar mt-2">
+                           <div class="progress-fill" id="timerProgressFill" style="width: 0%"></div>
+                       </div>
+                       <p class="mt-2"><strong class="text-warning">💰 ${coinsToEarn} coins</strong> waiting for you!</p>
+                       <p class="text-info"><i class="fas fa-clock"></i> Timer automatically chal raha hai!</p>
+                       <p class="text-info">Timer complete hone par ${coinsToEarn} coins apne aap add ho jayenge!</p>
                    </div>`,
             icon: 'info',
             showConfirmButton: false,
             showCancelButton: true,
             cancelButtonText: 'Cancel Task',
             didOpen: () => {
-                const timerElement = document.getElementById('secureTimer');
-                const progressElement = document.getElementById('timerProgress');
+                const timerElement = document.getElementById('watchTimerDisplay');
+                const progressElement = document.getElementById('timerProgressFill');
                 
                 interval = setInterval(() => {
-                    // Check if tab is hidden (user switched tab)
-                    if (document.hidden) {
-                        clearInterval(interval);
-                        delete activeTimers[taskId];
-                        Swal.close();
-                        logScam('TAB_SWITCH_DETECTED', `User switched tab during task: ${taskTitle}`);
-                        Swal.fire({
-                            title: 'Task Cancelled!',
-                            text: 'Task cancelled because you switched tabs. Do not switch tabs while timer is running.',
-                            icon: 'error',
-                            confirmButtonText: 'OK'
-                        });
-                        return;
-                    }
-                    
                     timeLeft--;
+                    
                     if (timerElement) {
                         timerElement.innerHTML = timeLeft;
+                    }
+                    if (progressElement) {
                         const percent = ((watchTimeNeeded - timeLeft) / watchTimeNeeded) * 100;
-                        if (progressElement) progressElement.style.width = percent + '%';
+                        progressElement.style.width = percent + '%';
                     }
                     
+                    // Timer complete - GIVE COINS!
                     if (timeLeft <= 0) {
                         clearInterval(interval);
                         delete activeTimers[taskId];
                         Swal.close();
                         
-                        // Double check if already completed
+                        // CRITICAL FIX: Add coins to client
                         if (!clientState.completedTasks[taskId]) {
                             clientState.completedTasks[taskId] = true;
-                            clientState.clientCoins += watchTimeNeeded;
+                            clientState.clientCoins += coinsToEarn;
                             clientState.totalCompleted++;
                             
                             saveClientData();
-                            updateAdminOnTaskCompletion(watchTimeNeeded);
-                            addToHistory(taskTitle, 'Watch Task', watchTimeNeeded, true);
+                            updateAdminOnTaskCompletion(coinsToEarn);
+                            addToHistory(taskTitle, 'Watch Task', coinsToEarn, true);
                             animateCoins();
                             updateUI();
                             renderVideoTasks();
@@ -799,7 +671,7 @@
                             
                             Swal.fire({ 
                                 title: '🎉 Task Completed!', 
-                                html: `You earned <strong class="text-warning">${watchTimeNeeded} coins</strong>!`, 
+                                html: `You earned <strong class="text-warning">${coinsToEarn} coins</strong>!`, 
                                 icon: 'success', 
                                 timer: 3000, 
                                 showConfirmButton: false 
@@ -808,16 +680,18 @@
                     }
                 }, 1000);
                 
-                activeTimers[taskId] = { interval, startTime };
+                activeTimers[taskId] = interval;
             },
             willClose: () => {
-                if (interval) clearInterval(interval);
-                delete activeTimers[taskId];
+                if (interval) {
+                    clearInterval(interval);
+                    delete activeTimers[taskId];
+                }
             }
         });
     }
 
-    // Secure Engagement Task
+    // Engagement Task
     async function completeEngagementTask(taskId, taskTarget, taskType, taskCoins, commentText) {
         if (clientState.completedEngagement[taskId]) {
             Swal.fire('Already Completed!', 'You have already completed this task.', 'info');
@@ -850,7 +724,6 @@
                            <i class="fas ${taskType === 'like' ? 'fa-thumbs-up' : taskType === 'share' ? 'fa-share-alt' : taskType === 'comment' ? 'fa-comment' : 'fa-bell'}"></i>
                            Take Action & Complete
                        </button>
-                       <p class="text-info mt-2"><i class="fas fa-shield-alt"></i> One-time completion only!</p>
                    </div>`,
             icon: 'info',
             showConfirmButton: false,
@@ -981,7 +854,7 @@
         if(!container) return;
         const availableTasks = clientState.videos.filter(v => !clientState.completedTasks[v.id]);
         if (availableTasks.length === 0) {
-            container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-check-circle"></i><p>No tasks available</p></div>';
+            container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-check-circle"></i><p>No video tasks available.</p></div>';
             return;
         }
         container.innerHTML = availableTasks.map(task => {
@@ -989,10 +862,14 @@
             return `
                 <div class="task-card priority-${task.priority || 'low'}">
                     ${thumbnail ? `<img src="${thumbnail}" class="video-thumbnail" onclick="window.open('${task.url}', '_blank')">` : ''}
-                    <div class="flex-between"><strong>${escapeHtml(task.title)}</strong><span class="badge badge-warning">Pending</span></div>
-                    <div class="mt-2">💰 ${task.watchTime} coins | ⏱️ ${task.watchTime} sec</div>
+                    <div class="flex-between"><strong><i class="fab fa-youtube" style="color:#ef4444;"></i> ${escapeHtml(task.title)}</strong><span class="badge badge-warning">Pending</span></div>
+                    <div class="mt-2">
+                        <div><i class="fas fa-coins"></i> Reward: <span class="text-warning">${task.watchTime} coins</span></div>
+                        <div><i class="fas fa-hourglass-half"></i> Watch Time: ${task.watchTime} seconds</div>
+                        <div class="text-info mt-1">⚡ 1 second = 1 coin!</div>
+                    </div>
                     <button class="btn btn-primary mt-2" style="width:100%;" onclick="startVideoTask(${task.id}, '${escapeHtml(task.title)}', '${escapeHtml(task.url)}', ${task.watchTime})">
-                        <i class="fab fa-youtube"></i> Start Task (${task.watchTime} coins)
+                        <i class="fab fa-youtube"></i> Start Task & Earn ${task.watchTime} Coins
                     </button>
                 </div>
             `;
@@ -1004,7 +881,7 @@
         if(!container) return;
         const availableTasks = clientState.engagementTasks.filter(e => !clientState.completedEngagement[e.id]);
         if (availableTasks.length === 0) {
-            container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-tasks"></i><p>No tasks available</p></div>';
+            container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-tasks"></i><p>No engagement tasks available.</p></div>';
             return;
         }
         
@@ -1016,6 +893,7 @@
         
         const icons = { like:'👍', share:'🔄', comment:'💬', subscribe:'🔔' };
         const typeNames = { like:'Like', share:'Share', comment:'Comment', subscribe:'Subscribe' };
+        const colors = { like:'#3b82f6', share:'#22c55e', comment:'#f59e0b', subscribe:'#ef4444' };
         
         container.innerHTML = availableTasks.map(task => `
             <div class="task-card priority-${task.priority || 'low'}">
@@ -1024,11 +902,11 @@
                     <img src="${task.channelInfo?.channelLogo}" class="channel-logo">
                     <div><strong>${escapeHtml(task.channelInfo?.channelName || 'Channel')}</strong><div class="text-info">${typeNames[task.type]} Task</div></div>
                 </div>
-                <div class="mt-2">💰 ${task.coins} coins</div>
-                ${task.commentText ? `<div class="text-info">💬 "${escapeHtml(task.commentText)}"</div>` : ''}
-                <button class="btn btn-secondary mt-2" style="width:100%;" onclick="completeEngagementTask(${task.id}, '${escapeHtml(task.target)}', '${task.type}', ${task.coins}, '${escapeHtml(task.commentText || '')}')">
+                <div class="mt-2"><i class="fas fa-coins"></i> Reward: <span class="text-warning">${task.coins} coins</span></div>
+                ${task.commentText ? `<div class="text-info"><i class="fas fa-comment"></i> "${escapeHtml(task.commentText)}"</div>` : ''}
+                <button class="btn btn-secondary mt-2" style="width:100%; background: ${colors[task.type]};" onclick="completeEngagementTask(${task.id}, '${escapeHtml(task.target)}', '${task.type}', ${task.coins}, '${escapeHtml(task.commentText || '')}')">
                     <i class="fas ${task.type === 'like' ? 'fa-thumbs-up' : task.type === 'share' ? 'fa-share-alt' : task.type === 'comment' ? 'fa-comment' : 'fa-bell'}"></i>
-                    Take Action (${task.coins} coins)
+                    Take Action & Earn ${task.coins} Coins
                 </button>
             </div>
         `).join('');
@@ -1038,7 +916,7 @@
         const container = document.getElementById('messagesList');
         if(!container) return;
         if (clientState.messages.length === 0) {
-            container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-inbox"></i><p>No messages</p></div>';
+            container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-inbox"></i><p>No messages from admin.</p></div>';
             return;
         }
         container.innerHTML = clientState.messages.map(msg => `
@@ -1053,7 +931,7 @@
         const container = document.getElementById('earningsHistory');
         if(!container) return;
         if (clientState.earningsHistory.length === 0) {
-            container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-chart-line"></i><p>No activity yet</p></div>';
+            container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-chart-line"></i><p>No activity yet. Watch videos to start earning!</p></div>';
             return;
         }
         container.innerHTML = clientState.earningsHistory.map(item => `
@@ -1088,8 +966,10 @@
     const client = {
         toggleTheme() { document.body.classList.toggle('light-mode'); },
         showHelp() {
-            Swal.fire('Secure System', 
-                '🔒 ANTI-SCAM FEATURES:\n• Tab switch detection - task cancels if you switch tabs\n• Duplicate task prevention\n• Device fingerprint tracking\n• Session monitoring\n• Automatic ban on multiple scam attempts\n\n✅ Legitimate users: Just watch videos normally!', 'info');
+            Swal.fire('How to Earn Coins', 
+                '💰 EARN COINS:\n• Click "Start Task" on any video\n• Timer automatically starts (1 second = 1 coin)\n• YouTube video opens in new tab\n• Timer complete hone par coins automatically add ho jayenge!\n\n' +
+                '✅ ENGAGEMENT TASKS:\n• Click "Take Action" button\n• Complete the action on YouTube\n• Coins will be added instantly\n\n' +
+                '🚀 PROMOTE YOUR VIDEOS:\n• Upload your YouTube video\n• Use earned coins to buy views, likes, shares, comments, subscribers', 'info');
         },
         addPromotionVideo() { addPromotionVideo(); },
         buyService(serviceType) { buyService(serviceType); },
@@ -1101,7 +981,6 @@
     window.deleteOwnVideo = deleteOwnVideo;
     window.client = client;
 
-    initSecurity();
     loadData();
     updateDateTime();
 </script>
