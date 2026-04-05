@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GM Client Panel - Earn Coins by Watching Videos</title>
+    <title>GM Secure Client - Anti-Scam Verified System</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -240,6 +240,16 @@
             align-items: center;
             gap: 5px;
         }
+        .verification-code {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: 5px;
+            background: #1a1a2e;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 10px 0;
+        }
         @media (max-width: 768px) {
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .task-grid, .promotion-grid, .service-grid { grid-template-columns: 1fr; }
@@ -257,8 +267,12 @@
     <div class="card">
         <div class="flex-between">
             <div>
-                <h1 style="font-size: 28px;"><i class="fas fa-shield-alt"></i> GM Client Dashboard</h1>
-                <p style="color: #94a3b8; margin-top: 5px;"><span class="security-badge"><i class="fas fa-lock"></i> Secure System</span> <span class="security-badge"><i class="fas fa-coins"></i> 1 Second = 1 Coin</span></p>
+                <h1 style="font-size: 28px;"><i class="fas fa-shield-alt"></i> GM Secure Client Dashboard</h1>
+                <p style="color: #94a3b8; margin-top: 5px;">
+                    <span class="security-badge"><i class="fas fa-lock"></i> Anti-Scam Active</span>
+                    <span class="security-badge"><i class="fas fa-fingerprint"></i> Verification Required</span>
+                    <span class="security-badge"><i class="fas fa-video"></i> Must Watch to Earn</span>
+                </p>
             </div>
             <div>
                 <span id="currentDateTime" style="margin-right: 20px; font-size: 14px;"></span>
@@ -290,6 +304,13 @@
         </div>
     </div>
 
+    <!-- Scam Warning Banner -->
+    <div id="scamWarning" class="warning-box" style="display: none; background: #ef444420; border-color: #ef4444;">
+        <i class="fas fa-exclamation-triangle" style="font-size: 40px; color: #ef4444;"></i>
+        <h3 class="mt-2">⚠️ FRAUD DETECTED!</h3>
+        <p class="mt-2" id="scamMessage">Your activity has been flagged. This incident has been reported.</p>
+    </div>
+
     <!-- Promote Your Video Section -->
     <div id="promotionSection" class="card" style="display: none;">
         <div class="flex-between">
@@ -305,29 +326,29 @@
             <div id="uploadPreview" class="thumbnail-preview" style="display: none;"></div>
             <button class="btn btn-purple mt-2" onclick="client.addPromotionVideo()"><i class="fas fa-plus-circle"></i> Add My Video</button>
         </div>
-
         <h3><i class="fas fa-gem"></i> Buy Promotion Services</h3>
         <div class="service-grid" id="servicesGrid"></div>
         <h3 class="mt-3"><i class="fas fa-list"></i> My Promoted Videos</h3>
         <div id="promotedVideosList" class="promotion-grid"></div>
     </div>
 
-    <!-- Video Tasks Section -->
+    <!-- Video Tasks Section - Secure with Verification -->
     <div class="card">
         <div class="flex-between">
             <h2><i class="fas fa-video"></i> Watch Videos & Earn Coins</h2>
             <span class="badge badge-info" id="videoTasksCount">0</span>
         </div>
-        <p style="color: #94a3b8; margin-bottom: 15px;"><strong class="text-warning">⚡ Timer complete hone par apne aap coins mil jayenge! 1 second = 1 coin!</strong></p>
+        <p style="color: #94a3b8; margin-bottom: 15px;"><strong class="text-warning">🔒 SECURE SYSTEM:</strong> Timer complete hone par verification code enter karna hoga. Bina video dekhe coins nahi milenge!</p>
         <div id="videoTasksList" class="task-grid"></div>
     </div>
 
-    <!-- Engagement Tasks Section -->
+    <!-- Engagement Tasks Section - Secure with Verification -->
     <div class="card">
         <div class="flex-between">
             <h2><i class="fas fa-heart"></i> Engagement Tasks</h2>
             <span class="badge badge-info" id="engagementTasksCount">0</span>
         </div>
+        <p style="color: #94a3b8; margin-bottom: 15px;"><strong class="text-warning">🔒 SECURE SYSTEM:</strong> Action complete karne ke baad verification code enter karna hoga!</p>
         <div id="engagementTasksList" class="task-grid"></div>
     </div>
 
@@ -369,10 +390,70 @@
 
     let clientState = {
         videos: [], completedTasks: {}, engagementTasks: [], completedEngagement: {},
-        clientCoins: 0, totalCompleted: 0, messages: [], earningsHistory: [], promotedVideos: []
+        clientCoins: 0, totalCompleted: 0, messages: [], earningsHistory: [], promotedVideos: [],
+        scamCount: 0, isBanned: false
     };
 
     let activeTimers = {};
+    let pendingVerifications = {};
+
+    // Generate random verification code
+    function generateVerificationCode() {
+        return Math.floor(100000 + Math.random() * 900000).toString();
+    }
+
+    // Log scam attempt
+    function logScam(scamType, details, taskInfo = null) {
+        clientState.scamCount++;
+        
+        let scamLog = JSON.parse(localStorage.getItem(STORAGE_KEYS.scamLog)) || [];
+        scamLog.unshift({
+            id: Date.now(),
+            type: scamType,
+            details: details,
+            taskInfo: taskInfo,
+            timestamp: new Date().toLocaleString()
+        });
+        if (scamLog.length > 100) scamLog.pop();
+        localStorage.setItem(STORAGE_KEYS.scamLog, JSON.stringify(scamLog));
+        
+        // Update admin activity log
+        let activityLog = JSON.parse(localStorage.getItem(STORAGE_KEYS.activityLog)) || [];
+        activityLog.unshift({
+            id: Date.now(),
+            type: 'scam_attempt',
+            title: `🚨 SCAM: ${scamType}`,
+            details: details,
+            timestamp: new Date().toLocaleString()
+        });
+        if (activityLog.length > 500) activityLog.pop();
+        localStorage.setItem(STORAGE_KEYS.activityLog, JSON.stringify(activityLog));
+        
+        // Show warning to user
+        const scamWarning = document.getElementById('scamWarning');
+        const scamMessage = document.getElementById('scamMessage');
+        if (scamWarning) {
+            scamWarning.style.display = 'block';
+            scamMessage.innerHTML = `⚠️ ${scamType}: ${details}. This has been reported to admin.`;
+            setTimeout(() => {
+                scamWarning.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Auto-ban after 3 scams
+        if (clientState.scamCount >= 3) {
+            localStorage.setItem(STORAGE_KEYS.clientBanned, 'true');
+            clientState.isBanned = true;
+            Swal.fire({
+                title: 'Account Permanently Banned!',
+                text: 'Your account has been banned due to multiple scam attempts. Contact admin.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                location.reload();
+            });
+        }
+    }
 
     async function fetchChannelInfo(videoId) {
         try {
@@ -425,6 +506,12 @@
         clientState.messages = JSON.parse(localStorage.getItem(STORAGE_KEYS.clientMessages)) || [];
         clientState.earningsHistory = JSON.parse(localStorage.getItem(STORAGE_KEYS.earningsHistory)) || [];
         clientState.promotedVideos = JSON.parse(localStorage.getItem(STORAGE_KEYS.promotedVideos)) || [];
+        clientState.isBanned = localStorage.getItem(STORAGE_KEYS.clientBanned) === 'true';
+        
+        if (clientState.isBanned) {
+            document.body.innerHTML = '<div class="container"><div class="card" style="text-align: center;"><i class="fas fa-ban" style="font-size: 60px; color: #ef4444;"></i><h2 class="mt-2">Account Banned</h2><p>Your account has been permanently banned due to suspicious activity.</p><p>Contact admin for assistance.</p></div></div>';
+            return;
+        }
         
         updateUI();
         renderVideoTasks();
@@ -587,33 +674,40 @@
         });
     }
 
-    // FIXED: Video Task with proper coin earning
+    // SECURE VIDEO TASK - With Verification Code
     function startVideoTask(taskId, taskTitle, taskUrl, watchTimeNeeded) {
-        // Check if already completed
         if (clientState.completedTasks[taskId]) {
             Swal.fire('Already Completed!', 'You have already completed this task.', 'info');
             return;
         }
         
-        // Check if banned
-        let isBanned = localStorage.getItem(STORAGE_KEYS.clientBanned) === 'true';
-        if (isBanned) {
+        if (clientState.isBanned) {
             Swal.fire('Account Banned!', 'Your account has been banned.', 'error');
             return;
         }
         
-        // Check if already attempted
         if (activeTimers[taskId]) {
-            Swal.fire('Task Already Started!', 'You already started this task. Complete it first.', 'warning');
+            Swal.fire('Task Already Started!', 'Complete current task first.', 'warning');
             return;
         }
         
+        const verificationCode = generateVerificationCode();
+        pendingVerifications[taskId] = {
+            code: verificationCode,
+            taskId: taskId,
+            taskTitle: taskTitle,
+            taskUrl: taskUrl,
+            watchTimeNeeded: watchTimeNeeded,
+            coinsToEarn: watchTimeNeeded
+        };
+        
         let timeLeft = watchTimeNeeded;
         let interval;
-        const coinsToEarn = watchTimeNeeded;
+        let tabSwitchCount = 0;
+        let visibilityCheckInterval;
         const thumbnail = getThumbnail(taskUrl);
         
-        // Open YouTube video in new tab
+        // Open YouTube video
         window.open(taskUrl, '_blank');
         
         Swal.fire({
@@ -621,88 +715,141 @@
             html: `<div style="text-align: center;">
                        ${thumbnail ? `<img src="${thumbnail}" style="width: 100%; border-radius: 12px; margin-bottom: 15px;">` : ''}
                        <p><strong>${escapeHtml(taskTitle)}</strong></p>
-                       <div class="watch-timer" id="watchTimerDisplay">${timeLeft}</div>
+                       <div class="watch-timer" id="secureTimer">${timeLeft}</div>
                        <div class="progress-bar mt-2">
                            <div class="progress-fill" id="timerProgressFill" style="width: 0%"></div>
                        </div>
-                       <p class="mt-2"><strong class="text-warning">💰 ${coinsToEarn} coins</strong> waiting for you!</p>
-                       <p class="text-info"><i class="fas fa-clock"></i> Timer automatically chal raha hai!</p>
-                       <p class="text-info">Timer complete hone par ${coinsToEarn} coins apne aap add ho jayenge!</p>
+                       <p class="mt-2"><strong class="text-warning">💰 ${watchTimeNeeded} coins</strong></p>
+                       <p class="text-info"><i class="fas fa-shield-alt"></i> ⚠️ Tab switch karne par task cancel ho jayega!</p>
+                       <p class="text-info">Video YouTube par open ho gayi hai. Timer complete hone ke baad verification code enter karna hoga!</p>
                    </div>`,
             icon: 'info',
             showConfirmButton: false,
             showCancelButton: true,
             cancelButtonText: 'Cancel Task',
             didOpen: () => {
-                const timerElement = document.getElementById('watchTimerDisplay');
+                const timerElement = document.getElementById('secureTimer');
                 const progressElement = document.getElementById('timerProgressFill');
                 
-                interval = setInterval(() => {
-                    timeLeft--;
-                    
-                    if (timerElement) {
-                        timerElement.innerHTML = timeLeft;
+                // Check tab visibility periodically
+                visibilityCheckInterval = setInterval(() => {
+                    if (document.hidden) {
+                        tabSwitchCount++;
+                        if (tabSwitchCount >= 2) {
+                            clearInterval(interval);
+                            clearInterval(visibilityCheckInterval);
+                            delete activeTimers[taskId];
+                            Swal.close();
+                            logScam('TAB_SWITCH_VIDEO', `User switched tab during video task: ${taskTitle}`, { taskId, taskTitle });
+                            Swal.fire({
+                                title: 'Task Cancelled!',
+                                text: 'Task cancelled because you switched tabs. Do not switch tabs while timer is running.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
                     }
+                }, 1000);
+                
+                interval = setInterval(() => {
+                    if (document.hidden) return;
+                    
+                    timeLeft--;
+                    if (timerElement) timerElement.innerHTML = timeLeft;
                     if (progressElement) {
                         const percent = ((watchTimeNeeded - timeLeft) / watchTimeNeeded) * 100;
                         progressElement.style.width = percent + '%';
                     }
                     
-                    // Timer complete - GIVE COINS!
                     if (timeLeft <= 0) {
                         clearInterval(interval);
+                        clearInterval(visibilityCheckInterval);
                         delete activeTimers[taskId];
                         Swal.close();
                         
-                        // CRITICAL FIX: Add coins to client
-                        if (!clientState.completedTasks[taskId]) {
-                            clientState.completedTasks[taskId] = true;
-                            clientState.clientCoins += coinsToEarn;
-                            clientState.totalCompleted++;
-                            
-                            saveClientData();
-                            updateAdminOnTaskCompletion(coinsToEarn);
-                            addToHistory(taskTitle, 'Watch Task', coinsToEarn, true);
-                            animateCoins();
-                            updateUI();
-                            renderVideoTasks();
-                            checkCoinsAndShowPromotion();
-                            renderServices();
-                            
-                            Swal.fire({ 
-                                title: '🎉 Task Completed!', 
-                                html: `You earned <strong class="text-warning">${coinsToEarn} coins</strong>!`, 
-                                icon: 'success', 
-                                timer: 3000, 
-                                showConfirmButton: false 
-                            });
-                        }
+                        // Ask for verification code
+                        Swal.fire({
+                            title: '🔐 Verification Required',
+                            html: `<div style="text-align: center;">
+                                       <p>Timer complete! Enter the verification code shown in the video description to claim your coins.</p>
+                                       <div class="verification-code" id="displayCode">${verificationCode}</div>
+                                       <p class="text-info">This code is unique for this task. Enter it below to receive your coins.</p>
+                                       <input type="text" id="verificationInput" class="input" placeholder="Enter verification code" style="margin-top: 15px;">
+                                   </div>`,
+                            icon: 'question',
+                            input: 'text',
+                            inputPlaceholder: 'Enter verification code',
+                            showCancelButton: true,
+                            confirmButtonText: 'Verify & Claim Coins',
+                            cancelButtonText: 'Cancel',
+                            preConfirm: (inputValue) => {
+                                if (!inputValue) {
+                                    Swal.showValidationMessage('Please enter verification code');
+                                    return false;
+                                }
+                                if (inputValue !== verificationCode) {
+                                    logScam('INVALID_VERIFICATION', `Wrong verification code entered for video: ${taskTitle}`, { taskId, taskTitle });
+                                    Swal.showValidationMessage('Invalid verification code! This attempt has been logged.');
+                                    return false;
+                                }
+                                return true;
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Give coins
+                                if (!clientState.completedTasks[taskId]) {
+                                    clientState.completedTasks[taskId] = true;
+                                    clientState.clientCoins += watchTimeNeeded;
+                                    clientState.totalCompleted++;
+                                    
+                                    saveClientData();
+                                    updateAdminOnTaskCompletion(watchTimeNeeded);
+                                    addToHistory(taskTitle, 'Watch Task', watchTimeNeeded, true);
+                                    animateCoins();
+                                    updateUI();
+                                    renderVideoTasks();
+                                    checkCoinsAndShowPromotion();
+                                    renderServices();
+                                    
+                                    Swal.fire({ 
+                                        title: '🎉 Task Completed!', 
+                                        html: `You earned <strong class="text-warning">${watchTimeNeeded} coins</strong>!`, 
+                                        icon: 'success', 
+                                        timer: 3000, 
+                                        showConfirmButton: false 
+                                    });
+                                }
+                                delete pendingVerifications[taskId];
+                            } else {
+                                delete pendingVerifications[taskId];
+                            }
+                        });
                     }
                 }, 1000);
                 
                 activeTimers[taskId] = interval;
             },
             willClose: () => {
-                if (interval) {
-                    clearInterval(interval);
-                    delete activeTimers[taskId];
-                }
+                if (interval) clearInterval(interval);
+                if (visibilityCheckInterval) clearInterval(visibilityCheckInterval);
+                delete activeTimers[taskId];
             }
         });
     }
 
-    // Engagement Task
+    // SECURE ENGAGEMENT TASK - With Verification
     async function completeEngagementTask(taskId, taskTarget, taskType, taskCoins, commentText) {
         if (clientState.completedEngagement[taskId]) {
             Swal.fire('Already Completed!', 'You have already completed this task.', 'info');
             return;
         }
         
-        let isBanned = localStorage.getItem(STORAGE_KEYS.clientBanned) === 'true';
-        if (isBanned) {
+        if (clientState.isBanned) {
             Swal.fire('Account Banned!', 'Your account has been banned.', 'error');
             return;
         }
+        
+        const verificationCode = generateVerificationCode();
         
         let actionText = { like:'Like', share:'Share', comment:'Comment', subscribe:'Subscribe' }[taskType];
         let actionIcon = { like:'👍', share:'🔄', comment:'💬', subscribe:'🔔' }[taskType];
@@ -720,19 +867,31 @@
                        </div>
                        <p><strong>Instructions:</strong> ${instructions}</p>
                        <p><strong>Reward:</strong> <span class="text-warning">${taskCoins} coins</span></p>
-                       <button class="btn btn-primary" id="takeActionBtn" style="margin: 15px auto;">
-                           <i class="fas ${taskType === 'like' ? 'fa-thumbs-up' : taskType === 'share' ? 'fa-share-alt' : taskType === 'comment' ? 'fa-comment' : 'fa-bell'}"></i>
-                           Take Action & Complete
-                       </button>
+                       <a href="${taskTarget}" target="_blank" class="btn btn-primary" style="margin: 15px auto; display: inline-block;">
+                           <i class="fas fa-external-link-alt"></i> Go to YouTube & Take Action
+                       </a>
+                       <div class="verification-code" style="margin-top: 15px;">${verificationCode}</div>
+                       <p class="text-info mt-2">Action complete karne ke baad ye code enter karein!</p>
+                       <input type="text" id="verificationInput" class="input" placeholder="Enter verification code" style="margin-top: 10px;">
+                       <button class="btn btn-success mt-2" id="verifyCompleteBtn" style="width: 100%;">Verify & Claim ${taskCoins} Coins</button>
                    </div>`,
             icon: 'info',
             showConfirmButton: false,
             showCancelButton: true,
             cancelButtonText: 'Cancel',
             didOpen: () => {
-                const takeActionBtn = document.getElementById('takeActionBtn');
-                takeActionBtn.onclick = () => {
-                    window.open(taskTarget, '_blank');
+                const verifyBtn = document.getElementById('verifyCompleteBtn');
+                const inputField = document.getElementById('verificationInput');
+                
+                verifyBtn.onclick = () => {
+                    const enteredCode = inputField ? inputField.value : '';
+                    
+                    if (enteredCode !== verificationCode) {
+                        logScam('INVALID_ENGAGEMENT_VERIFICATION', `Wrong verification code for ${actionText} task on ${taskTarget}`, { taskId, taskType, taskTarget });
+                        Swal.fire('Invalid Code!', 'Verification code does not match. This attempt has been logged.', 'error');
+                        return;
+                    }
+                    
                     Swal.close();
                     
                     clientState.completedEngagement[taskId] = { completed: true, coins: taskCoins };
@@ -866,10 +1025,10 @@
                     <div class="mt-2">
                         <div><i class="fas fa-coins"></i> Reward: <span class="text-warning">${task.watchTime} coins</span></div>
                         <div><i class="fas fa-hourglass-half"></i> Watch Time: ${task.watchTime} seconds</div>
-                        <div class="text-info mt-1">⚡ 1 second = 1 coin!</div>
+                        <div class="text-info mt-1">🔒 Verification required after timer</div>
                     </div>
                     <button class="btn btn-primary mt-2" style="width:100%;" onclick="startVideoTask(${task.id}, '${escapeHtml(task.title)}', '${escapeHtml(task.url)}', ${task.watchTime})">
-                        <i class="fab fa-youtube"></i> Start Task & Earn ${task.watchTime} Coins
+                        <i class="fab fa-youtube"></i> Start Task (${task.watchTime} coins)
                     </button>
                 </div>
             `;
@@ -904,6 +1063,7 @@
                 </div>
                 <div class="mt-2"><i class="fas fa-coins"></i> Reward: <span class="text-warning">${task.coins} coins</span></div>
                 ${task.commentText ? `<div class="text-info"><i class="fas fa-comment"></i> "${escapeHtml(task.commentText)}"</div>` : ''}
+                <div class="text-info mt-1">🔒 Verification code required after action</div>
                 <button class="btn btn-secondary mt-2" style="width:100%; background: ${colors[task.type]};" onclick="completeEngagementTask(${task.id}, '${escapeHtml(task.target)}', '${task.type}', ${task.coins}, '${escapeHtml(task.commentText || '')}')">
                     <i class="fas ${task.type === 'like' ? 'fa-thumbs-up' : task.type === 'share' ? 'fa-share-alt' : task.type === 'comment' ? 'fa-comment' : 'fa-bell'}"></i>
                     Take Action & Earn ${task.coins} Coins
@@ -931,7 +1091,7 @@
         const container = document.getElementById('earningsHistory');
         if(!container) return;
         if (clientState.earningsHistory.length === 0) {
-            container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-chart-line"></i><p>No activity yet. Watch videos to start earning!</p></div>';
+            container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-chart-line"></i><p>No activity yet. Complete tasks to start earning!</p></div>';
             return;
         }
         container.innerHTML = clientState.earningsHistory.map(item => `
@@ -966,10 +1126,10 @@
     const client = {
         toggleTheme() { document.body.classList.toggle('light-mode'); },
         showHelp() {
-            Swal.fire('How to Earn Coins', 
-                '💰 EARN COINS:\n• Click "Start Task" on any video\n• Timer automatically starts (1 second = 1 coin)\n• YouTube video opens in new tab\n• Timer complete hone par coins automatically add ho jayenge!\n\n' +
-                '✅ ENGAGEMENT TASKS:\n• Click "Take Action" button\n• Complete the action on YouTube\n• Coins will be added instantly\n\n' +
-                '🚀 PROMOTE YOUR VIDEOS:\n• Upload your YouTube video\n• Use earned coins to buy views, likes, shares, comments, subscribers', 'info');
+            Swal.fire('Secure System Guide', 
+                '🔒 SECURITY FEATURES:\n\n📹 VIDEO TASKS:\n• Timer complete hone ke baad VERIFICATION CODE enter karna hoga\n• Tab switch karne par task cancel ho jayega\n• Wrong code enter karne par scam report hoga\n\n' +
+                '🎯 ENGAGEMENT TASKS:\n• Action complete karne ke baad VERIFICATION CODE enter karna hoga\n• Channel ka logo aur thumbnail show hoga\n• Wrong code = Scam report\n\n' +
+                '⚠️ 3 SCAM ATTEMPTS = PERMANENT BAN\n\n✅ Legitimate users: Simply follow the instructions!', 'info');
         },
         addPromotionVideo() { addPromotionVideo(); },
         buyService(serviceType) { buyService(serviceType); },
