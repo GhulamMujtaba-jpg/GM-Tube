@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GM Admin Panel - Complete Task Management System</title>
+    <title>GM Admin Panel - Complete Control | Add/Delete Tasks | Thumbnail Preview</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -15,20 +15,14 @@
             background: linear-gradient(135deg, #0a0e27 0%, #000000 100%);
             min-height: 100vh;
             color: #ffffff;
-            transition: all 0.3s ease;
         }
         body.light-mode {
             background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
             color: #1a1a2e;
         }
-        body.light-mode .card, body.light-mode .panel, body.light-mode .stat-card {
+        body.light-mode .card, body.light-mode .panel {
             background: rgba(255,255,255,0.95);
             border-color: #e2e8f0;
-            color: #1a1a2e;
-        }
-        body.light-mode .input, body.light-mode .select, body.light-mode textarea {
-            background: #ffffff;
-            border-color: #cbd5e1;
             color: #1a1a2e;
         }
         .container { max-width: 1600px; margin: 0 auto; padding: 20px; }
@@ -41,16 +35,24 @@
             margin-bottom: 24px;
             transition: all 0.3s;
         }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
         .stat-card {
             background: linear-gradient(135deg, rgba(15,25,45,0.9), rgba(30,40,60,0.8));
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 20px;
             padding: 20px;
+            text-align: center;
             transition: all 0.3s;
             cursor: pointer;
         }
-        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); border-color: #22c55e; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 24px; }
+        .stat-card:hover { transform: translateY(-5px); border-color: #22c55e; }
+        .stat-value { font-size: 32px; font-weight: 800; color: #f59e0b; }
+        .stat-label { font-size: 12px; color: #94a3b8; margin-top: 5px; }
         .input, .select, textarea {
             width: 100%;
             padding: 14px 18px;
@@ -69,7 +71,6 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            font-size: 14px;
             display: inline-flex;
             align-items: center;
             gap: 8px;
@@ -81,15 +82,26 @@
         .btn-warning { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
         .btn-info { background: linear-gradient(135deg, #06b6d4, #0891b2); color: white; }
         .btn-dark { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); }
-        .task-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 20px; margin-top: 20px; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .mt-2 { margin-top: 12px; }
+        .mt-3 { margin-top: 18px; }
+        .mb-2 { margin-bottom: 12px; }
+        .text-success { color: #86efac; }
+        .text-warning { color: #fcd34d; }
+        .text-info { color: #7dd3fc; }
+        .text-danger { color: #fca5a5; }
+        .task-grid, .engagement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
         .task-card {
             background: rgba(10, 20, 35, 0.9);
             border-radius: 20px;
             padding: 20px;
             transition: all 0.3s;
             border-left: 4px solid;
-            position: relative;
-            overflow: hidden;
         }
         .task-card:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
         .priority-high { border-left-color: #ef4444; }
@@ -106,48 +118,19 @@
         }
         .badge-success { background: #22c55e20; color: #86efac; border: 1px solid #22c55e40; }
         .badge-warning { background: #f59e0b20; color: #fcd34d; border: 1px solid #f59e0b40; }
-        .badge-danger { background: #ef444420; color: #fca5a5; border: 1px solid #ef444440; }
         .badge-info { background: #3b82f620; color: #93c5fd; border: 1px solid #3b82f640; }
-        .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
-        .mt-2 { margin-top: 12px; }
-        .mt-3 { margin-top: 18px; }
-        .mb-2 { margin-bottom: 12px; }
-        .text-success { color: #86efac; }
-        .text-warning { color: #fcd34d; }
-        .text-info { color: #7dd3fc; }
-        .text-danger { color: #fca5a5; }
-        .filter-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-        .filter-btn {
-            padding: 8px 18px;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: all 0.3s;
+        .thumbnail-preview {
+            margin-top: 10px;
+            border-radius: 12px;
+            overflow: hidden;
+            max-width: 200px;
         }
-        .filter-btn.active { background: #22c55e; color: #000; border-color: #22c55e; }
+        .thumbnail-preview img {
+            width: 100%;
+            border-radius: 8px;
+        }
         .login-box { max-width: 450px; margin: 80px auto; }
         .hidden { display: none !important; }
-        .admin-earning-box {
-            background: linear-gradient(135deg, #f59e0b20, #d9770620);
-            border: 2px solid #f59e0b;
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        .progress-bar {
-            height: 6px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 3px;
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #22c55e, #3b82f6);
-            border-radius: 3px;
-            transition: width 0.5s;
-        }
         .floating-actions {
             position: fixed;
             bottom: 30px;
@@ -171,7 +154,7 @@
         .floating-btn:hover { transform: scale(1.1); }
         @media (max-width: 768px) {
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .task-grid { grid-template-columns: 1fr; }
+            .task-grid, .engagement-grid { grid-template-columns: 1fr; }
             .container { padding: 12px; }
         }
     </style>
@@ -188,10 +171,10 @@
         <div class="card" style="text-align: center;">
             <i class="fas fa-crown" style="font-size: 50px; color: #22c55e; margin-bottom: 20px;"></i>
             <h2 style="margin-bottom: 10px;">GM Admin Panel</h2>
-            <p style="color: #94a3b8; margin-bottom: 25px;">Complete Task Management System</p>
+            <p style="color: #94a3b8; margin-bottom: 25px;">Complete Control | Add/Delete Tasks | Thumbnail Preview</p>
             <input type="email" id="adminEmail" class="input" placeholder="Email Address" value="ghulammujtaba30@gmail.com">
             <input type="password" id="adminPassword" class="input" placeholder="Password" value="Sahibzada6060">
-            <button class="btn btn-primary" style="width: 100%;" onclick="admin.login()"><i class="fas fa-sign-in-alt"></i> Login to Dashboard</button>
+            <button class="btn btn-primary" style="width: 100%;" onclick="admin.login()"><i class="fas fa-sign-in-alt"></i> Login</button>
         </div>
     </div>
 
@@ -202,7 +185,7 @@
             <div class="flex-between">
                 <div>
                     <h1 style="font-size: 28px;"><i class="fas fa-tachometer-alt"></i> GM Admin Dashboard</h1>
-                    <p style="color: #94a3b8; margin-top: 5px;">Complete Control | Social Media Tasks | Real-time Analytics</p>
+                    <p style="color: #94a3b8; margin-top: 5px;">Complete Control | Add/Delete Tasks | Client Management</p>
                 </div>
                 <div>
                     <span id="currentDateTime" style="margin-right: 20px; font-size: 14px;"></span>
@@ -211,65 +194,40 @@
             </div>
         </div>
 
-        <!-- Admin Earning Box - Sirf Admin ki Earning -->
-        <div class="admin-earning-box">
-            <div class="flex-between">
-                <div>
-                    <h2><i class="fas fa-chart-line"></i> Admin Real Earnings</h2>
-                    <p style="color: #fcd34d; margin-top: 5px;">💵 Sirf Admin real money kamayega | Client ko sirf coins milenge</p>
-                </div>
-                <div>
-                    <div style="font-size: 36px; font-weight: 800; color: #f59e0b;" id="adminBalance">0</div>
-                    <div style="font-size: 12px;">Available Balance (USD)</div>
-                </div>
-            </div>
-            <div class="progress-bar mt-2"><div class="progress-fill" id="earningProgress" style="width: 0%"></div></div>
-            <div class="flex-between mt-2">
-                <span>Total Tasks Completed: <strong id="totalCompleted">0</strong></span>
-                <span>Commission Rate: <strong id="currentCommissionDisplay" class="text-warning">10%</strong></span>
-            </div>
-        </div>
-
         <!-- Stats Grid -->
         <div class="stats-grid">
-            <div class="stat-card"><i class="fas fa-video" style="font-size: 24px; color: #22c55e;"></i><div class="stat-label" style="margin-top: 10px;">Total Video Tasks</div><div class="stat-value" id="totalTasks" style="font-size: 32px; font-weight: 800;">0</div></div>
-            <div class="stat-card"><i class="fas fa-check-circle" style="font-size: 24px; color: #3b82f6;"></i><div class="stat-label" style="margin-top: 10px;">Tasks Completed</div><div class="stat-value" id="totalCompletedCount" style="font-size: 32px; font-weight: 800;">0</div></div>
-            <div class="stat-card"><i class="fas fa-coins" style="font-size: 24px; color: #f59e0b;"></i><div class="stat-label" style="margin-top: 10px;">Client Coins Earned</div><div class="stat-value" id="clientCoinsEarned" style="font-size: 32px; font-weight: 800;">0</div></div>
-            <div class="stat-card"><i class="fas fa-shield-alt" style="font-size: 24px; color: #ef4444;"></i><div class="stat-label" style="margin-top: 10px;">Scam Alerts</div><div class="stat-value" id="scamCount" style="font-size: 32px; font-weight: 800;">0</div></div>
-            <div class="stat-card"><i class="fas fa-tasks" style="font-size: 24px; color: #06b6d4;"></i><div class="stat-label" style="margin-top: 10px;">Active Engagement</div><div class="stat-value" id="engagementCount" style="font-size: 32px; font-weight: 800;">0</div></div>
-        </div>
-
-        <!-- Quick Actions -->
-        <div class="card">
-            <div class="flex-between"><h3><i class="fas fa-bolt"></i> Quick Actions</h3><div><button class="btn btn-primary" onclick="admin.scrollTo('videoTask')"><i class="fas fa-video"></i> Video Task</button><button class="btn btn-secondary" onclick="admin.scrollTo('engagementTask')"><i class="fas fa-heart"></i> Engagement Task</button><button class="btn btn-warning" onclick="admin.exportReport()"><i class="fas fa-file-excel"></i> Export Report</button></div></div>
+            <div class="stat-card"><i class="fas fa-video" style="font-size: 24px; color: #22c55e;"></i><div class="stat-label">Video Tasks</div><div class="stat-value" id="totalTasks">0</div></div>
+            <div class="stat-card"><i class="fas fa-heart" style="font-size: 24px; color: #3b82f6;"></i><div class="stat-label">Engagement Tasks</div><div class="stat-value" id="totalEngagement">0</div></div>
+            <div class="stat-card"><i class="fas fa-check-circle" style="font-size: 24px; color: #f59e0b;"></i><div class="stat-label">Completed</div><div class="stat-value" id="totalCompleted">0</div></div>
+            <div class="stat-card"><i class="fas fa-dollar-sign" style="font-size: 24px; color: #a855f7;"></i><div class="stat-label">Admin Balance</div><div class="stat-value" id="adminBalance">$0</div></div>
         </div>
 
         <!-- Commission Settings -->
         <div class="card">
-            <h3><i class="fas fa-sliders-h"></i> Commission Settings</h3>
-            <div class="flex-between" style="flex-wrap: wrap; gap: 20px;">
-                <div><label>Admin Commission Rate:</label><input type="number" id="commissionRate" class="input" style="width: 100px; margin-left: 10px;" min="5" max="30" value="10"><button class="btn btn-primary" onclick="admin.updateCommission()">Update</button></div>
-                <div><label>Currency:</label><select id="currencySelect" class="select" style="width: 100px; margin-left: 10px;" onchange="admin.updateCurrency()"><option value="USD">USD $</option><option value="PKR">PKR ₨</option><option value="INR">INR ₹</option></select></div>
-                <div><span class="text-info">Client ko sirf <i class="fas fa-coins"></i> coins milenge | Admin ko real money</span></div>
+            <div class="flex-between">
+                <h3><i class="fas fa-sliders-h"></i> Commission Settings</h3>
+                <div><input type="number" id="commissionRate" class="input" style="width: 100px; display: inline-block;" min="5" max="30" value="10"><button class="btn btn-primary" onclick="admin.updateCommission()">Update</button></div>
             </div>
+            <div class="mt-2">Current Commission: <strong id="currentCommissionDisplay" class="text-warning">10%</strong></div>
         </div>
 
-        <!-- Add Video Task -->
-        <div id="videoTask" class="card">
+        <!-- Add Video Task with Thumbnail Preview -->
+        <div class="card">
             <h3><i class="fas fa-plus-circle"></i> Add YouTube Video Task</h3>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
                 <input type="text" id="videoTitle" class="input" placeholder="Video Title">
-                <input type="text" id="videoUrl" class="input" placeholder="YouTube URL">
+                <input type="text" id="videoUrl" class="input" placeholder="YouTube URL" onkeyup="admin.previewThumbnail()">
                 <input type="number" id="videoCoins" class="input" placeholder="Reward (Coins for Client)">
                 <input type="number" id="watchSeconds" class="input" placeholder="Watch Time (seconds)">
             </div>
             <select id="taskPriority" class="select"><option value="low">🟢 Low Priority</option><option value="medium">🟡 Medium Priority</option><option value="high">🔴 High Priority</option></select>
-            <button class="btn btn-primary" onclick="admin.addTask()"><i class="fas fa-cloud-upload-alt"></i> Publish Video Task</button>
+            <div id="thumbnailPreview" class="thumbnail-preview" style="display: none;"></div>
+            <button class="btn btn-primary mt-2" onclick="admin.addVideoTask()"><i class="fas fa-cloud-upload-alt"></i> Publish Video Task</button>
         </div>
 
         <!-- Add Engagement Task (Like/Share/Comment/Subscribe) -->
-        <div id="engagementTask" class="card">
-            <h3><i class="fas fa-heart"></i> Social Media Engagement Tasks</h3>
+        <div class="card">
+            <h3><i class="fas fa-heart"></i> Add Engagement Task</h3>
             <p style="color: #94a3b8; margin-bottom: 15px;">Admin client ko like, share, comment, ya subscribe ka task de sakta hai</p>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
                 <input type="text" id="engagementTarget" class="input" placeholder="Target URL / Channel ID">
@@ -279,62 +237,47 @@
                     <option value="comment">💬 Comment on Video</option>
                     <option value="subscribe">🔔 Subscribe Channel</option>
                 </select>
-                <input type="number" id="engagementCoins" class="input" placeholder="Reward (Coins for Client)">
+                <input type="number" id="engagementCoins" class="input" placeholder="Reward (Coins)">
                 <input type="text" id="engagementCommentText" class="input" placeholder="Comment Text (Optional)">
             </div>
             <select id="engagementPriority" class="select"><option value="low">🟢 Low Priority</option><option value="medium">🟡 Medium Priority</option><option value="high">🔴 High Priority</option></select>
-            <button class="btn btn-secondary" onclick="admin.addEngagementTask()"><i class="fas fa-tasks"></i> Assign Engagement Task to Client</button>
+            <button class="btn btn-secondary mt-2" onclick="admin.addEngagementTask()"><i class="fas fa-tasks"></i> Assign Engagement Task</button>
         </div>
 
-        <!-- Active Engagement Tasks Display -->
+        <!-- Video Tasks List - Admin Can Delete -->
         <div class="card">
-            <div class="flex-between"><h3><i class="fas fa-list"></i> Active Engagement Tasks</h3><span class="badge badge-info" id="engagementTasksCount">0</span></div>
+            <div class="flex-between">
+                <h3><i class="fas fa-video"></i> Video Tasks</h3>
+                <button class="btn btn-danger btn-sm" onclick="admin.deleteAllCompletedVideoTasks()" style="padding: 8px 16px;"><i class="fas fa-trash-alt"></i> Delete All Completed</button>
+            </div>
+            <div id="videoTasksList" class="task-grid"></div>
+        </div>
+
+        <!-- Engagement Tasks List - Admin Can Delete -->
+        <div class="card">
+            <div class="flex-between">
+                <h3><i class="fas fa-tasks"></i> Engagement Tasks</h3>
+                <button class="btn btn-danger btn-sm" onclick="admin.deleteAllCompletedEngagementTasks()" style="padding: 8px 16px;"><i class="fas fa-trash-alt"></i> Delete All Completed</button>
+            </div>
             <div id="engagementTasksList" class="task-grid"></div>
         </div>
 
-        <!-- Video Tasks Display -->
-        <div class="card">
-            <div class="flex-between"><h3><i class="fas fa-video"></i> Video Tasks Library</h3><span class="badge badge-info" id="tasksCount">0</span></div>
-            <div id="tasksList" class="task-grid"></div>
-        </div>
-
-        <!-- Analytics Charts -->
-        <div class="card">
-            <h3><i class="fas fa-chart-line"></i> Performance Analytics</h3>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px;">
-                <div><canvas id="earningsChart"></canvas><p style="text-align: center; margin-top: 10px;">Admin Real Earnings (USD)</p></div>
-                <div><canvas id="taskChart"></canvas><p style="text-align: center; margin-top: 10px;">Task Completion Rate</p></div>
-            </div>
-        </div>
-
-        <!-- Broadcast Message -->
-        <div class="card">
-            <h3><i class="fas fa-bullhorn"></i> Send Message to Client</h3>
-            <textarea id="adminMessage" class="input" rows="3" placeholder="Type your message here..."></textarea>
-            <div class="flex-between mt-2"><button class="btn btn-info" onclick="admin.sendMessage()"><i class="fas fa-paper-plane"></i> Send Message</button><button class="btn btn-warning" onclick="admin.broadcastMessage()"><i class="fas fa-broadcast-tower"></i> Broadcast to All</button></div>
-        </div>
-
-        <!-- Activity Log -->
-        <div class="card">
-            <h3><i class="fas fa-history"></i> Activity Log</h3>
-            <div class="filter-bar">
-                <button class="filter-btn active" data-filter="all" onclick="admin.filterLog('all')">All</button>
-                <button class="filter-btn" data-filter="task_completed" onclick="admin.filterLog('task_completed')">Completed</button>
-                <button class="filter-btn" data-filter="engagement_completed" onclick="admin.filterLog('engagement_completed')">Engagement</button>
-                <button class="filter-btn" data-filter="scam_attempt" onclick="admin.filterLog('scam_attempt')">Scam Alerts</button>
-            </div>
-            <div id="activityLogList" style="max-height: 400px; overflow-y: auto;"></div>
-        </div>
-
-        <!-- Client Management -->
+        <!-- Client Management - Reset Client Tasks -->
         <div class="card">
             <h3><i class="fas fa-user-shield"></i> Client Management</h3>
-            <div id="clientSummaryList"></div>
-            <div class="flex-between mt-3" style="flex-wrap: wrap; gap: 10px;">
-                <button class="btn btn-warning" onclick="admin.giveWarning()"><i class="fas fa-exclamation-triangle"></i> Give Warning</button>
-                <button class="btn btn-danger" onclick="admin.banClient()"><i class="fas fa-ban"></i> Ban Client</button>
-                <button class="btn btn-success" onclick="admin.resetClient()"><i class="fas fa-undo-alt"></i> Reset Status</button>
+            <div class="flex-between" style="flex-wrap: wrap; gap: 10px;">
+                <button class="btn btn-warning" onclick="admin.resetClientTasks()"><i class="fas fa-undo-alt"></i> Reset All Client Tasks</button>
+                <button class="btn btn-danger" onclick="admin.resetAllData()"><i class="fas fa-database"></i> Reset Everything</button>
+                <button class="btn btn-info" onclick="admin.viewClientStats()"><i class="fas fa-chart-simple"></i> View Client Stats</button>
             </div>
+            <div id="clientStats" class="mt-2"></div>
+        </div>
+
+        <!-- Send Message to Client -->
+        <div class="card">
+            <h3><i class="fas fa-envelope"></i> Send Message to Client</h3>
+            <textarea id="adminMessage" class="input" rows="3" placeholder="Type your message here..."></textarea>
+            <button class="btn btn-info mt-2" onclick="admin.sendMessage()"><i class="fas fa-paper-plane"></i> Send Message</button>
         </div>
     </div>
 </div>
@@ -344,227 +287,514 @@
     const ADMIN_EMAIL = "ghulammujtaba30@gmail.com";
     const ADMIN_PASSWORD = "Sahibzada6060";
 
-    // Global State - Client ko sirf coins milte hain, admin ko real money
-    let appState = {
+    // Storage Keys
+    const STORAGE_KEYS = {
+        videos: 'gm_final_videos',
+        completedTasks: 'gm_final_completed',
+        totalCompleted: 'gm_final_total',
+        adminBalance: 'gm_final_admin_balance',
+        clientCoins: 'gm_final_client_coins',
+        activityLog: 'gm_final_log',
+        engagementTasks: 'gm_final_engagement',
+        completedEngagement: 'gm_final_comp_eng',
+        commission: 'gm_final_commission',
+        clientWarnings: 'gm_final_warnings',
+        clientBanned: 'gm_final_banned',
+        clientMessages: 'gm_final_client_messages',
+        earningsHistory: 'gm_final_earnings_history',
+        promotedVideos: 'gm_final_promoted_videos'
+    };
+
+    let adminState = {
         videos: [],
-        completedTasks: {},
-        totalCompleted: 0,
-        adminBalance: 0,  // Real money in USD
-        clientCoins: 0,   // Client ki coins
-        activityLog: [],
         engagementTasks: [],
+        completedTasks: {},
         completedEngagement: {},
+        totalCompleted: 0,
+        adminBalance: 0,
         commission: 10,
-        clientWarnings: 0,
-        clientBanned: false,
-        currency: 'USD',
-        exchangeRates: { USD: 1, PKR: 280, INR: 83 },
         isLoggedIn: false
     };
-    let currentLogFilter = 'all';
-    let earningsChart = null, taskChart = null;
 
-    // Load/Save Functions
     function loadData() {
-        appState.videos = JSON.parse(localStorage.getItem('gm_final_videos')) || [];
-        appState.completedTasks = JSON.parse(localStorage.getItem('gm_final_completed')) || {};
-        appState.totalCompleted = parseInt(localStorage.getItem('gm_final_total')) || 0;
-        appState.adminBalance = parseFloat(localStorage.getItem('gm_final_admin_balance')) || 0;
-        appState.clientCoins = parseInt(localStorage.getItem('gm_final_client_coins')) || 0;
-        appState.activityLog = JSON.parse(localStorage.getItem('gm_final_log')) || [];
-        appState.engagementTasks = JSON.parse(localStorage.getItem('gm_final_engagement')) || [];
-        appState.completedEngagement = JSON.parse(localStorage.getItem('gm_final_comp_eng')) || {};
-        appState.commission = parseInt(localStorage.getItem('gm_final_commission')) || 10;
-        appState.clientWarnings = parseInt(localStorage.getItem('gm_final_warnings')) || 0;
-        appState.clientBanned = localStorage.getItem('gm_final_banned') === 'true';
-        appState.currency = localStorage.getItem('gm_final_currency') || 'USD';
-        if (document.getElementById('commissionRate')) document.getElementById('commissionRate').value = appState.commission;
-        if (document.getElementById('currentCommissionDisplay')) document.getElementById('currentCommissionDisplay').innerHTML = appState.commission + '%';
-        if (document.getElementById('currencySelect')) document.getElementById('currencySelect').value = appState.currency;
+        adminState.videos = JSON.parse(localStorage.getItem(STORAGE_KEYS.videos)) || [];
+        adminState.engagementTasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.engagementTasks)) || [];
+        adminState.completedTasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.completedTasks)) || {};
+        adminState.completedEngagement = JSON.parse(localStorage.getItem(STORAGE_KEYS.completedEngagement)) || {};
+        adminState.totalCompleted = parseInt(localStorage.getItem(STORAGE_KEYS.totalCompleted)) || 0;
+        adminState.adminBalance = parseFloat(localStorage.getItem(STORAGE_KEYS.adminBalance)) || 0;
+        adminState.commission = parseInt(localStorage.getItem(STORAGE_KEYS.commission)) || 10;
+        
+        if (document.getElementById('commissionRate')) document.getElementById('commissionRate').value = adminState.commission;
+        if (document.getElementById('currentCommissionDisplay')) document.getElementById('currentCommissionDisplay').innerHTML = adminState.commission + '%';
+        
+        updateStats();
+        renderVideoTasks();
+        renderEngagementTasks();
+        renderClientStats();
     }
 
     function saveData() {
-        localStorage.setItem('gm_final_videos', JSON.stringify(appState.videos));
-        localStorage.setItem('gm_final_completed', JSON.stringify(appState.completedTasks));
-        localStorage.setItem('gm_final_total', appState.totalCompleted);
-        localStorage.setItem('gm_final_admin_balance', appState.adminBalance);
-        localStorage.setItem('gm_final_client_coins', appState.clientCoins);
-        localStorage.setItem('gm_final_log', JSON.stringify(appState.activityLog));
-        localStorage.setItem('gm_final_engagement', JSON.stringify(appState.engagementTasks));
-        localStorage.setItem('gm_final_comp_eng', JSON.stringify(appState.completedEngagement));
-        localStorage.setItem('gm_final_commission', appState.commission);
-        localStorage.setItem('gm_final_warnings', appState.clientWarnings);
-        localStorage.setItem('gm_final_banned', appState.clientBanned);
-        localStorage.setItem('gm_final_currency', appState.currency);
+        localStorage.setItem(STORAGE_KEYS.videos, JSON.stringify(adminState.videos));
+        localStorage.setItem(STORAGE_KEYS.engagementTasks, JSON.stringify(adminState.engagementTasks));
+        localStorage.setItem(STORAGE_KEYS.completedTasks, JSON.stringify(adminState.completedTasks));
+        localStorage.setItem(STORAGE_KEYS.completedEngagement, JSON.stringify(adminState.completedEngagement));
+        localStorage.setItem(STORAGE_KEYS.totalCompleted, adminState.totalCompleted);
+        localStorage.setItem(STORAGE_KEYS.adminBalance, adminState.adminBalance);
+        localStorage.setItem(STORAGE_KEYS.commission, adminState.commission);
     }
-
-    function addLog(type, title, details, amount = 0) {
-        appState.activityLog.unshift({ id: Date.now(), type, title, details, amount, timestamp: new Date().toLocaleString() });
-        if (appState.activityLog.length > 500) appState.activityLog.pop();
-        saveData();
-        if (appState.isLoggedIn) renderLogs();
-    }
-
-    function formatCurrency(amount) { 
-        const rate = appState.exchangeRates[appState.currency] || 1; 
-        return new Intl.NumberFormat('en-US', { style: 'currency', currency: appState.currency }).format(amount * rate); 
-    }
-
-    function formatCoins(coins) { return coins + ' 🪙'; }
-
-    function showToast(message, type = 'success') { 
-        Swal.fire({ title: type === 'success' ? 'Success!' : 'Alert!', text: message, icon: type, toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 });
-    }
-
-    function updateDateTime() { const now = new Date(); if (document.getElementById('currentDateTime')) document.getElementById('currentDateTime').innerHTML = now.toLocaleString(); }
-    setInterval(updateDateTime, 1000);
 
     function updateStats() {
-        if (!appState.isLoggedIn) return;
-        document.getElementById('totalTasks').innerHTML = appState.videos.length;
-        document.getElementById('totalCompleted').innerHTML = appState.totalCompleted;
-        document.getElementById('totalCompletedCount').innerHTML = appState.totalCompleted;
-        document.getElementById('adminBalance').innerHTML = formatCurrency(appState.adminBalance);
-        document.getElementById('clientCoinsEarned').innerHTML = formatCoins(appState.clientCoins);
-        const scamCount = appState.activityLog.filter(l => l.type === 'scam_attempt').length;
-        document.getElementById('scamCount').innerHTML = scamCount;
-        const engagementActive = appState.engagementTasks.filter(t => !appState.completedEngagement[t.id]).length;
-        document.getElementById('engagementCount').innerHTML = engagementActive;
-        document.getElementById('engagementTasksCount').innerHTML = engagementActive;
-        document.getElementById('tasksCount').innerHTML = appState.videos.length;
-        
-        // Calculate total earning percentage
-        const totalAdminEarned = appState.adminBalance;
-        const maxEarning = 10000;
-        const percentage = Math.min((totalAdminEarned / maxEarning) * 100, 100);
-        if (document.getElementById('earningProgress')) document.getElementById('earningProgress').style.width = percentage + '%';
-        
-        renderCharts();
+        document.getElementById('totalTasks').innerHTML = adminState.videos.length;
+        document.getElementById('totalEngagement').innerHTML = adminState.engagementTasks.length;
+        document.getElementById('totalCompleted').innerHTML = adminState.totalCompleted;
+        document.getElementById('adminBalance').innerHTML = `$${adminState.adminBalance.toFixed(2)}`;
     }
 
-    function renderTasks() {
-        const container = document.getElementById('tasksList');
+    function getYouTubeId(url) {
+        const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([^&\n?#]+)/;
+        const match = url.match(regex);
+        return match ? match[1] : null;
+    }
+
+    function getThumbnail(url) {
+        const id = getYouTubeId(url);
+        return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
+    }
+
+    function renderVideoTasks() {
+        const container = document.getElementById('videoTasksList');
         if (!container) return;
-        if (!appState.videos.length) { container.innerHTML = '<div style="text-align:center;padding:40px;"><i class="fas fa-inbox"></i> No video tasks available</div>'; return; }
-        container.innerHTML = appState.videos.map(task => `<div class="task-card priority-${task.priority || 'low'}"><div class="flex-between"><strong>${escapeHtml(task.title)}</strong><span class="badge ${appState.completedTasks[task.id] ? 'badge-success' : 'badge-warning'}">${appState.completedTasks[task.id] ? '<i class="fas fa-check"></i> Completed' : '<i class="fas fa-clock"></i> Active'}</span></div><div class="mt-2"><i class="fas fa-coins"></i> Client Reward: ${formatCoins(task.coins)} | <i class="fas fa-hourglass-half"></i> ${task.watchTime} sec</div><div class="progress-bar mt-2"><div class="progress-fill" style="width: ${appState.completedTasks[task.id] ? 100 : 0}%"></div></div><button class="btn btn-danger mt-2" style="padding:8px 16px;" onclick="admin.deleteTask(${task.id})"><i class="fas fa-trash"></i> Delete</button></div>`).join('');
+        
+        if (adminState.videos.length === 0) {
+            container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-inbox"></i> No video tasks available</div>';
+            return;
+        }
+        
+        container.innerHTML = adminState.videos.map(task => {
+            const isCompleted = adminState.completedTasks[task.id];
+            return `
+                <div class="task-card priority-${task.priority || 'low'}">
+                    <img src="${task.thumbnail}" style="width: 100%; border-radius: 12px; margin-bottom: 10px;" onerror="this.src='https://via.placeholder.com/640x360?text=No+Thumbnail'">
+                    <div class="flex-between">
+                        <strong>${escapeHtml(task.title)}</strong>
+                        <span class="badge ${isCompleted ? 'badge-success' : 'badge-warning'}">
+                            ${isCompleted ? '✓ Completed' : '⏳ Pending'}
+                        </span>
+                    </div>
+                    <div class="mt-2">
+                        <div><i class="fas fa-coins"></i> Reward: ${task.coins} coins</div>
+                        <div><i class="fas fa-hourglass-half"></i> Watch Time: ${task.watchTime} seconds</div>
+                        <div><i class="fas fa-calendar"></i> Added: ${task.createdAt}</div>
+                    </div>
+                    <div class="flex-between mt-2">
+                        ${isCompleted ? `<button class="btn btn-warning" style="padding: 6px 12px;" onclick="admin.resetClientTask(${task.id}, 'video')"><i class="fas fa-undo"></i> Reset Client</button>` : ''}
+                        <button class="btn btn-danger" style="padding: 6px 12px;" onclick="admin.deleteVideoTask(${task.id})"><i class="fas fa-trash"></i> Delete Task</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
     }
 
     function renderEngagementTasks() {
         const container = document.getElementById('engagementTasksList');
         if (!container) return;
-        const active = appState.engagementTasks.filter(t => !appState.completedEngagement[t.id]);
-        if (!active.length) { container.innerHTML = '<div style="text-align:center;padding:40px;"><i class="fas fa-tasks"></i> No active engagement tasks</div>'; return; }
+        
+        if (adminState.engagementTasks.length === 0) {
+            container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-inbox"></i> No engagement tasks available</div>';
+            return;
+        }
+        
         const icons = { like:'👍', share:'🔄', comment:'💬', subscribe:'🔔' };
-        container.innerHTML = active.map(task => `<div class="task-card priority-${task.priority || 'low'}"><div class="flex-between"><strong>${icons[task.type]} ${task.type.toUpperCase()}</strong><span class="badge badge-warning"><i class="fas fa-hourglass-half"></i> Pending</span></div><div class="mt-2"><i class="fas fa-link"></i> ${escapeHtml(task.target)}</div><div><i class="fas fa-coins"></i> Client Reward: ${formatCoins(task.coins)}</div>${task.commentText ? `<div class="mt-1"><i class="fas fa-comment"></i> "${escapeHtml(task.commentText)}"</div>` : ''}<button class="btn btn-danger mt-2" style="padding:8px 16px;" onclick="admin.deleteEngagementTask(${task.id})"><i class="fas fa-trash"></i> Remove</button></div>`).join('');
+        const typeNames = { like:'Like', share:'Share', comment:'Comment', subscribe:'Subscribe' };
+        
+        container.innerHTML = adminState.engagementTasks.map(task => {
+            const isCompleted = adminState.completedEngagement[task.id];
+            return `
+                <div class="task-card priority-${task.priority || 'low'}">
+                    <div class="flex-between">
+                        <strong>${icons[task.type]} ${typeNames[task.type]} Task</strong>
+                        <span class="badge ${isCompleted ? 'badge-success' : 'badge-warning'}">
+                            ${isCompleted ? '✓ Completed' : '⏳ Pending'}
+                        </span>
+                    </div>
+                    <div class="mt-2">
+                        <div><i class="fas fa-link"></i> Target: ${escapeHtml(task.target)}</div>
+                        <div><i class="fas fa-coins"></i> Reward: ${task.coins} coins</div>
+                        ${task.commentText ? `<div><i class="fas fa-comment"></i> Comment: "${escapeHtml(task.commentText)}"</div>` : ''}
+                        <div><i class="fas fa-calendar"></i> Added: ${task.createdAt}</div>
+                    </div>
+                    <div class="flex-between mt-2">
+                        ${isCompleted ? `<button class="btn btn-warning" style="padding: 6px 12px;" onclick="admin.resetClientTask(${task.id}, 'engagement')"><i class="fas fa-undo"></i> Reset Client</button>` : ''}
+                        <button class="btn btn-danger" style="padding: 6px 12px;" onclick="admin.deleteEngagementTask(${task.id})"><i class="fas fa-trash"></i> Delete Task</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
     }
 
-    function renderLogs() {
-        const container = document.getElementById('activityLogList');
+    function renderClientStats() {
+        const container = document.getElementById('clientStats');
         if (!container) return;
-        let filtered = appState.activityLog.filter(l => currentLogFilter === 'all' ? true : l.type === currentLogFilter);
-        if (!filtered.length) { container.innerHTML = '<div style="text-align:center;padding:40px;"><i class="fas fa-history"></i> No activity logs</div>'; return; }
-        container.innerHTML = filtered.map(log => `<div style="padding:12px; border-bottom:1px solid rgba(255,255,255,0.05);"><div class="flex-between"><span class="badge ${log.type === 'scam_attempt' ? 'badge-danger' : 'badge-info'}">${log.type.replace('_', ' ')}</span><span style="font-size:11px; color:#94a3b8;">${log.timestamp}</span></div><div class="mt-1"><strong>${escapeHtml(log.title)}</strong></div><div style="font-size:13px;">${escapeHtml(log.details)}</div>${log.amount ? `<div class="text-success mt-1">💰 Admin Earned: ${formatCurrency(log.amount)}</div>` : ''}</div>`).join('');
+        
+        const clientCoins = parseInt(localStorage.getItem(STORAGE_KEYS.clientCoins)) || 0;
+        const completedVideos = Object.keys(adminState.completedTasks).length;
+        const completedEngagement = Object.keys(adminState.completedEngagement).length;
+        
+        container.innerHTML = `
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 10px;">
+                <div class="stat-card" style="padding: 10px;"><div class="stat-label">Client Coins</div><div class="stat-value" style="font-size: 24px;">${clientCoins}</div></div>
+                <div class="stat-card" style="padding: 10px;"><div class="stat-label">Completed Videos</div><div class="stat-value" style="font-size: 24px;">${completedVideos}</div></div>
+                <div class="stat-card" style="padding: 10px;"><div class="stat-label">Completed Engagement</div><div class="stat-value" style="font-size: 24px;">${completedEngagement}</div></div>
+                <div class="stat-card" style="padding: 10px;"><div class="stat-label">Total Completed</div><div class="stat-value" style="font-size: 24px;">${adminState.totalCompleted}</div></div>
+            </div>
+        `;
     }
 
-    function renderClientSummary() {
-        const container = document.getElementById('clientSummaryList');
-        if (!container) return;
-        container.innerHTML = `<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:15px;"><div class="stat-card" style="padding:15px;"><i class="fas fa-user-circle"></i><div class="stat-label">Client Status</div><div class="stat-value" style="font-size:20px;">${appState.clientBanned ? '🔴 BANNED' : '🟢 Active'}</div></div><div class="stat-card" style="padding:15px;"><i class="fas fa-exclamation-triangle"></i><div class="stat-label">Warnings</div><div class="stat-value" style="font-size:20px;">${appState.clientWarnings}/3</div></div><div class="stat-card" style="padding:15px;"><i class="fas fa-coins"></i><div class="stat-label">Client Coins</div><div class="stat-value" style="font-size:20px;">${formatCoins(appState.clientCoins)}</div></div><div class="stat-card" style="padding:15px;"><i class="fas fa-chart-line"></i><div class="stat-label">Completion Rate</div><div class="stat-value" style="font-size:20px;">${appState.totalCompleted > 0 ? Math.round((appState.totalCompleted / (appState.videos.length + appState.engagementTasks.length || 1)) * 100) : 0}%</div></div></div>`;
+    function addActivityLog(type, title, details) {
+        let activityLog = JSON.parse(localStorage.getItem(STORAGE_KEYS.activityLog)) || [];
+        activityLog.unshift({
+            id: Date.now(),
+            type: type,
+            title: title,
+            details: details,
+            timestamp: new Date().toLocaleString()
+        });
+        if (activityLog.length > 500) activityLog.pop();
+        localStorage.setItem(STORAGE_KEYS.activityLog, JSON.stringify(activityLog));
     }
 
-    function renderCharts() {
-        const ctx1 = document.getElementById('earningsChart')?.getContext('2d');
-        const ctx2 = document.getElementById('taskChart')?.getContext('2d');
-        if (!ctx1 || !ctx2) return;
-        const last7Days = [...Array(7)].map((_, i) => { const d = new Date(); d.setDate(d.getDate() - (6 - i)); return d.toLocaleDateString(); });
-        const earnings = last7Days.map(() => Math.floor(Math.random() * 500) + 100);
-        if (earningsChart) earningsChart.destroy();
-        earningsChart = new Chart(ctx1, { type: 'line', data: { labels: last7Days, datasets: [{ label: `Admin Earnings (${appState.currency})`, data: earnings, borderColor: '#f59e0b', backgroundColor: '#f59e0b20', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: true } });
-        if (taskChart) taskChart.destroy();
-        const completedCount = appState.totalCompleted;
-        const pendingCount = (appState.videos.length + appState.engagementTasks.length) - completedCount;
-        taskChart = new Chart(ctx2, { type: 'doughnut', data: { labels: ['Completed', 'Pending'], datasets: [{ data: [completedCount, pendingCount], backgroundColor: ['#22c55e', '#3b82f6'] }] }, options: { responsive: true, maintainAspectRatio: true } });
+    function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 
-    function escapeHtml(text) { if (!text) return ''; const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
-
-    // Admin API - Client ko sirf coins, admin ko real money
     const admin = {
-        login() { 
-            const email = document.getElementById('adminEmail').value; 
-            const pass = document.getElementById('adminPassword').value; 
-            if (email === ADMIN_EMAIL && pass === ADMIN_PASSWORD) { 
-                appState.isLoggedIn = true; 
-                document.getElementById('loginSection').classList.add('hidden'); 
-                document.getElementById('dashboardSection').classList.remove('hidden'); 
-                loadData(); 
-                updateStats(); 
-                renderTasks(); 
-                renderEngagementTasks(); 
-                renderLogs(); 
-                renderClientSummary(); 
-                showToast('Welcome to GM Admin Panel!'); 
-            } else { 
-                Swal.fire('Error', 'Invalid credentials! Use: ghulammujtaba30@gmail.com / Sahibzada6060', 'error'); 
-            } 
+        login() {
+            const email = document.getElementById('adminEmail').value;
+            const pass = document.getElementById('adminPassword').value;
+            if (email === ADMIN_EMAIL && pass === ADMIN_PASSWORD) {
+                adminState.isLoggedIn = true;
+                document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('dashboardSection').classList.remove('hidden');
+                loadData();
+                Swal.fire('Welcome!', 'Admin logged in successfully!', 'success');
+            } else {
+                Swal.fire('Error', 'Invalid credentials!', 'error');
+            }
         },
-        logout() { appState.isLoggedIn = false; document.getElementById('loginSection').classList.remove('hidden'); document.getElementById('dashboardSection').classList.add('hidden'); },
+        logout() {
+            adminState.isLoggedIn = false;
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('dashboardSection').classList.add('hidden');
+        },
         toggleTheme() { document.body.classList.toggle('light-mode'); },
-        showHelp() { Swal.fire('Help Center', 'Features:\n• Video Tasks Management\n• Engagement Tasks (Like/Share/Comment/Subscribe)\n• Client ko sirf coins milte hain\n• Admin ko real money (USD) milta hai\n• Anti-Scam System\n• Commission Rate adjustable', 'info'); },
-        scrollTo(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' }); },
-        updateCommission() { const newRate = parseInt(document.getElementById('commissionRate').value); if (newRate >= 5 && newRate <= 30) { appState.commission = newRate; saveData(); document.getElementById('currentCommissionDisplay').innerHTML = newRate + '%'; addLog('settings', 'Commission Updated', `New rate: ${newRate}%`); showToast(`Commission updated to ${newRate}%`); } else Swal.fire('Error', 'Commission must be between 5% and 30%', 'error'); },
-        updateCurrency() { appState.currency = document.getElementById('currencySelect').value; saveData(); updateStats(); showToast(`Currency changed to ${appState.currency}`); },
-        addTask() { 
-            const title = document.getElementById('videoTitle').value, url = document.getElementById('videoUrl').value, coins = parseInt(document.getElementById('videoCoins').value), watchTime = parseInt(document.getElementById('watchSeconds').value), priority = document.getElementById('taskPriority').value; 
-            if (!title || !url || !coins || !watchTime) { Swal.fire('Error', 'All fields required', 'error'); return; } 
-            appState.videos.unshift({ id: Date.now(), title, url, coins, watchTime, priority, createdAt: new Date().toLocaleString() }); 
-            addLog('task_added', `New Task: ${title}`, `Client Reward: ${formatCoins(coins)}`); 
-            saveData(); updateStats(); renderTasks(); 
-            document.getElementById('videoTitle').value = ''; document.getElementById('videoUrl').value = ''; document.getElementById('videoCoins').value = ''; document.getElementById('watchSeconds').value = ''; 
-            showToast('Video task published! Client ko coins milenge complete karne par'); 
+        showHelp() {
+            Swal.fire('Admin Controls', 
+                '📹 VIDEO TASKS:\n• Add video tasks with thumbnail preview\n• Delete any video task\n• Reset client progress on specific tasks\n\n' +
+                '🎯 ENGAGEMENT TASKS:\n• Add Like/Share/Comment/Subscribe tasks\n• Delete any engagement task\n• Reset client progress\n\n' +
+                '👑 CLIENT MANAGEMENT:\n• Reset all client tasks at once\n• View client statistics\n• Send messages to client', 'info');
         },
-        deleteTask(id) { appState.videos = appState.videos.filter(v => v.id !== id); delete appState.completedTasks[id]; saveData(); updateStats(); renderTasks(); showToast('Task deleted'); },
-        addEngagementTask() { 
-            const target = document.getElementById('engagementTarget').value, type = document.getElementById('engagementType').value, coins = parseInt(document.getElementById('engagementCoins').value), commentText = document.getElementById('engagementCommentText').value, priority = document.getElementById('engagementPriority').value; 
-            if (!target || !type || !coins) { Swal.fire('Error', 'Target, type and reward required', 'error'); return; } 
-            appState.engagementTasks.unshift({ id: Date.now(), target, type, coins, commentText, priority, createdAt: new Date().toLocaleString() }); 
-            saveData(); updateStats(); renderEngagementTasks(); 
-            addLog('engagement_added', `${type.toUpperCase()} Task`, `Target: ${target} | Client Reward: ${formatCoins(coins)}`); 
-            document.getElementById('engagementTarget').value = ''; document.getElementById('engagementCoins').value = ''; document.getElementById('engagementCommentText').value = ''; 
-            showToast(`Engagement task assigned! Client ko ${formatCoins(coins)} milenge complete karne par`); 
+        previewThumbnail() {
+            const url = document.getElementById('videoUrl').value;
+            const thumbnail = getThumbnail(url);
+            const previewDiv = document.getElementById('thumbnailPreview');
+            if (thumbnail) {
+                previewDiv.style.display = 'block';
+                previewDiv.innerHTML = `<img src="${thumbnail}" alt="Thumbnail Preview"><p class="text-info mt-1">✅ Thumbnail preview ready</p>`;
+            } else {
+                previewDiv.style.display = 'none';
+            }
         },
-        deleteEngagementTask(id) { appState.engagementTasks = appState.engagementTasks.filter(t => t.id !== id); delete appState.completedEngagement[id]; saveData(); renderEngagementTasks(); updateStats(); showToast('Task removed'); },
-        sendMessage() { const msg = document.getElementById('adminMessage').value; if (!msg) { Swal.fire('Error', 'Enter message', 'error'); return; } addLog('message', 'Message to Client', msg.substring(0, 100)); document.getElementById('adminMessage').value = ''; showToast('Message sent to client!'); },
-        broadcastMessage() { const msg = document.getElementById('adminMessage').value; if (!msg) { Swal.fire('Error', 'Enter message', 'error'); return; } addLog('broadcast', 'Broadcast Message', `Sent to all: ${msg.substring(0, 100)}`); showToast('Broadcast sent to all clients!'); },
-        filterLog(type) { currentLogFilter = type; document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.filter === type)); renderLogs(); },
-        giveWarning() { if (appState.clientWarnings >= 3) { Swal.fire('Max Warnings', 'Client already has 3 warnings. Consider banning.', 'error'); return; } appState.clientWarnings++; saveData(); renderClientSummary(); addLog('warning', 'Warning Issued', `Warning ${appState.clientWarnings}/3`); showToast(`Warning ${appState.clientWarnings}/3 issued`, 'warning'); },
-        banClient() { appState.clientBanned = true; saveData(); renderClientSummary(); addLog('ban', 'Client Banned', 'Client has been banned'); showToast('Client has been banned', 'warning'); },
-        resetClient() { appState.clientWarnings = 0; appState.clientBanned = false; saveData(); renderClientSummary(); addLog('reset', 'Client Reset', 'Warnings and ban status reset'); showToast('Client status reset successfully'); },
-        exportReport() { let csv = "Date,Type,Title,Details,AdminEarned(USD)\n"; appState.activityLog.forEach(log => { csv += `"${log.timestamp}","${log.type}","${log.title}","${log.details}","${log.amount || 0}"\n`; }); const blob = new Blob([csv], { type: 'text/csv' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `gm_report_${Date.now()}.csv`; link.click(); showToast('Report exported!'); },
-        // Client task completion handler - Client ko coins, admin ko real money
-        completeClientTask(taskId, taskCoins) { 
-            if (!appState.completedTasks[taskId]) { 
-                appState.completedTasks[taskId] = true; 
-                appState.totalCompleted++; 
-                const adminEarn = (taskCoins * appState.commission) / 100; 
-                appState.adminBalance += adminEarn; 
-                appState.clientCoins += taskCoins; 
-                addLog('task_completed', 'Task Completed by Client', `Client earned ${formatCoins(taskCoins)} | Admin earned ${formatCurrency(adminEarn)}`, adminEarn); 
-                saveData(); updateStats(); renderTasks(); renderClientSummary(); 
-            } 
+        updateCommission() {
+            const newRate = parseInt(document.getElementById('commissionRate').value);
+            if (newRate >= 5 && newRate <= 30) {
+                adminState.commission = newRate;
+                localStorage.setItem(STORAGE_KEYS.commission, newRate);
+                document.getElementById('currentCommissionDisplay').innerHTML = newRate + '%';
+                addActivityLog('settings', 'Commission Updated', `New rate: ${newRate}%`);
+                Swal.fire('Updated', `Commission set to ${newRate}%`, 'success');
+            } else {
+                Swal.fire('Error', 'Commission must be 5-30%', 'error');
+            }
         },
-        completeEngagementTask(taskId, taskCoins) { 
-            if (!appState.completedEngagement[taskId]) { 
-                appState.completedEngagement[taskId] = { completed: true, coins: taskCoins }; 
-                appState.totalCompleted++; 
-                const adminEarn = (taskCoins * appState.commission) / 100; 
-                appState.adminBalance += adminEarn; 
-                appState.clientCoins += taskCoins; 
-                addLog('engagement_completed', 'Engagement Task Completed', `Client earned ${formatCoins(taskCoins)} | Admin earned ${formatCurrency(adminEarn)}`, adminEarn); 
-                saveData(); updateStats(); renderEngagementTasks(); renderClientSummary(); 
-            } 
+        addVideoTask() {
+            const title = document.getElementById('videoTitle').value.trim();
+            const url = document.getElementById('videoUrl').value.trim();
+            const coins = parseInt(document.getElementById('videoCoins').value);
+            const watchTime = parseInt(document.getElementById('watchSeconds').value);
+            const priority = document.getElementById('taskPriority').value;
+            
+            if (!title || !url || !coins || !watchTime) {
+                Swal.fire('Error', 'All fields required', 'error');
+                return;
+            }
+            
+            const videoId = getYouTubeId(url);
+            if (!videoId) {
+                Swal.fire('Error', 'Invalid YouTube URL', 'error');
+                return;
+            }
+            
+            const thumbnail = getThumbnail(url);
+            
+            adminState.videos.unshift({
+                id: Date.now(),
+                title: title,
+                url: url,
+                coins: coins,
+                watchTime: watchTime,
+                priority: priority,
+                thumbnail: thumbnail,
+                createdAt: new Date().toLocaleString()
+            });
+            
+            saveData();
+            updateStats();
+            renderVideoTasks();
+            addActivityLog('task_added', `Video Task: ${title}`, `Reward: ${coins} coins | Watch: ${watchTime} sec`);
+            
+            document.getElementById('videoTitle').value = '';
+            document.getElementById('videoUrl').value = '';
+            document.getElementById('videoCoins').value = '';
+            document.getElementById('watchSeconds').value = '';
+            document.getElementById('thumbnailPreview').style.display = 'none';
+            
+            Swal.fire('Success!', 'Video task added successfully!', 'success');
+        },
+        deleteVideoTask(taskId) {
+            const task = adminState.videos.find(v => v.id === taskId);
+            Swal.fire({
+                title: 'Delete Task?',
+                text: `Delete "${task?.title}"? This action cannot be undone.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Delete'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    adminState.videos = adminState.videos.filter(v => v.id !== taskId);
+                    delete adminState.completedTasks[taskId];
+                    adminState.totalCompleted = Object.keys(adminState.completedTasks).length + Object.keys(adminState.completedEngagement).length;
+                    saveData();
+                    updateStats();
+                    renderVideoTasks();
+                    renderClientStats();
+                    addActivityLog('task_deleted', `Deleted Video Task`, task?.title);
+                    Swal.fire('Deleted!', 'Task has been deleted.', 'success');
+                }
+            });
+        },
+        addEngagementTask() {
+            const target = document.getElementById('engagementTarget').value.trim();
+            const type = document.getElementById('engagementType').value;
+            const coins = parseInt(document.getElementById('engagementCoins').value);
+            const commentText = document.getElementById('engagementCommentText').value.trim();
+            const priority = document.getElementById('engagementPriority').value;
+            
+            if (!target || !type || !coins) {
+                Swal.fire('Error', 'Target, type and reward required', 'error');
+                return;
+            }
+            
+            adminState.engagementTasks.unshift({
+                id: Date.now(),
+                target: target,
+                type: type,
+                coins: coins,
+                commentText: commentText,
+                priority: priority,
+                createdAt: new Date().toLocaleString()
+            });
+            
+            saveData();
+            updateStats();
+            renderEngagementTasks();
+            addActivityLog('engagement_added', `${type.toUpperCase()} Task`, `Target: ${target} | Reward: ${coins} coins`);
+            
+            document.getElementById('engagementTarget').value = '';
+            document.getElementById('engagementCoins').value = '';
+            document.getElementById('engagementCommentText').value = '';
+            
+            Swal.fire('Success!', 'Engagement task assigned!', 'success');
+        },
+        deleteEngagementTask(taskId) {
+            const task = adminState.engagementTasks.find(t => t.id === taskId);
+            Swal.fire({
+                title: 'Delete Task?',
+                text: `Delete ${task?.type} task? This action cannot be undone.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Delete'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    adminState.engagementTasks = adminState.engagementTasks.filter(t => t.id !== taskId);
+                    delete adminState.completedEngagement[taskId];
+                    adminState.totalCompleted = Object.keys(adminState.completedTasks).length + Object.keys(adminState.completedEngagement).length;
+                    saveData();
+                    updateStats();
+                    renderEngagementTasks();
+                    renderClientStats();
+                    addActivityLog('engagement_deleted', `Deleted ${task?.type} Task`, task?.target);
+                    Swal.fire('Deleted!', 'Task has been deleted.', 'success');
+                }
+            });
+        },
+        resetClientTask(taskId, type) {
+            Swal.fire({
+                title: 'Reset Client Progress?',
+                text: 'This will allow client to complete this task again.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Reset'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    if (type === 'video') {
+                        delete adminState.completedTasks[taskId];
+                    } else {
+                        delete adminState.completedEngagement[taskId];
+                    }
+                    adminState.totalCompleted = Object.keys(adminState.completedTasks).length + Object.keys(adminState.completedEngagement).length;
+                    saveData();
+                    updateStats();
+                    renderVideoTasks();
+                    renderEngagementTasks();
+                    renderClientStats();
+                    addActivityLog('task_reset', 'Reset Client Task', `Task ID: ${taskId}`);
+                    Swal.fire('Reset!', 'Client can now complete this task again.', 'success');
+                }
+            });
+        },
+        resetClientTasks() {
+            Swal.fire({
+                title: 'Reset ALL Client Tasks?',
+                text: 'This will reset all client progress. Client will have to complete all tasks again.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Reset All'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    adminState.completedTasks = {};
+                    adminState.completedEngagement = {};
+                    adminState.totalCompleted = 0;
+                    saveData();
+                    updateStats();
+                    renderVideoTasks();
+                    renderEngagementTasks();
+                    renderClientStats();
+                    addActivityLog('reset_all', 'Reset All Client Tasks', 'All client progress cleared');
+                    Swal.fire('Reset Complete!', 'All client tasks have been reset.', 'success');
+                }
+            });
+        },
+        deleteAllCompletedVideoTasks() {
+            const completedVideoIds = Object.keys(adminState.completedTasks);
+            if (completedVideoIds.length === 0) {
+                Swal.fire('No Completed Tasks', 'No completed video tasks to delete.', 'info');
+                return;
+            }
+            
+            Swal.fire({
+                title: 'Delete Completed Video Tasks?',
+                text: `This will delete ${completedVideoIds.length} completed video tasks.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Delete'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    // Remove completed video tasks
+                    adminState.videos = adminState.videos.filter(v => !adminState.completedTasks[v.id]);
+                    // Clear completed flags
+                    for (let id of completedVideoIds) {
+                        delete adminState.completedTasks[id];
+                    }
+                    adminState.totalCompleted = Object.keys(adminState.completedTasks).length + Object.keys(adminState.completedEngagement).length;
+                    saveData();
+                    updateStats();
+                    renderVideoTasks();
+                    renderClientStats();
+                    addActivityLog('delete_completed', 'Deleted Completed Video Tasks', `${completedVideoIds.length} tasks removed`);
+                    Swal.fire('Deleted!', 'Completed video tasks have been removed.', 'success');
+                }
+            });
+        },
+        deleteAllCompletedEngagementTasks() {
+            const completedEngIds = Object.keys(adminState.completedEngagement);
+            if (completedEngIds.length === 0) {
+                Swal.fire('No Completed Tasks', 'No completed engagement tasks to delete.', 'info');
+                return;
+            }
+            
+            Swal.fire({
+                title: 'Delete Completed Engagement Tasks?',
+                text: `This will delete ${completedEngIds.length} completed engagement tasks.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Delete'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    adminState.engagementTasks = adminState.engagementTasks.filter(t => !adminState.completedEngagement[t.id]);
+                    for (let id of completedEngIds) {
+                        delete adminState.completedEngagement[id];
+                    }
+                    adminState.totalCompleted = Object.keys(adminState.completedTasks).length + Object.keys(adminState.completedEngagement).length;
+                    saveData();
+                    updateStats();
+                    renderEngagementTasks();
+                    renderClientStats();
+                    addActivityLog('delete_completed', 'Deleted Completed Engagement Tasks', `${completedEngIds.length} tasks removed`);
+                    Swal.fire('Deleted!', 'Completed engagement tasks have been removed.', 'success');
+                }
+            });
+        },
+        resetAllData() {
+            Swal.fire({
+                title: 'Reset EVERYTHING?',
+                text: 'This will delete all tasks, client data, earnings, and history! This cannot be undone!',
+                icon: 'error',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Reset Everything',
+                confirmButtonColor: '#ef4444'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    localStorage.clear();
+                    location.reload();
+                }
+            });
+        },
+        sendMessage() {
+            const message = document.getElementById('adminMessage').value.trim();
+            if (!message) {
+                Swal.fire('Error', 'Please enter a message', 'error');
+                return;
+            }
+            
+            const clientMessages = JSON.parse(localStorage.getItem(STORAGE_KEYS.clientMessages)) || [];
+            clientMessages.unshift({
+                id: Date.now(),
+                message: message,
+                timestamp: new Date().toLocaleString(),
+                isRead: false
+            });
+            localStorage.setItem(STORAGE_KEYS.clientMessages, JSON.stringify(clientMessages));
+            
+            addActivityLog('message_sent', 'Message to Client', message.substring(0, 100));
+            document.getElementById('adminMessage').value = '';
+            Swal.fire('Sent!', 'Message sent to client successfully!', 'success');
+        },
+        viewClientStats() {
+            const clientCoins = parseInt(localStorage.getItem(STORAGE_KEYS.clientCoins)) || 0;
+            const totalEarned = parseInt(localStorage.getItem(STORAGE_KEYS.clientCoins)) || 0;
+            Swal.fire('Client Statistics', 
+                `💰 Client Coins: ${clientCoins}\n` +
+                `✅ Completed Tasks: ${adminState.totalCompleted}\n` +
+                `📹 Video Tasks Completed: ${Object.keys(adminState.completedTasks).length}\n` +
+                `🎯 Engagement Tasks Completed: ${Object.keys(adminState.completedEngagement).length}\n` +
+                `👑 Admin Balance: $${adminState.adminBalance.toFixed(2)}`, 'info');
         }
     };
+
     window.admin = admin;
     loadData();
 </script>
