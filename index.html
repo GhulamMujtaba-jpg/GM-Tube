@@ -3,315 +3,390 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
-<title>GM Tube Pro — Owner Ghulam Mujtaba</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>GM Tube Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
-:root{
-  --bg:#04080F;--bg2:#070E1C;--card:#0C1525;--card2:#101C30;
-  --border:#182840;--border-g:rgba(99,202,119,0.3);
-  --green:#63CA77;--green2:#3FA854;--glow:rgba(99,202,119,0.10);
-  --gold:#F5A623;--gold2:#D4891A;--gold-g:rgba(245,166,35,0.10);
-  --sky:#4FC3F7;--purple:#B39DDB;--red:#EF5350;
-  --txt:#EDF4FF;--txt2:#8CA3BE;--txt3:#2E4A68;
-  --r:18px;--r2:12px;
-  --cover-h:380px;
-}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{scroll-behavior:smooth}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden}
-::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-track{background:var(--bg2)}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px}
-::-webkit-scrollbar-thumb:hover{background:var(--green)}
+:root{
+  --bg:#03060F;--bg2:#060C1A;--card:#0A1422;--card2:#0D1929;
+  --b:#162236;--bg:#02060E;
+  --g:#5BBF72;--g2:#3D9E52;--glo:rgba(91,191,114,.1);
+  --gold:#F0A500;--gold2:#C8861A;
+  --sky:#3FB8F0;--red:#E84545;--pur:#9D8FD4;
+  --t:#E8F2FF;--t2:#6A90B0;--t3:#243650;
+  --ra:15px;--rb:10px;
+}
+html,body{font-family:'DM Sans',sans-serif;background:#02060E;color:var(--t);min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:#060C1A}::-webkit-scrollbar-thumb{background:#162236;border-radius:9px}
 
-/* ─── COVER PHOTO ─── */
-.cover-wrap{position:relative;width:100%;height:var(--cover-h);overflow:hidden}
-.cover-img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(0.55)}
-.cover-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,8,15,0.2) 0%,rgba(4,8,15,0.5) 60%,rgba(4,8,15,1) 100%)}
-.cover-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(99,202,119,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(99,202,119,0.04) 1px,transparent 1px);background-size:40px 40px}
-.cover-content{position:absolute;bottom:0;left:0;right:0;padding:0 24px 36px;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px}
-.cover-brand{display:flex;align-items:center;gap:14px}
-.cover-logo{width:58px;height:58px;background:linear-gradient(135deg,var(--green),var(--green2));border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 8px 32px rgba(99,202,119,0.4);border:2px solid rgba(99,202,119,0.5);flex-shrink:0}
-.cover-name{font-family:'Syne',sans-serif;font-size:clamp(22px,4vw,36px);font-weight:800;color:#fff;text-shadow:0 2px 20px rgba(0,0,0,0.8);line-height:1.1}
-.cover-tagline{font-size:13px;color:rgba(255,255,255,0.65);margin-top:4px;font-weight:400}
-.cover-pills{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.cpill{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:99px;padding:6px 14px;font-size:11px;font-weight:600;color:rgba(255,255,255,0.8);display:flex;align-items:center;gap:5px;backdrop-filter:blur(10px)}
-.cpill.green{background:rgba(99,202,119,0.15);border-color:rgba(99,202,119,0.3);color:var(--green)}
-.cover-secret{position:absolute;top:18px;right:18px;width:38px;height:38px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.08);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(255,255,255,0.15);font-size:13px;transition:all 0.3s;backdrop-filter:blur(10px)}
-.cover-secret:hover{color:rgba(255,255,255,0.25);border-color:rgba(255,255,255,0.15)}
+/* ╔══════════════════════════════╗
+   ║       COVER PHOTO            ║
+   ╚══════════════════════════════╝ */
+.cover{width:100%;position:relative;overflow:hidden;background:#030810}
+.cover svg{display:block;width:100%;height:auto}
 
-/* ─── NAV ─── */
-.nav{position:sticky;top:0;z-index:100;background:rgba(4,8,15,0.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
-.nav-inner{max-width:1320px;margin:0 auto;padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.logo{display:flex;align-items:center;gap:9px}
-.logo-ic{width:32px;height:32px;background:linear-gradient(135deg,var(--green),var(--green2));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
-.logo-tx{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--txt)}
-.coin-pill{background:linear-gradient(135deg,rgba(99,202,119,0.12),rgba(63,168,84,0.08));border:1px solid var(--border-g);border-radius:99px;padding:7px 16px;display:flex;align-items:center;gap:7px;font-weight:700;font-size:15px;color:var(--green);font-family:'Syne',sans-serif}
-.coin-pill i{font-size:13px}
+/* ╔══════════════════════════════╗
+   ║           NAV                ║
+   ╚══════════════════════════════╝ */
+.nav{position:sticky;top:0;z-index:99;background:rgba(2,6,14,.96);backdrop-filter:blur(20px);border-bottom:1px solid #162236}
+.ni{max-width:1300px;margin:0 auto;padding:0 20px;height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{display:flex;align-items:center;gap:9px;user-select:none;cursor:default}
+.logo-box{width:34px;height:34px;background:linear-gradient(135deg,var(--g),var(--g2));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:transform .15s}
+.logo-box:active{transform:scale(.92)}
+.logo-tx{font-family:'Syne',sans-serif;font-size:15px;font-weight:700}
+.cpill{background:rgba(91,191,114,.1);border:1px solid rgba(91,191,114,.25);border-radius:99px;padding:7px 15px;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--g);display:flex;align-items:center;gap:6px}
 
-/* ─── LAYOUT ─── */
-.wrap{max-width:1320px;margin:0 auto;padding:0 20px 120px;position:relative;z-index:1}
-.sec{margin-bottom:26px}
+/* ╔══════════════════════════════╗
+   ║          LAYOUT              ║
+   ╚══════════════════════════════╝ */
+.wrap{max-width:1300px;margin:0 auto;padding:0 20px 110px}
+.sec{margin-bottom:22px}
+.panel{background:var(--card);border:1px solid #162236;border-radius:var(--ra);padding:20px}
+.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:8px}
+.pt{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;display:flex;align-items:center;gap:7px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--g);box-shadow:0 0 5px var(--g);flex-shrink:0}
 
-/* ─── HERO STRIP (below cover) ─── */
-.hero-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin:28px 0}
-.hs{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px 18px;display:flex;align-items:center;gap:14px;transition:all 0.25s;cursor:default;position:relative;overflow:hidden}
-.hs::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--glow),transparent);opacity:0;transition:opacity 0.3s}
-.hs:hover::before{opacity:1}
-.hs:hover{border-color:var(--border-g);transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,0.3)}
-.hs-ic{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.ic-g{background:rgba(99,202,119,0.12);color:var(--green)}
-.ic-b{background:rgba(79,195,247,0.10);color:var(--sky)}
-.ic-o{background:rgba(245,166,35,0.12);color:var(--gold)}
-.ic-p{background:rgba(179,157,219,0.12);color:var(--purple)}
-.hs-info{}
-.hs-l{font-size:10px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:4px}
-.hs-v{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--txt);line-height:1}
+/* ╔══════════════════════════════╗
+   ║           STATS              ║
+   ╚══════════════════════════════╝ */
+.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:12px;margin:22px 0 24px}
+.sc{background:var(--card);border:1px solid #162236;border-radius:var(--ra);padding:16px 14px;display:flex;align-items:center;gap:12px;transition:all .2s}
+.sc:hover{border-color:rgba(91,191,114,.28);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.si{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.ig{background:rgba(91,191,114,.1);color:var(--g)}
+.ib{background:rgba(63,184,240,.1);color:var(--sky)}
+.io{background:rgba(240,165,0,.1);color:var(--gold)}
+.ip{background:rgba(157,143,212,.1);color:var(--pur)}
+.sl{font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
+.sv{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;line-height:1}
 
-/* ─── PANEL ─── */
-.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px}
-.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}
-.pt{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;display:flex;align-items:center;gap:9px;color:var(--txt)}
-.pt-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;box-shadow:0 0 8px var(--green)}
+/* ╔══════════════════════════════╗
+   ║          INPUTS              ║
+   ╚══════════════════════════════╝ */
+.f{margin-bottom:13px}
+.f label{display:block;font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px}
+.inp,.sel,.txa{width:100%;padding:11px 13px;background:#040A15;border:1px solid #162236;border-radius:var(--rb);color:var(--t);font-size:14px;font-family:'DM Sans',sans-serif;transition:all .2s;-webkit-appearance:none}
+.inp:focus,.sel:focus,.txa:focus{border-color:var(--g);outline:none;box-shadow:0 0 0 3px rgba(91,191,114,.08)}
+.inp::placeholder{color:var(--t3)}
+.txa{resize:vertical;min-height:80px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
 
-/* ─── INPUTS ─── */
-.f{margin-bottom:15px}
-.f label{display:block;font-size:11px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:0.9px;margin-bottom:7px}
-.inp,.sel,.txa{width:100%;padding:12px 15px;background:#060D1A;border:1px solid var(--border);border-radius:var(--r2);color:var(--txt);font-size:14px;font-family:'DM Sans',sans-serif;transition:border-color 0.2s,box-shadow 0.2s;appearance:none;-webkit-appearance:none}
-.inp:focus,.sel:focus,.txa:focus{border-color:var(--green);outline:none;box-shadow:0 0 0 3px rgba(99,202,119,0.1)}
-.inp::placeholder{color:var(--txt3)}
-.txa{resize:vertical;min-height:90px}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-
-/* ─── BUTTONS ─── */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px 20px;border-radius:var(--r2);font-weight:600;font-size:13px;font-family:'DM Sans',sans-serif;border:none;cursor:pointer;transition:all 0.2s;white-space:nowrap;line-height:1}
-.btn:active{transform:scale(0.97)}
-.bp{background:linear-gradient(135deg,var(--green),var(--green2));color:#03160A;box-shadow:0 4px 20px rgba(99,202,119,0.3)}
-.bp:hover{box-shadow:0 6px 28px rgba(99,202,119,0.45);transform:translateY(-1px)}
-.bg{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1a0900;box-shadow:0 4px 20px rgba(245,166,35,0.3)}
-.bg:hover{box-shadow:0 6px 28px rgba(245,166,35,0.45);transform:translateY(-1px)}
-.bd{background:var(--red);color:#fff}.bd:hover{background:#C62828}
-.bh{background:transparent;border:1px solid var(--border);color:var(--txt2)}.bh:hover{border-color:var(--border-g);color:var(--green)}
-.bsk{background:linear-gradient(135deg,#29B6F6,#0288D1);color:#fff}
-.bpu{background:linear-gradient(135deg,#9C27B0,#7B1FA2);color:#fff}
-.bsm{padding:8px 14px;font-size:12px;border-radius:10px}
-.bxs{padding:5px 9px;font-size:11px;border-radius:8px}
+/* ╔══════════════════════════════╗
+   ║          BUTTONS             ║
+   ╚══════════════════════════════╝ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 18px;border-radius:var(--rb);font-weight:600;font-size:13px;font-family:'DM Sans',sans-serif;border:none;cursor:pointer;transition:all .2s;white-space:nowrap;line-height:1;text-decoration:none}
+.btn:active{transform:scale(.96)}
+.bp{background:linear-gradient(135deg,var(--g),var(--g2));color:#021006;box-shadow:0 4px 16px rgba(91,191,114,.25)}
+.bp:hover{box-shadow:0 6px 24px rgba(91,191,114,.42);transform:translateY(-1px)}
+.bgo{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#120600;box-shadow:0 4px 16px rgba(240,165,0,.25)}
+.bgo:hover{box-shadow:0 6px 24px rgba(240,165,0,.42);transform:translateY(-1px)}
+.bd{background:var(--red);color:#fff}.bd:hover{background:#C43030}
+.bh{background:transparent;border:1px solid #162236;color:var(--t2)}.bh:hover{border-color:rgba(91,191,114,.3);color:var(--g)}
+.bsk{background:linear-gradient(135deg,#29B5F5,#0280C8);color:#fff}
+.bpu{background:linear-gradient(135deg,#9327AC,#711E99);color:#fff}
+.bsm{padding:7px 13px;font-size:12px;border-radius:8px}
+.bxs{padding:5px 9px;font-size:11px;border-radius:7px}
 .bfw{width:100%}
 
-/* ─── TASK TABS ─── */
-.ttabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:22px;padding:4px;background:var(--bg2);border-radius:14px;border:1px solid var(--border)}
-.ttab{padding:7px 16px;border-radius:10px;font-size:12px;font-weight:600;background:transparent;border:none;color:var(--txt2);cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif}
-.ttab:hover{color:var(--txt)}
-.ttab.on{background:var(--card2);border:1px solid var(--border);color:var(--green);box-shadow:0 2px 8px rgba(0,0,0,0.3)}
+/* ╔══════════════════════════════╗
+   ║        TASK TABS             ║
+   ╚══════════════════════════════╝ */
+.ttabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:18px;background:var(--bg2);padding:5px;border-radius:13px;border:1px solid #162236}
+.ttab{padding:6px 14px;border-radius:9px;font-size:12px;font-weight:600;background:transparent;border:none;color:var(--t2);cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
+.ttab:hover{color:var(--t)}
+.ttab.on{background:var(--card2);color:var(--g);border:1px solid #162236;box-shadow:0 2px 6px rgba(0,0,0,.25)}
 .tpane{display:none}.tpane.on{display:block}
 
-/* ─── TASK CARDS ─── */
-.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px}
-.tcard{background:var(--card2);border:1px solid var(--border);border-radius:var(--r);padding:18px;transition:all 0.25s;position:relative;overflow:hidden}
-.tcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--green),var(--sky));opacity:0;transition:opacity 0.3s;border-radius:var(--r) var(--r) 0 0}
-.tcard:hover{border-color:rgba(99,202,119,0.3);transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,0.4)}
+/* ╔══════════════════════════════╗
+   ║        TASK CARDS            ║
+   ╚══════════════════════════════╝ */
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:15px}
+.tcard{background:var(--card2);border:1px solid #162236;border-radius:var(--ra);padding:16px;transition:all .22s;position:relative;overflow:hidden}
+.tcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--g),var(--sky));opacity:0;transition:opacity .3s;border-radius:var(--ra) var(--ra) 0 0}
+.tcard:hover{border-color:rgba(91,191,114,.26);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.35)}
 .tcard:hover::before{opacity:1}
-.chip{display:inline-flex;align-items:center;gap:4px;padding:4px 11px;border-radius:99px;font-size:10px;font-weight:700;margin-bottom:12px;letter-spacing:0.5px}
-.ch-w{background:rgba(79,195,247,0.1);color:#81D4FA;border:1px solid rgba(79,195,247,0.15)}
-.ch-l{background:rgba(99,202,119,0.1);color:#A5D6A7;border:1px solid rgba(99,202,119,0.15)}
-.ch-s{background:rgba(239,83,80,0.1);color:#EF9A9A;border:1px solid rgba(239,83,80,0.15)}
-.ch-c{background:rgba(179,157,219,0.1);color:#CE93D8;border:1px solid rgba(179,157,219,0.15)}
-.ch-sh{background:rgba(245,166,35,0.1);color:#FFD54F;border:1px solid rgba(245,166,35,0.15)}
-.ch-v{background:rgba(6,182,212,0.1);color:#80DEEA;border:1px solid rgba(6,182,212,0.15)}
-.thumb{width:100%;height:152px;border-radius:12px;overflow:hidden;background:var(--card);margin-bottom:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.thumb img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s}
-.tcard:hover .thumb img{transform:scale(1.04)}
-.thumb-no{font-size:38px;color:var(--txt3);opacity:0.5}
-.tc-title{font-size:13px;font-weight:600;line-height:1.5;margin-bottom:10px;color:var(--txt)}
-.tc-url{font-size:10px;color:var(--txt3);word-break:break-all;margin-bottom:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pw{background:rgba(255,255,255,0.04);border-radius:99px;height:4px;overflow:hidden;margin-bottom:13px}
-.pb{height:100%;background:linear-gradient(90deg,var(--gold),var(--green));border-radius:99px;transition:width 0.5s}
-.cb{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:99px;font-size:11px;font-weight:700;background:rgba(99,202,119,0.08);border:1px solid rgba(99,202,119,0.16);color:var(--green)}
-.db{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:99px;font-size:11px;font-weight:700;background:rgba(99,202,119,0.06);color:#81C784;border:1px solid rgba(99,202,119,0.12)}
-.tc-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
-.empty{text-align:center;padding:48px 20px;color:var(--txt3)}
-.empty-ic{font-size:42px;margin-bottom:14px;opacity:0.35}
-.empty p{font-size:13px;color:var(--txt3)}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;font-size:10px;font-weight:700;margin-bottom:11px;letter-spacing:.3px}
+.cw{background:rgba(63,184,240,.09);color:#7DD6F5;border:1px solid rgba(63,184,240,.13)}
+.cl{background:rgba(91,191,114,.09);color:#97D6A9;border:1px solid rgba(91,191,114,.13)}
+.cs{background:rgba(232,69,69,.09);color:#F09898;border:1px solid rgba(232,69,69,.13)}
+.cc{background:rgba(157,143,212,.09);color:#C4BAE8;border:1px solid rgba(157,143,212,.13)}
+.csh{background:rgba(240,165,0,.09);color:#F5CC60;border:1px solid rgba(240,165,0,.13)}
+.cv{background:rgba(0,200,200,.09);color:#7DE8E8;border:1px solid rgba(0,200,200,.13)}
+.thumb{width:100%;height:145px;border-radius:10px;overflow:hidden;background:var(--card);margin-bottom:12px;display:flex;align-items:center;justify-content:center}
+.thumb img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.tcard:hover .thumb img{transform:scale(1.05)}
+.tn{font-size:36px;opacity:.25}
+.tc-tit{font-size:13px;font-weight:600;line-height:1.5;margin-bottom:9px}
+.tc-url{font-size:10px;color:var(--t3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:9px}
+.pw{background:rgba(255,255,255,.04);border-radius:99px;height:4px;overflow:hidden;margin-bottom:11px}
+.pb{height:100%;background:linear-gradient(90deg,var(--gold),var(--g));border-radius:99px;transition:width .5s}
+.coi{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:700;background:rgba(91,191,114,.07);border:1px solid rgba(91,191,114,.14);color:var(--g)}
+.don{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:700;background:rgba(91,191,114,.05);color:#82C792;border:1px solid rgba(91,191,114,.1)}
+.tfoot{display:flex;align-items:center;justify-content:space-between;gap:7px;flex-wrap:wrap}
+.emp{text-align:center;padding:42px 16px;color:var(--t3)}
+.emp-i{font-size:38px;margin-bottom:11px;opacity:.28}
+.emp p{font-size:13px}
 
-/* ─── MESSAGES ─── */
-.mc{background:var(--card2);border:1px solid rgba(79,195,247,0.12);border-left:3px solid var(--sky);border-radius:var(--r2);padding:15px;margin-bottom:9px}
-.mc:last-child{margin-bottom:0}
-.mc-body{font-size:13px;line-height:1.7;color:var(--txt)}
-.mc-time{font-size:10px;color:var(--txt3);margin-top:8px;font-family:'Syne',sans-serif}
+/* ╔══════════════════════════════╗
+   ║         MESSAGES             ║
+   ╚══════════════════════════════╝ */
+.mc{background:var(--card2);border:1px solid rgba(63,184,240,.11);border-left:3px solid var(--sky);border-radius:var(--rb);padding:13px;margin-bottom:8px}
+.mc-b{font-size:13px;line-height:1.7}
+.mc-t{font-size:10px;color:var(--t3);margin-top:5px;font-family:'Syne',sans-serif}
 
-/* ─── ACTIVITY ─── */
-.ai{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:12px;background:var(--card2);margin-bottom:8px;border:1px solid transparent;transition:border-color 0.2s}
-.ai:hover{border-color:var(--border)}
-.ai-ic{width:34px;height:34px;flex-shrink:0;border-radius:9px;background:var(--glow);display:flex;align-items:center;justify-content:center;font-size:14px}
-.ai-tx{font-size:12px;color:var(--txt2);flex:1;line-height:1.5}
-.ai-tm{font-size:10px;color:var(--txt3);margin-top:3px;font-family:'Syne',sans-serif}
+/* ╔══════════════════════════════╗
+   ║          ACTIVITY            ║
+   ╚══════════════════════════════╝ */
+.ai{display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:10px;background:var(--card2);margin-bottom:7px;border:1px solid transparent;transition:border-color .2s}
+.ai:hover{border-color:#162236}
+.ai-i{width:32px;height:32px;flex-shrink:0;border-radius:8px;background:var(--glo);display:flex;align-items:center;justify-content:center;font-size:13px}
+.ai-t{font-size:12px;color:var(--t2);flex:1;line-height:1.5}
+.ai-d{font-size:10px;color:var(--t3);margin-top:2px;font-family:'Syne',sans-serif}
 
-/* ─── OVERLAY / MODAL ─── */
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);backdrop-filter:blur(20px);z-index:200;align-items:center;justify-content:center;padding:16px}
-.overlay.open{display:flex;animation:fadeIn 0.2s ease}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.modal{background:var(--card);border-radius:22px;width:100%;max-width:820px;max-height:92vh;overflow-y:auto;border:1px solid var(--border);animation:slideUp 0.25s ease}
-@keyframes slideUp{from{transform:translateY(24px);opacity:0}to{transform:translateY(0);opacity:1}}
-.modal-sm{max-width:480px}
-.mh{padding:24px 24px 0;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;position:sticky;top:0;background:var(--card);z-index:2;padding-bottom:20px;border-bottom:1px solid var(--border)}
-.mt{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--txt);display:flex;align-items:center;gap:10px}
-.cx{background:var(--card2);border:1px solid var(--border);color:var(--txt2);width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;transition:all 0.2s;flex-shrink:0}
+/* ╔══════════════════════════════╗
+   ║       OVERLAY / MODAL        ║
+   ╚══════════════════════════════╝ */
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.93);backdrop-filter:blur(18px);z-index:200;align-items:center;justify-content:center;padding:14px}
+.ov.open{display:flex;animation:fOv .18s ease}
+@keyframes fOv{from{opacity:0}to{opacity:1}}
+.modal{background:var(--card);border-radius:18px;width:100%;max-width:800px;max-height:92vh;overflow-y:auto;border:1px solid #162236;animation:sUp .22s ease}
+@keyframes sUp{from{transform:translateY(18px);opacity:0}to{transform:translateY(0);opacity:1}}
+.msm{max-width:460px}
+.mh{padding:20px 20px 0;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;position:sticky;top:0;background:var(--card);z-index:2;padding-bottom:16px;border-bottom:1px solid #162236}
+.mt{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
+.cx{background:var(--card2);border:1px solid #162236;color:var(--t2);width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;transition:all .2s;flex-shrink:0}
 .cx:hover{border-color:var(--red);color:var(--red)}
-.mb{padding:0 24px 24px}
+.mb{padding:0 20px 20px}
 
-/* ─── ADMIN TABS ─── */
-.atabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:22px;padding:4px;background:var(--bg2);border-radius:14px;border:1px solid var(--border)}
-.atab{padding:7px 13px;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;background:transparent;border:none;color:var(--txt2);font-family:'DM Sans',sans-serif;transition:all 0.2s}
-.atab:hover{color:var(--txt)}
-.atab.on{background:var(--card2);border:1px solid var(--border);color:var(--green)}
+/* Withdraw hero */
+.wh{background:linear-gradient(135deg,rgba(91,191,114,.08),rgba(61,158,82,.04));border:1px solid rgba(91,191,114,.17);border-radius:var(--rb);padding:22px;margin-bottom:18px;text-align:center}
+.wn{font-family:'Syne',sans-serif;font-size:50px;font-weight:800;color:var(--g);line-height:1}
+.wl{font-size:11px;color:var(--t2);margin-top:4px;text-transform:uppercase;letter-spacing:.9px}
+.info-row{display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid #162236;border-radius:var(--rb);padding:12px 14px;margin-bottom:13px;font-size:13px;color:var(--t2)}
+.info-row i{color:var(--sky);flex-shrink:0}
+.note{background:rgba(63,184,240,.04);border:1px solid rgba(63,184,240,.13);border-radius:var(--rb);padding:11px 14px;margin-bottom:15px;font-size:12px;color:var(--t2);display:flex;gap:8px;align-items:flex-start;line-height:1.7}
+.note i{color:var(--sky);flex-shrink:0;margin-top:1px}
+
+/* Admin login */
+.alb{background:linear-gradient(135deg,rgba(91,191,114,.06),var(--bg2));border:1px solid rgba(91,191,114,.2);border-radius:16px;padding:26px;text-align:center;margin-bottom:20px}
+.al-ic{font-size:42px;margin-bottom:10px;display:block}
+.al-tit{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:4px}
+.al-sub{font-size:12px;color:var(--t2)}
+
+/* Admin stats */
+.asr{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:9px;margin-bottom:18px}
+.ast{background:var(--card2);border:1px solid #162236;border-radius:var(--rb);padding:13px;text-align:center}
+.ast-v{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;color:var(--g);margin-bottom:2px}
+.ast-l{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.7px}
+
+/* Admin tabs */
+.atabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:18px;background:var(--bg2);padding:4px;border-radius:12px;border:1px solid #162236}
+.atab{padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;background:transparent;border:none;color:var(--t2);font-family:'DM Sans',sans-serif;transition:all .2s}
+.atab:hover{color:var(--t)}
+.atab.on{background:var(--card2);color:var(--g);border:1px solid #162236}
 .apane{display:none}.apane.on{display:block}
 
-.asr{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:22px}
-.ast{background:var(--card2);border:1px solid var(--border);border-radius:var(--r2);padding:16px;text-align:center}
-.ast-v{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--green);margin-bottom:3px}
-.ast-l{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:0.9px}
-
-.tr{display:flex;align-items:center;gap:10px;padding:12px;background:var(--bg2);border-radius:12px;margin-bottom:7px;border:1px solid var(--border)}
+.tr{display:flex;align-items:center;gap:9px;padding:10px;background:var(--bg2);border-radius:10px;margin-bottom:6px;border:1px solid #162236}
 .tr:last-child{margin-bottom:0}
-.tr-info{flex:1;min-width:0}
-.tr-name{font-size:12px;font-weight:600;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tr-meta{font-size:10px;color:var(--txt3);margin-top:2px}
+.tri{flex:1;min-width:0}
+.tn2{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tm{font-size:10px;color:var(--t3);margin-top:2px}
 
-.wrc{background:linear-gradient(135deg,rgba(245,166,35,0.04),var(--bg2));border:1px solid rgba(245,166,35,0.18);border-radius:var(--r2);padding:15px;margin-bottom:9px}
+.wrc{background:linear-gradient(135deg,rgba(240,165,0,.04),var(--bg2));border:1px solid rgba(240,165,0,.17);border-radius:var(--rb);padding:13px;margin-bottom:7px}
 .wrc:last-child{margin-bottom:0}
 .wrm{font-size:13px;font-weight:700;color:var(--gold)}
-.wri{font-size:12px;color:var(--txt2);margin:3px 0}
-.wrt{font-size:10px;color:var(--txt3);font-family:'Syne',sans-serif}
-.paid-r{background:rgba(99,202,119,0.04);border:1px solid rgba(99,202,119,0.12);border-radius:9px;padding:10px 13px;margin-bottom:5px;font-size:11px;color:var(--txt2)}
+.wri{font-size:12px;color:var(--t2);margin:3px 0}
+.wrt{font-size:10px;color:var(--t3);font-family:'Syne',sans-serif}
+.pr{background:rgba(91,191,114,.04);border:1px solid rgba(91,191,114,.1);border-radius:8px;padding:8px 12px;margin-bottom:5px;font-size:11px;color:var(--t2)}
 
-/* ─── WITHDRAW MODAL ─── */
-.w-box{background:linear-gradient(135deg,rgba(245,166,35,0.08),var(--bg2));border:1px solid rgba(245,166,35,0.2);border-radius:var(--r2);padding:22px;margin-bottom:20px;text-align:center}
-.w-num{font-family:'Syne',sans-serif;font-size:48px;font-weight:800;color:var(--gold);line-height:1}
-.w-lbl{font-size:11px;color:var(--txt2);margin-top:4px;text-transform:uppercase;letter-spacing:0.8px}
-.notice{background:rgba(79,195,247,0.05);border:1px solid rgba(79,195,247,0.15);border-radius:var(--r2);padding:13px 16px;margin-bottom:18px;font-size:12px;color:var(--txt2);display:flex;gap:9px;align-items:flex-start;line-height:1.6}
-.notice i{color:var(--sky);flex-shrink:0;margin-top:2px}
+hr.sep{border:none;border-top:1px solid #162236;margin:16px 0}
+.slbl{font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:9px}
 
-/* ─── FAB ─── */
-.fab{position:fixed;bottom:24px;right:24px;z-index:90}
-.fab .bg{border-radius:99px;padding:13px 22px;animation:pulse 2.5s infinite;font-size:13px}
-@keyframes pulse{0%,100%{box-shadow:0 6px 28px rgba(245,166,35,0.35)}50%{box-shadow:0 10px 44px rgba(245,166,35,0.6)}}
-
-hr.sep{border:none;border-top:1px solid var(--border);margin:18px 0}
-.slbl{font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:11px}
-
-/* ─── TRUST BADGES ─── */
-.trust-bar{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 26px;justify-content:center}
-.badge{background:var(--card);border:1px solid var(--border);border-radius:99px;padding:8px 18px;font-size:11px;font-weight:600;color:var(--txt2);display:flex;align-items:center;gap:6px;transition:all 0.2s}
-.badge:hover{border-color:var(--border-g);color:var(--green)}
-.badge i{font-size:11px}
-
-/* ─── ADMIN LOGIN STYLE ─── */
-.admin-badge{background:linear-gradient(135deg,rgba(99,202,119,0.08),rgba(63,168,84,0.04));border:1px solid var(--border-g);border-radius:16px;padding:22px;margin-bottom:20px;text-align:center}
-.admin-icon{font-size:42px;margin-bottom:10px;display:block}
-.admin-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--txt);margin-bottom:5px}
-.admin-sub{font-size:12px;color:var(--txt2)}
-
-@media(max-width:640px){
-  :root{--cover-h:260px}
-  .cover-content{padding:0 16px 26px}
-  .cover-name{font-size:20px}
+@media(max-width:620px){
+  .sgrid{grid-template-columns:1fr 1fr;gap:9px;margin:16px 0 18px}
   .g2{grid-template-columns:1fr}
   .tgrid{grid-template-columns:1fr}
   .asr{grid-template-columns:1fr 1fr}
-  .nav-inner .logo-tx{display:none}
-  .fab{bottom:16px;right:16px}
-  .trust-bar{gap:7px}
-  .hs-v{font-size:20px}
+  .logo-tx{display:none}
 }
 </style>
 </head>
 <body>
 
-<!-- COVER PHOTO -->
-<div class="cover-wrap">
-  <img class="cover-img" src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=1400&q=80&auto=format&fit=crop" alt="GM Tube Pro Cover" onerror="this.style.display='none'"/>
-  <div class="cover-overlay"></div>
-  <div class="cover-grid"></div>
-  <!-- Hidden Admin Button - barely visible -->
-  <div class="cover-secret" id="gearBtn" title=""><i class="fas fa-circle"></i></div>
-  <div class="cover-content">
-    <div class="cover-brand">
-      <div class="cover-logo">📺</div>
-      <div>
-        <div class="cover-name">GM Tube Pro</div>
-        <div class="cover-tagline">Global Earn &amp; Boost Platform</div>
-      </div>
-    </div>
-    <div class="cover-pills">
-      <div class="cpill green"><i class="fas fa-bolt"></i> Live Now</div>
-      <div class="cpill"><i class="fas fa-users"></i> 50K+ Members</div>
-      <div class="cpill"><i class="fas fa-shield-alt"></i> 100% Secure</div>
-    </div>
-  </div>
+<!-- ╔══════════════════════════════════════════╗
+     ║            COVER PHOTO (SVG)             ║
+     ╚══════════════════════════════════════════╝ -->
+<div class="cover">
+<svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg" style="max-height:420px">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#040C1A"/>
+      <stop offset="50%" style="stop-color:#061224"/>
+      <stop offset="100%" style="stop-color:#040C16"/>
+    </linearGradient>
+    <linearGradient id="gr" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#5BBF72"/>
+      <stop offset="100%" style="stop-color:#3D9E52"/>
+    </linearGradient>
+    <linearGradient id="go" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#F0A500"/>
+      <stop offset="100%" style="stop-color:#C8861A"/>
+    </linearGradient>
+    <linearGradient id="sk" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#5BBF72"/>
+      <stop offset="50%" style="stop-color:#3FB8F0"/>
+      <stop offset="100%" style="stop-color:#F0A500"/>
+    </linearGradient>
+    <radialGradient id="gl1" cx="20%" cy="40%">
+      <stop offset="0%" style="stop-color:#5BBF72;stop-opacity:.18"/>
+      <stop offset="100%" style="stop-color:#5BBF72;stop-opacity:0"/>
+    </radialGradient>
+    <radialGradient id="gl2" cx="80%" cy="60%">
+      <stop offset="0%" style="stop-color:#F0A500;stop-opacity:.12"/>
+      <stop offset="100%" style="stop-color:#F0A500;stop-opacity:0"/>
+    </radialGradient>
+    <radialGradient id="gl3" cx="55%" cy="30%">
+      <stop offset="0%" style="stop-color:#3FB8F0;stop-opacity:.1"/>
+      <stop offset="100%" style="stop-color:#3FB8F0;stop-opacity:0"/>
+    </radialGradient>
+    <filter id="blur"><feGaussianBlur stdDeviation="2"/></filter>
+    <linearGradient id="fade" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#02060E;stop-opacity:0"/>
+      <stop offset="100%" style="stop-color:#02060E;stop-opacity:1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="400" fill="url(#bg)"/>
+
+  <!-- Grid lines -->
+  <g stroke="rgba(91,191,114,0.055)" stroke-width="1">
+    <line x1="0" y1="50" x2="1200" y2="50"/><line x1="0" y1="100" x2="1200" y2="100"/>
+    <line x1="0" y1="150" x2="1200" y2="150"/><line x1="0" y1="200" x2="1200" y2="200"/>
+    <line x1="0" y1="250" x2="1200" y2="250"/><line x1="0" y1="300" x2="1200" y2="300"/>
+    <line x1="0" y1="350" x2="1200" y2="350"/>
+    <line x1="100" y1="0" x2="100" y2="400"/><line x1="200" y1="0" x2="200" y2="400"/>
+    <line x1="300" y1="0" x2="300" y2="400"/><line x1="400" y1="0" x2="400" y2="400"/>
+    <line x1="500" y1="0" x2="500" y2="400"/><line x1="600" y1="0" x2="600" y2="400"/>
+    <line x1="700" y1="0" x2="700" y2="400"/><line x1="800" y1="0" x2="800" y2="400"/>
+    <line x1="900" y1="0" x2="900" y2="400"/><line x1="1000" y1="0" x2="1000" y2="400"/>
+    <line x1="1100" y1="0" x2="1100" y2="400"/>
+  </g>
+
+  <!-- Glow blobs -->
+  <ellipse cx="220" cy="160" rx="320" ry="220" fill="url(#gl1)"/>
+  <ellipse cx="980" cy="250" rx="280" ry="200" fill="url(#gl2)"/>
+  <ellipse cx="600" cy="100" rx="240" ry="160" fill="url(#gl3)"/>
+
+  <!-- Decorative circles -->
+  <circle cx="1080" cy="80" r="60" fill="none" stroke="rgba(91,191,114,.08)" stroke-width="1.5"/>
+  <circle cx="1080" cy="80" r="40" fill="none" stroke="rgba(91,191,114,.06)" stroke-width="1"/>
+  <circle cx="120" cy="330" r="50" fill="none" stroke="rgba(240,165,0,.08)" stroke-width="1.5"/>
+  <circle cx="600" cy="380" r="80" fill="none" stroke="rgba(63,184,240,.06)" stroke-width="1"/>
+
+  <!-- Floating coins right side -->
+  <text x="950" y="90" font-size="28" opacity=".22" fill="#F0A500">🪙</text>
+  <text x="1050" y="170" font-size="22" opacity=".18" fill="#F0A500">💰</text>
+  <text x="900" y="220" font-size="18" opacity=".15" fill="#5BBF72">🪙</text>
+  <text x="1100" y="280" font-size="24" opacity=".16" fill="#F0A500">🪙</text>
+  <text x="150" y="80" font-size="20" opacity=".14" fill="#5BBF72">💎</text>
+  <text x="80" y="280" font-size="18" opacity=".13" fill="#3FB8F0">🪙</text>
+
+  <!-- YouTube play button shape -->
+  <rect x="760" y="100" width="180" height="130" rx="20" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+  <polygon points="800,135 800,195 860,165" fill="rgba(255,255,255,.12)"/>
+  <!-- Progress bar on fake video -->
+  <rect x="760" y="225" width="180" height="3" rx="2" fill="rgba(255,255,255,.05)"/>
+  <rect x="760" y="225" width="110" height="3" rx="2" fill="url(#sk)"/>
+  <!-- Fake like/subscribe icons -->
+  <text x="765" y="250" font-size="11" fill="rgba(255,255,255,.3)">👍 4.2K</text>
+  <text x="820" y="250" font-size="11" fill="rgba(255,255,255,.3)">🔔 Subscribe</text>
+
+  <!-- Second mini card -->
+  <rect x="960" y="120" width="140" height="100" rx="14" fill="rgba(255,255,255,.025)" stroke="rgba(240,165,0,.12)" stroke-width="1"/>
+  <text x="975" y="150" font-size="12" fill="rgba(255,255,255,.35)">💸 Withdrawal</text>
+  <text x="975" y="172" font-size="20" font-family="sans-serif" font-weight="700" fill="#F0A500">+500</text>
+  <text x="975" y="190" font-size="11" fill="rgba(91,191,114,.7)">Coins Earned</text>
+  <rect x="975" y="198" width="100" height="3" rx="2" fill="url(#go)"/>
+
+  <!-- Main logo box -->
+  <rect x="60" y="120" width="68" height="68" rx="18" fill="url(#gr)" opacity=".95"/>
+  <rect x="60" y="120" width="68" height="68" rx="18" fill="none" stroke="rgba(91,191,114,.4)" stroke-width="1.5"/>
+  <text x="94" y="163" text-anchor="middle" font-size="32">📺</text>
+
+  <!-- Main title -->
+  <text x="148" y="158" font-family="Syne,sans-serif" font-size="42" font-weight="800" fill="white" opacity=".97">GM Tube</text>
+  <text x="148" y="158" font-family="Syne,sans-serif" font-size="42" font-weight="800" fill="white" opacity=".97"/>
+  <!-- "Pro" in gradient color -->
+  <text x="358" y="158" font-family="Syne,sans-serif" font-size="42" font-weight="800" fill="url(#sk)">Pro</text>
+
+  <!-- Subtitle -->
+  <text x="148" y="185" font-family="DM Sans,sans-serif" font-size="16" fill="rgba(255,255,255,.48)">Complete Tasks · Earn Coins · Withdraw Anytime</text>
+
+  <!-- Divider line -->
+  <rect x="148" y="198" width="200" height="2" rx="1" fill="url(#sk)" opacity=".6"/>
+
+  <!-- Badges -->
+  <rect x="148" y="216" width="110" height="28" rx="99" fill="rgba(91,191,114,.12)" stroke="rgba(91,191,114,.22)" stroke-width="1"/>
+  <text x="203" y="234" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="600" fill="#86EFA6">⚡ Live Now</text>
+
+  <rect x="270" y="216" width="130" height="28" rx="99" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+  <text x="335" y="234" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="600" fill="rgba(255,255,255,.7)">👥 50K+ Members</text>
+
+  <rect x="412" y="216" width="120" height="28" rx="99" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+  <text x="472" y="234" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="600" fill="rgba(255,255,255,.7)">🛡️ 100% Verified</text>
+
+  <rect x="544" y="216" width="110" height="28" rx="99" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+  <text x="599" y="234" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="600" fill="rgba(255,255,255,.7)">⏰ 24hr Payout</text>
+
+  <!-- Bottom fade -->
+  <rect width="1200" height="400" fill="url(#fade)"/>
+</svg>
 </div>
 
-<!-- NAV -->
+<!-- ╔══════════════════════════════════════════╗
+     ║                  NAV                     ║
+     ╚══════════════════════════════════════════╝ -->
 <nav class="nav">
-  <div class="nav-inner">
-    <div class="logo">
-      <div class="logo-ic">📺</div>
+  <div class="ni">
+    <!-- Logo: clicking 5 times opens admin panel -->
+    <div class="logo" id="logoClick">
+      <div class="logo-box" id="logoBox">📺</div>
       <div class="logo-tx">GM Tube Pro</div>
     </div>
-    <div style="display:flex;align-items:center;gap:10px">
-      <div class="coin-pill"><i class="fas fa-coins"></i><span id="navC">0</span> Coins</div>
-      <button class="btn bg bsm" onclick="openW()"><i class="fas fa-wallet"></i> Withdraw</button>
+    <div style="display:flex;align-items:center;gap:9px">
+      <div class="cpill"><i class="fas fa-coins"></i><span id="navC">0</span> Coins</div>
+      <button class="btn bp bsm" onclick="openAdmin()"><i class="fas fa-shield-halved"></i> Admin</button>
     </div>
   </div>
 </nav>
 
 <div class="wrap">
 
-<!-- HERO STATS STRIP -->
-<div class="hero-strip">
-  <div class="hs">
-    <div class="hs-ic ic-g"><i class="fas fa-coins"></i></div>
-    <div class="hs-info"><div class="hs-l">My Coins</div><div class="hs-v" id="s1">0</div></div>
-  </div>
-  <div class="hs">
-    <div class="hs-ic ic-b"><i class="fas fa-check-circle"></i></div>
-    <div class="hs-info"><div class="hs-l">Tasks Done</div><div class="hs-v" id="s2">0</div></div>
-  </div>
-  <div class="hs">
-    <div class="hs-ic ic-o"><i class="fas fa-hourglass-half"></i></div>
-    <div class="hs-info"><div class="hs-l">Pending</div><div class="hs-v" id="s3">0</div></div>
-  </div>
-  <div class="hs">
-    <div class="hs-ic ic-p"><i class="fas fa-star"></i></div>
-    <div class="hs-info"><div class="hs-l">Hero Balance</div><div class="hs-v" id="s1b">0</div></div>
-  </div>
+<!-- STATS -->
+<div class="sgrid">
+  <div class="sc"><div class="si ig"><i class="fas fa-coins"></i></div><div><div class="sl">My Coins</div><div class="sv" id="s1">0</div></div></div>
+  <div class="sc"><div class="si ib"><i class="fas fa-check-circle"></i></div><div><div class="sl">Completed</div><div class="sv" id="s2">0</div></div></div>
+  <div class="sc"><div class="si io"><i class="fas fa-list-check"></i></div><div><div class="sl">Remaining</div><div class="sv" id="s3">0</div></div></div>
+  <div class="sc"><div class="si ip"><i class="fas fa-star"></i></div><div><div class="sl">Total Earned</div><div class="sv" id="s4">0</div></div></div>
 </div>
 
-<!-- TRUST BADGES -->
-<div class="trust-bar">
-  <div class="badge"><i class="fas fa-mobile-alt"></i> JazzCash</div>
-  <div class="badge"><i class="fas fa-money-bill"></i> Easypaisa</div>
-  <div class="badge"><i class="fas fa-lock"></i> 100% Safe</div>
-  <div class="badge"><i class="fas fa-clock"></i> 24hr Payout</div>
-  <div class="badge"><i class="fas fa-headset"></i> Support</div>
-</div>
-
-<!-- MESSAGES -->
+<!-- ANNOUNCEMENTS -->
 <div class="sec" id="msgSec" style="display:none">
   <div class="panel">
-    <div class="ph"><div class="pt"><div class="pt-dot"></div>📣 Announcements</div></div>
+    <div class="ph"><div class="pt"><div class="dot"></div>📣 Announcements</div></div>
     <div id="msgList"></div>
   </div>
 </div>
 
 <!-- TASKS -->
-<div class="sec" id="taskSec">
+<div class="sec">
   <div class="panel">
     <div class="ph">
-      <div class="pt"><div class="pt-dot"></div>Available Tasks</div>
-      <span style="font-size:11px;color:var(--txt3);font-weight:500">Complete tasks → earn coins</span>
+      <div class="pt"><div class="dot"></div>Available Tasks</div>
+      <span style="font-size:11px;color:var(--t3);font-weight:500">Task complete karo → Coins kamao</span>
     </div>
     <div class="ttabs" id="tabBar">
       <button class="ttab on" onclick="swTab(this,'watch')">🎬 Watch</button>
@@ -333,89 +408,67 @@ hr.sep{border:none;border-top:1px solid var(--border);margin:18px 0}
 <!-- ACTIVITY -->
 <div class="sec">
   <div class="panel">
-    <div class="ph"><div class="pt"><div class="pt-dot"></div>Activity Log</div></div>
+    <div class="ph"><div class="pt"><div class="dot"></div>Activity Log</div></div>
     <div id="actList"></div>
   </div>
 </div>
 
 </div><!-- /wrap -->
 
-<!-- FAB -->
-<div class="fab"><button class="btn bg" onclick="openW()"><i class="fas fa-money-bill-wave"></i> Withdraw Coins</button></div>
 
-<!-- WITHDRAW OVERLAY -->
-<div class="overlay" id="wOv">
-  <div class="modal modal-sm">
-    <div class="mh">
-      <div class="mt"><i class="fas fa-money-bill-wave" style="color:var(--gold)"></i>Withdraw Coins</div>
-      <div class="cx" onclick="closeOv('wOv')">×</div>
-    </div>
-    <div class="mb">
-      <div class="w-box">
-        <div class="w-num" id="wCn">0</div>
-        <div class="w-lbl">Your Coins Balance</div>
-      </div>
-      <div class="f">
-        <label>Payment Method</label>
-        <select class="sel" id="wMeth" onchange="onMeth()">
-          <option value="">— Select Method —</option>
-          <option value="JazzCash">📱 JazzCash</option>
-          <option value="Easypaisa">💚 Easypaisa</option>
-        </select>
-      </div>
-      <div id="wExtra" style="display:none">
-        <div class="f"><label id="wNumL">Mobile Number</label><input class="inp" id="wAcc" placeholder="03XXXXXXXXX" maxlength="11" type="tel"/></div>
-        <div class="f"><label>Account Holder Name</label><input class="inp" id="wName" placeholder="Full Name"/></div>
-        <div class="f"><label>Coins to Withdraw <span id="wMinL" style="color:var(--txt3)">(min 500)</span></label><input class="inp" id="wAmt" type="number" placeholder="Enter coins amount" min="1"/></div>
-        <div class="notice"><i class="fas fa-info-circle"></i><span>Admin will verify and process your request within 24 hours via your selected payment method.</span></div>
-        <button class="btn bg bfw" onclick="doW()"><i class="fas fa-paper-plane"></i> Submit Withdrawal Request</button>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- ADMIN OVERLAY -->
-<div class="overlay" id="aOv">
+<!-- ╔══════════════════════════════════════════╗
+     ║       ADMIN PANEL MODAL                  ║
+     ╚══════════════════════════════════════════╝ -->
+<div class="ov" id="aOv">
   <div class="modal">
     <div class="mh">
       <div class="mt"><i class="fas fa-shield-halved" style="color:var(--gold)"></i>Admin Control Panel</div>
-      <div class="cx" onclick="closeOv('aOv')">×</div>
+      <div class="cx" onclick="cOv('aOv')">×</div>
     </div>
     <div class="mb">
 
       <!-- LOGIN -->
       <div id="aLogin">
-        <div class="admin-badge">
-          <span class="admin-icon">🔐</span>
-          <div class="admin-title">Secure Admin Access</div>
-          <div class="admin-sub">Enter your credentials to continue</div>
+        <div class="alb">
+          <span class="al-ic">🔐</span>
+          <div class="al-tit">Admin Login</div>
+          <div class="al-sub">Sirf authorized admin access kar sakta hai</div>
         </div>
-        <div class="f"><label>Admin Email</label><input class="inp" id="aEml" type="email" placeholder="admin@gmtubepro.com" autocomplete="off"/></div>
-        <div class="f"><label>Password</label><input class="inp" id="aPwd" type="password" placeholder="••••••••" autocomplete="off"/></div>
-        <button class="btn bp bfw" onclick="doLogin()" style="margin-top:6px"><i class="fas fa-unlock"></i> Access Admin Panel</button>
+        <div class="f">
+          <label>Admin Email</label>
+          <input class="inp" id="aEml" type="email" placeholder="admin@example.com" autocomplete="off"/>
+        </div>
+        <div class="f">
+          <label>Password</label>
+          <input class="inp" id="aPwd" type="password" placeholder="••••••••" autocomplete="new-password"/>
+        </div>
+        <button class="btn bp bfw" onclick="doLogin()" style="margin-top:5px">
+          <i class="fas fa-unlock-alt"></i> Admin Panel Kholein
+        </button>
       </div>
 
       <!-- DASHBOARD -->
       <div id="aDash" style="display:none">
         <div class="asr">
-          <div class="ast"><div class="ast-v" id="aE">PKR 0</div><div class="ast-l">Admin Earning</div></div>
-          <div class="ast"><div class="ast-v" id="aPd">0</div><div class="ast-l">Pending W/D</div></div>
-          <div class="ast"><div class="ast-v" id="aTk">0</div><div class="ast-l">Total Tasks</div></div>
-          <div class="ast"><div class="ast-v" id="aCn">0</div><div class="ast-l">Client Coins</div></div>
+          <div class="ast"><div class="ast-v" id="aE">PKR 0</div><div class="ast-l">Earning</div></div>
+          <div class="ast"><div class="ast-v" id="aPd">0</div><div class="ast-l">Pending</div></div>
+          <div class="ast"><div class="ast-v" id="aTk">0</div><div class="ast-l">Tasks</div></div>
+          <div class="ast"><div class="ast-v" id="aCn">0</div><div class="ast-l">Coins</div></div>
         </div>
         <div class="atabs">
-          <button class="atab on" onclick="aTab(this,'aAT')">➕ Add Task</button>
+          <button class="atab on" onclick="aTab(this,'aAT')">➕ Task Add</button>
           <button class="atab" onclick="aTab(this,'aMT')">📋 Tasks</button>
           <button class="atab" onclick="aTab(this,'aWD')">💸 Withdrawals</button>
           <button class="atab" onclick="aTab(this,'aCC')">🪙 Coins</button>
-          <button class="atab" onclick="aTab(this,'aBM')">📣 Broadcast</button>
+          <button class="atab" onclick="aTab(this,'aBM')">📣 Message</button>
           <button class="atab" onclick="aTab(this,'aST')">⚙️ Settings</button>
         </div>
 
         <!-- ADD TASK -->
         <div class="apane on" id="aAT">
           <div class="f"><label>Task Type</label>
-            <select class="sel" id="atType" onchange="onType()">
+            <select class="sel" id="atType" onchange="onTyp()">
               <option value="watch">🎬 Watch Video</option>
               <option value="like">👍 Like</option>
               <option value="subscribe">🔔 Subscribe</option>
@@ -424,202 +477,212 @@ hr.sep{border:none;border-top:1px solid var(--border);margin:18px 0}
               <option value="views">👁️ Views</option>
             </select>
           </div>
-          <div class="f"><label>Task Title</label><input class="inp" id="atTit" placeholder="e.g. Watch this video and earn coins"/></div>
-          <div class="f"><label>URL</label><input class="inp" id="atUrl" placeholder="https://youtube.com/watch?v=..."/></div>
+          <div class="f"><label>Title</label><input class="inp" id="atTit" placeholder="Task ka title..."/></div>
+          <div class="f"><label>URL</label><input class="inp" id="atUrl" placeholder="https://youtube.com/..."/></div>
           <div class="g2">
             <div class="f"><label>Coins Reward</label><input class="inp" type="number" id="atCn" placeholder="e.g. 50" min="1"/></div>
             <div class="f" id="atSW"><label>Watch Time (sec, min 8)</label><input class="inp" type="number" id="atSec" placeholder="e.g. 30" min="8"/></div>
           </div>
-          <button class="btn bp bfw" onclick="doAdd()"><i class="fas fa-plus-circle"></i> Add Task</button>
+          <button class="btn bp bfw" onclick="doAdd()"><i class="fas fa-plus-circle"></i> Task Add Karein</button>
         </div>
 
         <!-- MANAGE TASKS -->
-        <div class="apane" id="aMT"><div id="aTkList"></div></div>
+        <div class="apane" id="aMT"><div id="aTkL"></div></div>
 
-        <!-- WITHDRAWALS -->
+        <!-- WITHDRAWALS — Admin dekhta hai poori detail + payment info -->
         <div class="apane" id="aWD">
-          <div class="slbl">Pending Requests</div><div id="aWPend"></div>
+          <div class="slbl">⏳ Pending Requests</div><div id="aWP"></div>
           <hr class="sep">
-          <div class="slbl">Recently Paid</div><div id="aWPaid"></div>
+          <div class="slbl">✅ Paid</div><div id="aWD2"></div>
         </div>
 
         <!-- COINS -->
         <div class="apane" id="aCC">
-          <p style="font-size:12px;color:var(--txt2);margin-bottom:16px;line-height:1.6">Manually adjust client coins balance from here.</p>
-          <div class="f"><label>Coins Amount</label><input class="inp" type="number" id="acAmt" placeholder="e.g. 200" min="1"/></div>
-          <div class="g2" style="margin-bottom:20px">
-            <button class="btn bp" onclick="adjC(true)"><i class="fas fa-plus"></i> Add Coins</button>
+          <p style="font-size:12px;color:var(--t2);margin-bottom:14px;line-height:1.6">Client ke coins manually adjust karein.</p>
+          <div class="f"><label>Coins Amount</label><input class="inp" type="number" id="acA" placeholder="e.g. 100" min="1"/></div>
+          <div class="g2" style="margin-bottom:16px">
+            <button class="btn bp" onclick="adjC(true)"><i class="fas fa-plus"></i> Add</button>
             <button class="btn bd" onclick="adjC(false)"><i class="fas fa-minus"></i> Remove</button>
           </div>
           <hr class="sep">
-          <p style="font-size:12px;color:var(--txt2);margin-bottom:14px;line-height:1.6">Add to admin PKR earning record</p>
-          <div class="f"><label>PKR Amount</label><input class="inp" type="number" id="aeAmt" placeholder="e.g. 500" min="1"/></div>
-          <button class="btn bg" onclick="addEarn()"><i class="fas fa-rupee-sign"></i> Add Earning</button>
+          <p style="font-size:12px;color:var(--t2);margin-bottom:12px;line-height:1.6">Admin earning record mein add karein (PKR)</p>
+          <div class="f"><label>PKR Amount</label><input class="inp" type="number" id="aeA" placeholder="e.g. 500" min="1"/></div>
+          <button class="btn bgo" onclick="addE()"><i class="fas fa-rupee-sign"></i> Earning Add</button>
         </div>
 
         <!-- BROADCAST -->
         <div class="apane" id="aBM">
-          <div class="f"><label>Message to all clients</label><textarea class="txa inp" id="amTx" placeholder="New tasks available! Check and earn now..."></textarea></div>
-          <button class="btn bpu bfw" onclick="sendMsg()"><i class="fas fa-bullhorn"></i> Broadcast Message</button>
+          <div class="f"><label>Message (sabko dikhega)</label>
+            <textarea class="txa inp" id="amT" placeholder="Naye tasks aa gaye hain! Ab earn karein..."></textarea>
+          </div>
+          <button class="btn bpu bfw" onclick="sendM()"><i class="fas fa-bullhorn"></i> Message Bhejein</button>
         </div>
 
         <!-- SETTINGS -->
         <div class="apane" id="aST">
           <div class="g2">
             <div class="f"><label>Coins per PKR 1</label><input class="inp" type="number" id="sCpr" placeholder="10"/></div>
-            <div class="f"><label>Min Withdraw Coins</label><input class="inp" type="number" id="sMin" placeholder="500"/></div>
+            <div class="f"><label>Min Withdraw (Coins)</label><input class="inp" type="number" id="sMin" placeholder="500"/></div>
           </div>
-          <div class="f"><label>Admin Cut % per withdrawal</label><input class="inp" type="number" id="sCut" placeholder="10" min="0" max="50"/></div>
-          <button class="btn bp bfw" onclick="saveSt()" style="margin-bottom:15px"><i class="fas fa-save"></i> Save Settings</button>
+          <div class="f"><label>Admin Cut % (per withdrawal)</label><input class="inp" type="number" id="sCut" placeholder="10" min="0" max="50"/></div>
+          <button class="btn bp bfw" onclick="saveSt()" style="margin-bottom:13px"><i class="fas fa-save"></i> Settings Save</button>
           <hr class="sep">
-          <button class="btn bh bfw" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+          <button class="btn bh bfw" onclick="doOut()"><i class="fas fa-sign-out-alt"></i> Logout</button>
         </div>
-      </div>
+      </div><!-- /aDash -->
     </div>
   </div>
 </div>
 
 <script>
-// ── STORAGE ──
-const K={coins:'gmt3_c',done:'gmt3_d',wProg:'gmt3_wp',wTasks:'gmt3_wt',sTasks:'gmt3_st',wReqs:'gmt3_wr',aEarn:'gmt3_ae',msgs:'gmt3_ms',activity:'gmt3_ac',cfg:'gmt3_cf'};
+// ═══════════ STORAGE ═══════════
+const K={c:'gm5_coins',d:'gm5_done',wp:'gm5_wp',wt:'gm5_wt',st:'gm5_st',wr:'gm5_wr',ae:'gm5_ae',ms:'gm5_ms',ac:'gm5_ac',cf:'gm5_cf'};
 const ADM={e:'ghulammujtaba30@gmail.com',p:'Sahibzada6060'};
-function ld(k,fb){try{const v=localStorage.getItem(k);return v!=null?JSON.parse(v):fb}catch(e){return fb}}
-function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
-function gcfg(){return ld(K.cfg,{cpr:10,minW:500,cut:10})}
-function gcoins(){return ld(K.coins,0)}
-function scoins(n){sv(K.coins,Math.max(0,parseInt(n)||0))}
-function gdone(){return ld(K.done,{})}
-function gwp(){return ld(K.wProg,{})}
-function log(icon,msg){let a=ld(K.activity,[]);a.unshift({icon,msg,t:new Date().toLocaleString()});if(a.length>40)a=a.slice(0,40);sv(K.activity,a)}
+const TL={watch:'Watch',like:'Like',subscribe:'Subscribe',comment:'Comment',share:'Share',views:'Views'};
+const TE={watch:'🎬',like:'👍',subscribe:'🔔',comment:'💬',share:'📢',views:'👁️'};
+const TC={watch:'cw',like:'cl',subscribe:'cs',comment:'cc',share:'csh',views:'cv'};
+
+function ld(k,fb){try{const v=localStorage.getItem(k);return v!=null?JSON.parse(v):fb}catch{return fb}}
+function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
+function cfg(){return ld(K.cf,{cpr:10,minW:500,cut:10})}
+function gc(){return ld(K.c,0)}
+function sc(n){sv(K.c,Math.max(0,Math.floor(n)||0))}
+function gd(){return ld(K.d,{})}
+function gwp(){return ld(K.wp,{})}
+function log(ic,msg){let a=ld(K.ac,[]);a.unshift({ic,msg,t:new Date().toLocaleString()});if(a.length>40)a=a.slice(0,40);sv(K.ac,a)}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function el(id){return document.getElementById(id)}
 function tx(id,v){const e=el(id);if(e)e.textContent=v}
-function yt(url){try{const u=new URL(url);if(u.hostname.includes('youtube')||u.hostname.includes('youtu.be')){const id=u.searchParams.get('v')||u.pathname.replace('/','').split('?')[0];return id?'https://i.ytimg.com/vi/'+id+'/mqdefault.jpg':''}}catch(e){}return ''}
+function yt(url){try{const u=new URL(url);if(u.hostname.includes('youtube')||u.hostname.includes('youtu.be')){const id=u.searchParams.get('v')||u.pathname.replace('/','').split('?')[0];return id?'https://i.ytimg.com/vi/'+id+'/mqdefault.jpg':''}}catch{}return''}
+function sw(o){return Swal.fire({background:'#0A1422',color:'#E8F2FF',confirmButtonColor:'#5BBF72',...o})}
+function emp(ic,msg){return'<div class="emp"><div class="emp-i">'+ic+'</div><p>'+msg+'</p></div>'}
 
-const TL={watch:'Watch',like:'Like',subscribe:'Subscribe',comment:'Comment',share:'Share',views:'Views'};
-const TE={watch:'🎬',like:'👍',subscribe:'🔔',comment:'💬',share:'📢',views:'👁️'};
-const TC={watch:'ch-w',like:'ch-l',subscribe:'ch-s',comment:'ch-c',share:'ch-sh',views:'ch-v'};
+// ═══════════ ADMIN OPEN ═══════════
+function openAdmin(){
+  el('aOv').classList.add('open');
+  if(adminIn)aRef();
+}
 
-// ── UI ──
-function updateStats(){
-  const c=gcoins(),s=gcfg(),d=gdone(),dc=Object.keys(d).length;
-  const wt=ld(K.wTasks,[]),st=ld(K.sTasks,[]);
-  const total=wt.length+st.length,pend=Math.max(0,total-dc);
-  tx('navC',c);
-  tx('s1',c);tx('s1b',c);tx('s2',dc);tx('s3',pend);
+// ═══════════ STATS ═══════════
+function updS(){
+  const c=gc(),d=gd(),dc=Object.keys(d).length;
+  const wt=ld(K.wt,[]),st=ld(K.st,[]),tot=wt.length+st.length,rem=Math.max(0,tot-dc);
+  tx('navC',c);tx('s1',c);tx('s2',dc);tx('s3',rem);tx('s4',c);
 }
 
 function swTab(btn,type){
-  document.querySelectorAll('#tabBar .ttab').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
+  document.querySelectorAll('#tabBar .ttab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
   document.querySelectorAll('.tpane').forEach(p=>p.classList.remove('on'));
-  const p=el('tp-'+type);if(p)p.classList.add('on');
+  el('tp-'+type)?.classList.add('on');
 }
 
-function empty(ic,msg){return '<div class="empty"><div class="empty-ic">'+ic+'</div><p>'+msg+'</p></div>'}
-
-function renderWatch(){
-  const tasks=ld(K.wTasks,[]),d=gdone(),wp=gwp(),g=el('g-watch');
-  if(!tasks.length){g.innerHTML=empty('🎬','No watch tasks yet');return}
+// ═══════════ RENDER WATCH ═══════════
+function rWatch(){
+  const tasks=ld(K.wt,[]),d=gd(),wp=gwp(),g=el('g-watch');
+  if(!tasks.length){g.innerHTML=emp('🎬','Admin ne abhi koi watch task nahi lagaya');return}
   g.innerHTML=tasks.map(t=>{
-    const k='w_'+t.id,done=d[k],pr=wp[k]||0,pct=done?100:Math.min(100,Math.round(pr/t.watchTime*100));
+    const k='w_'+t.id,done=!!d[k],pr=wp[k]||0;
+    const pct=done?100:Math.min(100,Math.round(pr/t.watchTime*100));
     const th=t.thumb||yt(t.url);
-    return '<div class="tcard" id="tc_'+t.id+'">'
-      +'<span class="chip ch-w">'+TE.watch+' Watch</span>'
-      +'<div class="thumb">'+(th?'<img src="'+esc(th)+'" loading="lazy" onerror="this.parentElement.innerHTML=\'<div class=thumb-no>🎬</div>\'">'
-        :'<div class="thumb-no">🎬</div>')+'</div>'
-      +'<div class="tc-title">'+esc(t.title)+'</div>'
+    return'<div class="tcard">'
+      +'<span class="chip cw">🎬 Watch</span>'
+      +'<div class="thumb">'+(th?'<img src="'+esc(th)+'" loading="lazy" onerror="this.parentElement.innerHTML=\'<div class=tn>🎬</div>\'">'
+        :'<div class="tn">🎬</div>')+'</div>'
+      +'<div class="tc-tit">'+esc(t.title)+'</div>'
       +'<div class="pw"><div class="pb" id="pb_'+t.id+'" style="width:'+pct+'%"></div></div>'
-      +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">'
-        +'<span style="font-size:11px;color:var(--txt3)">'+(done?'✅ Completed':(pr>0?pr+'/'+t.watchTime+'s':'Watch '+t.watchTime+'s'))+'</span>'
-        +'<span class="cb"><i class="fas fa-coins"></i> +'+t.coins+' Coins</span>'
+      +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'
+        +'<span style="font-size:11px;color:var(--t3)">'+(done?'✅ Mukammal':(pr>0?pr+'/'+t.watchTime+'s':'⏱️ '+t.watchTime+'s watch karo'))+'</span>'
+        +'<span class="coi"><i class="fas fa-coins"></i>+'+t.coins+'</span>'
       +'</div>'
-      +'<div class="tc-foot">'
+      +'<div class="tfoot">'
         +(done
-          ?'<span class="db"><i class="fas fa-check-circle"></i> Earned '+t.coins+' Coins</span>'
-          :'<button class="btn bp bsm" onclick="startW('+t.id+')"><i class="fas fa-play"></i> Watch & Earn</button>'
-           +'<a href="'+esc(t.url)+'" target="_blank" rel="noopener" class="btn bsk bsm"><i class="fas fa-external-link-alt"></i> Open</a>')
+          ?'<span class="don"><i class="fas fa-check-circle"></i>+'+t.coins+' Coins Mil Gaye</span>'
+          :'<button class="btn bp bsm" onclick="startW('+t.id+')"><i class="fas fa-play"></i>Watch & Earn</button>'
+           +'<a href="'+esc(t.url)+'" target="_blank" rel="noopener" class="btn bsk bsm" onclick="void 0"><i class="fas fa-external-link-alt"></i>Open</a>')
       +'</div></div>';
   }).join('');
 }
 
-function renderSocial(type){
-  const tasks=ld(K.sTasks,[]).filter(t=>t.type===type),d=gdone(),g=el('g-'+type);
-  if(!tasks.length){g.innerHTML=empty(TE[type],'No '+TL[type]+' tasks yet');return}
+// ═══════════ RENDER SOCIAL ═══════════
+function rSocial(type){
+  const tasks=ld(K.st,[]).filter(t=>t.type===type),d=gd(),g=el('g-'+type);
+  if(!tasks.length){g.innerHTML=emp(TE[type],'Is category mein abhi koi task nahi');return}
   g.innerHTML=tasks.map(t=>{
-    const k='s_'+t.id,done=d[k];
-    return '<div class="tcard">'
+    const k='s_'+t.id,done=!!d[k];
+    return'<div class="tcard">'
       +'<span class="chip '+TC[type]+'">'+TE[type]+' '+TL[type]+'</span>'
-      +'<div class="tc-title">'+esc(t.title)+'</div>'
-      +'<div class="tc-url"><i class="fas fa-link" style="margin-right:4px;font-size:10px"></i>'+esc(t.url)+'</div>'
-      +'<div class="tc-foot">'
-        +'<span class="cb"><i class="fas fa-coins"></i> +'+t.coins+' Coins</span>'
+      +'<div class="tc-tit">'+esc(t.title)+'</div>'
+      +'<div class="tc-url">🔗 '+esc(t.url)+'</div>'
+      +'<div class="tfoot">'
+        +'<span class="coi"><i class="fas fa-coins"></i>+'+t.coins+'</span>'
         +(done
-          ?'<span class="db"><i class="fas fa-check-circle"></i> Done</span>'
-          :'<div style="display:flex;gap:7px;flex-wrap:wrap">'
-            +'<a href="'+esc(t.url)+'" target="_blank" rel="noopener" onclick="claimS('+t.id+')" class="btn bp bsm"><i class="fas fa-external-link-alt"></i> '+TL[type]+'</a>'
-            +'<button class="btn bh bsm" onclick="claimS('+t.id+')"><i class="fas fa-coins"></i> Claim</button>'
+          ?'<span class="don"><i class="fas fa-check-circle"></i>Done</span>'
+          :'<div style="display:flex;gap:6px;flex-wrap:wrap">'
+            +'<a href="'+esc(t.url)+'" target="_blank" rel="noopener" onclick="markOpened('+t.id+')" class="btn bp bsm"><i class="fas fa-external-link-alt"></i>'+TL[type]+'</a>'
+            +'<button class="btn bh bsm" onclick="claimS('+t.id+')"><i class="fas fa-coins"></i>Claim</button>'
           +'</div>')
       +'</div></div>';
   }).join('');
 }
 
-function renderMsgs(){
-  const msgs=ld(K.msgs,[]),sec=el('msgSec'),list=el('msgList');
+function rMsgs(){
+  const msgs=ld(K.ms,[]),sec=el('msgSec'),list=el('msgList');
   if(!msgs.length){sec.style.display='none';return}
   sec.style.display='block';
-  list.innerHTML=msgs.map(m=>'<div class="mc"><div class="mc-body">'+esc(m.msg)+'</div><div class="mc-time">'+esc(m.t||'')+'</div></div>').join('');
+  list.innerHTML=msgs.map(m=>'<div class="mc"><div class="mc-b">'+esc(m.msg)+'</div><div class="mc-t">'+esc(m.t||'')+'</div></div>').join('');
 }
 
-function renderAct(){
-  const arr=ld(K.activity,[]),list=el('actList');
-  if(!arr.length){list.innerHTML=empty('📊','No activity yet — complete tasks to see history');return}
-  list.innerHTML=arr.slice(0,15).map(a=>'<div class="ai"><div class="ai-ic">'+(a.icon||'✅')+'</div><div style="flex:1"><div class="ai-tx">'+esc(a.msg)+'</div><div class="ai-tm">'+esc(a.t||'')+'</div></div></div>').join('');
+function rAct(){
+  const arr=ld(K.ac,[]),list=el('actList');
+  if(!arr.length){list.innerHTML=emp('📊','Abhi koi activity nahi — pehle task complete karein');return}
+  list.innerHTML=arr.slice(0,15).map(a=>'<div class="ai"><div class="ai-i">'+(a.ic||'✅')+'</div><div style="flex:1"><div class="ai-t">'+esc(a.msg)+'</div><div class="ai-d">'+esc(a.t||'')+'</div></div></div>').join('');
 }
 
-function renderAll(){
-  updateStats();
-  renderWatch();
-  ['like','subscribe','comment','share','views'].forEach(renderSocial);
-  renderMsgs();renderAct();
-}
+function rAll(){updS();rWatch();['like','subscribe','comment','share','views'].forEach(rSocial);rMsgs();rAct()}
 
-// ── WATCH TIMER ──
+// ═══════════ WATCH TIMER (ANTI-CHEAT) ═══════════
+// Timer real-time mein chalta hai — band karne pe progress save hoti hai
+// Task tab complete hoga jab poora time guzre
 const timers={};
 function startW(tid){
-  const tasks=ld(K.wTasks,[]),t=tasks.find(x=>x.id===tid);
+  const tasks=ld(K.wt,[]),t=tasks.find(x=>x.id===tid);
   if(!t)return;
-  if(gdone()['w_'+tid]){
-    Swal.fire({title:'Already Completed!',text:'You already earned coins for this task.',icon:'info',background:'#0C1525',color:'#EDF4FF',confirmButtonColor:'#63CA77'});return;
-  }
+  const d=gd();
+  if(d['w_'+tid]){sw({title:'Pehle se Complete!',text:'Ye task aap already kar chuke hain.',icon:'info'});return}
+  // Open video
   window.open(t.url,'_blank');
   const wp=gwp();let cur=wp['w_'+tid]||0;
   Swal.fire({
-    title:'⏱️ Watch Timer',
-    html:'<div style="font-family:DM Sans,sans-serif;color:#EDF4FF">'
-      +'<div style="font-weight:600;font-size:13px;margin-bottom:15px;color:#8CA3BE">'+esc(t.title)+'</div>'
-      +'<div style="font-family:Syne,sans-serif;font-size:58px;font-weight:800;color:#63CA77;line-height:1" id="sc">'+Math.max(0,t.watchTime-cur)+'</div>'
-      +'<div style="font-size:12px;color:#4A6A8A;margin-top:5px">seconds remaining</div>'
-      +'<div style="background:#070E1C;border-radius:99px;height:6px;margin-top:20px;overflow:hidden">'
-        +'<div id="sb" style="background:linear-gradient(90deg,#F5A623,#63CA77);height:100%;border-radius:99px;width:'+Math.round(cur/t.watchTime*100)+'%;transition:width 0.5s"></div>'
-      +'</div></div>',
+    title:'⏱️ Watch karo aur kamao',
+    html:'<div style="font-family:DM Sans,sans-serif;color:#E8F2FF;padding:8px 0">'
+      +'<div style="font-size:12px;color:#6A90B0;margin-bottom:14px;line-height:1.5">'+esc(t.title)+'</div>'
+      +'<div style="font-family:Syne,sans-serif;font-size:62px;font-weight:800;color:#5BBF72;line-height:1" id="sc_t">'+Math.max(0,t.watchTime-cur)+'</div>'
+      +'<div style="font-size:11px;color:#243650;margin-top:4px;text-transform:uppercase;letter-spacing:1px">seconds baaki</div>'
+      +'<div style="background:#040A15;border-radius:99px;height:6px;margin-top:18px;overflow:hidden">'
+        +'<div id="sb_t" style="background:linear-gradient(90deg,#F0A500,#5BBF72);height:100%;border-radius:99px;width:'+Math.round(cur/t.watchTime*100)+'%;transition:width .6s"></div>'
+      +'</div>'
+      +'<div style="font-size:11px;color:#243650;margin-top:10px">⚠️ Ye window band mat karo</div>'
+      +'</div>',
     showConfirmButton:false,showCancelButton:true,cancelButtonText:'Cancel',
-    background:'#0C1525',color:'#EDF4FF',allowOutsideClick:false,
+    background:'#0A1422',color:'#E8F2FF',allowOutsideClick:false,allowEscapeKey:false,
     didOpen:()=>{
       clearInterval(timers[tid]);
       timers[tid]=setInterval(()=>{
-        const p=gwp();cur=(p['w_'+tid]||0)+1;p['w_'+tid]=cur;sv(K.wProg,p);
+        const p=gwp();
+        cur=(p['w_'+tid]||0)+1;
+        p['w_'+tid]=cur;sv(K.wp,p);
         const left=Math.max(0,t.watchTime-cur);
-        const sc=document.getElementById('sc');if(sc)sc.textContent=left;
-        const sb=document.getElementById('sb');if(sb)sb.style.width=Math.min(100,Math.round(cur/t.watchTime*100))+'%';
+        const sc=document.getElementById('sc_t');if(sc)sc.textContent=left;
+        const sb=document.getElementById('sb_t');if(sb)sb.style.width=Math.min(100,Math.round(cur/t.watchTime*100))+'%';
         const pb=el('pb_'+tid);if(pb)pb.style.width=Math.min(100,Math.round(cur/t.watchTime*100))+'%';
         if(cur>=t.watchTime){
           clearInterval(timers[tid]);
-          const d=gdone();d['w_'+tid]=true;sv(K.done,d);
-          scoins(gcoins()+t.coins);
-          log('🎬','Watch: "'+t.title+'" — +'+t.coins+' Coins');
-          Swal.fire({title:'🎉 +'+t.coins+' Coins!',text:'Watch task completed!',icon:'success',background:'#0C1525',color:'#EDF4FF',timer:2500,showConfirmButton:false});
-          renderAll();
+          // COINS SIRF TAB MILENGE JAB POORA TIME GUZRE
+          const dd=gd();dd['w_'+tid]=true;sv(K.d,dd);
+          sc(gc()+t.coins);
+          log('🎬','"'+t.title+'" watch mukammal — +'+t.coins+' Coins');
+          Swal.fire({title:'🎉 +'+t.coins+' Coins Mil Gaye!',text:'Watch task kamiyabi se mukammal!',icon:'success',background:'#0A1422',color:'#E8F2FF',timer:2500,showConfirmButton:false});
+          rAll();
         }
       },1000);
     },
@@ -627,183 +690,179 @@ function startW(tid){
   });
 }
 
+// Social task anti-cheat: link khola nahi to claim nahi hoga
+const opened={};
+function markOpened(tid){opened[tid]=true}
+
 function claimS(tid){
-  const t=ld(K.sTasks,[]).find(x=>x.id===tid);
-  if(!t||gdone()['s_'+tid])return;
+  const t=ld(K.st,[]).find(x=>x.id===tid);
+  if(!t)return;
+  const d=gd();
+  if(d['s_'+tid]){sw({title:'Pehle se done hai!',icon:'info'});return}
+  // Anti-cheat: pehle link kholo
+  if(!opened[tid]){
+    sw({title:'Pehle task kholo!',text:'Upar wale button se task open karo, phir claim karo.',icon:'warning'});
+    return;
+  }
   Swal.fire({
-    title:'Task Complete?',
-    html:'<div style="font-family:DM Sans,sans-serif;font-size:13px;color:#8CA3BE">'+esc(t.title)+'</div>',
-    icon:'question',showCancelButton:true,confirmButtonText:'Yes, Claim!',cancelButtonText:'Not yet',
-    confirmButtonColor:'#63CA77',background:'#0C1525',color:'#EDF4FF'
+    title:'Task complete hua?',
+    html:'<div style="font-size:13px;color:#6A90B0;font-family:DM Sans,sans-serif;line-height:1.6">'+esc(t.title)+'</div>',
+    icon:'question',showCancelButton:true,
+    confirmButtonText:'✅ Han, kar liya',cancelButtonText:'Nahi abhi',
+    confirmButtonColor:'#5BBF72',background:'#0A1422',color:'#E8F2FF'
   }).then(r=>{
     if(!r.isConfirmed)return;
-    const d=gdone();d['s_'+tid]=true;sv(K.done,d);
-    scoins(gcoins()+t.coins);
+    d['s_'+tid]=true;sv(K.d,d);
+    sc(gc()+t.coins);
     log(TE[t.type]||'⭐',TL[t.type]+': "'+t.title+'" — +'+t.coins+' Coins');
-    Swal.fire({title:'🎉 +'+t.coins+' Coins!',icon:'success',background:'#0C1525',color:'#EDF4FF',timer:2000,showConfirmButton:false});
-    renderAll();
+    Swal.fire({title:'🎉 +'+t.coins+' Coins!',icon:'success',background:'#0A1422',color:'#E8F2FF',timer:2000,showConfirmButton:false});
+    rAll();
   });
 }
 
-// ── WITHDRAW ── (Coins only shown to client, no PKR)
-function openW(){
-  const c=gcoins(),s=gcfg();
-  tx('wCn',c);el('wMinL').textContent='(min '+s.minW+' coins)';
-  el('wOv').classList.add('open');
-}
-function onMeth(){
-  const m=el('wMeth').value;
-  el('wExtra').style.display=m?'block':'none';
-  if(m)el('wNumL').textContent=m+' Mobile Number';
-}
-function doW(){
-  const m=el('wMeth').value,acc=(el('wAcc').value||'').trim(),nm=(el('wName').value||'').trim();
-  const amt=parseInt(el('wAmt').value)||0,s=gcfg(),c=gcoins();
-  const sw=t=>Swal.fire({title:t,icon:'warning',background:'#0C1525',color:'#EDF4FF',confirmButtonColor:'#63CA77'});
-  if(!m)return sw('Select a payment method');
-  if(!acc||!/^0\d{10}$/.test(acc))return sw('Enter valid 11-digit number (03XXXXXXXXX)');
-  if(!nm)return sw('Enter account holder name');
-  if(amt<s.minW)return sw('Minimum '+s.minW+' coins required');
-  if(amt>c)return sw('You only have '+c+' coins');
-  const pkr=Math.floor(amt/s.cpr),cut=Math.floor(pkr*s.cut/100),cPkr=pkr-cut;
-  Swal.fire({
-    title:'Confirm Withdrawal',
-    html:'<div style="font-family:DM Sans,sans-serif;text-align:left;color:#8CA3BE;line-height:2.2;font-size:13px">'
-      +'<div>Method: <b style="color:#EDF4FF">'+esc(m)+'</b></div>'
-      +'<div>Account: <b style="color:#EDF4FF">'+esc(acc)+'</b></div>'
-      +'<div>Name: <b style="color:#EDF4FF">'+esc(nm)+'</b></div>'
-      +'<div>Coins to Withdraw: <b style="color:#F5A623">'+amt+' Coins</b></div></div>',
-    showCancelButton:true,confirmButtonText:'Submit Request',cancelButtonText:'Cancel',
-    confirmButtonColor:'#F5A623',background:'#0C1525',color:'#EDF4FF'
-  }).then(r=>{
-    if(!r.isConfirmed)return;
-    const reqs=ld(K.wReqs,[]);
-    reqs.push({id:Date.now(),method:m,acc,name:nm,coins:amt,pkr,clientPkr:cPkr,cut,status:'pending',t:new Date().toLocaleString()});
-    sv(K.wReqs,reqs);scoins(c-amt);sv(K.aEarn,ld(K.aEarn,0)+cut);
-    log('💸','Withdrawal: '+amt+' coins via '+m+' — to '+acc);
-    closeOv('wOv');
-    el('wMeth').value='';el('wAcc').value='';el('wName').value='';el('wAmt').value='';el('wExtra').style.display='none';
-    renderAll();
-    Swal.fire({title:'Request Submitted ✅',text:'Admin will process your request within 24 hours.',icon:'success',background:'#0C1525',color:'#EDF4FF',confirmButtonColor:'#63CA77'});
-  });
-}
-
-// ── ADMIN ──
+// ═══════════ ADMIN ═══════════
 let adminIn=false;
-function closeOv(id){el(id).classList.remove('open')}
-window.addEventListener('click',e=>{['wOv','aOv'].forEach(id=>{if(e.target===el(id))el(id).classList.remove('open')})});
-el('gearBtn').onclick=()=>{el('aOv').classList.add('open');if(adminIn)aRefresh()};
+function cOv(id){el(id).classList.remove('open')}
+window.addEventListener('click',e=>{if(e.target===el('aOv'))el('aOv').classList.remove('open')});
 
 function doLogin(){
-  const e=(el('aEml').value||'').trim(),p=el('aPwd').value||'';
+  const e=(el('aEml').value||'').trim().toLowerCase(),p=el('aPwd').value||'';
   if(e===ADM.e&&p===ADM.p){
-    adminIn=true;el('aLogin').style.display='none';el('aDash').style.display='block';aRefresh();
-    Swal.fire({title:'Access Granted ✅',icon:'success',background:'#0C1525',color:'#EDF4FF',timer:1400,showConfirmButton:false});
+    adminIn=true;el('aLogin').style.display='none';el('aDash').style.display='block';
+    aRef();
+    sw({title:'✅ Admin Access Mil Gaya',icon:'success',timer:1300,showConfirmButton:false});
   }else{
-    Swal.fire({title:'Access Denied',text:'Invalid credentials',icon:'error',background:'#0C1525',color:'#EDF4FF',confirmButtonColor:'#63CA77'});
+    sw({title:'❌ Galat Credentials',text:'Email ya password galat hai',icon:'error'});
   }
 }
-function doLogout(){adminIn=false;el('aLogin').style.display='block';el('aDash').style.display='none';el('aEml').value='';el('aPwd').value='';closeOv('aOv')}
+
+function doOut(){adminIn=false;el('aLogin').style.display='block';el('aDash').style.display='none';el('aEml').value='';el('aPwd').value='';cOv('aOv')}
 
 function aTab(btn,pane){
   document.querySelectorAll('.atab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
-  document.querySelectorAll('.apane').forEach(p=>p.classList.remove('on'));const ap=el(pane);if(ap)ap.classList.add('on');
-  aRefresh();
+  document.querySelectorAll('.apane').forEach(p=>p.classList.remove('on'));el(pane)?.classList.add('on');
+  aRef();
 }
-function onType(){el('atSW').style.display=el('atType').value==='watch'?'block':'none'}
+
+function onTyp(){el('atSW').style.display=el('atType').value==='watch'?'block':'none'}
 
 function doAdd(){
   const type=el('atType').value,tit=(el('atTit').value||'').trim(),url=(el('atUrl').value||'').trim();
   const cn=parseInt(el('atCn').value)||0;
-  const sw=t=>Swal.fire({title:t,icon:'warning',background:'#0C1525',color:'#EDF4FF',confirmButtonColor:'#63CA77'});
-  if(!tit)return sw('Title is required');
-  if(!url||!url.startsWith('http'))return sw('Valid URL required (must start with http)');
-  if(cn<1)return sw('Enter coins reward (min 1)');
+  if(!tit)return sw({title:'Title likhein',icon:'warning'});
+  if(!url.startsWith('http'))return sw({title:'Valid URL chahiye',text:'http ya https se shuru hona chahiye',icon:'warning'});
+  if(cn<1)return sw({title:'Coins reward likhein',icon:'warning'});
   if(type==='watch'){
     const sec=parseInt(el('atSec').value)||0;
-    if(sec<8)return sw('Watch time must be at least 8 seconds');
-    const wt=ld(K.wTasks,[]);wt.unshift({id:Date.now(),title:tit,url,coins:cn,watchTime:sec,thumb:yt(url)});sv(K.wTasks,wt);
+    if(sec<8)return sw({title:'Watch time kam se kam 8 seconds',icon:'warning'});
+    const wt=ld(K.wt,[]);wt.unshift({id:Date.now(),title:tit,url,coins:cn,watchTime:sec,thumb:yt(url)});sv(K.wt,wt);
   }else{
-    const st=ld(K.sTasks,[]);st.unshift({id:Date.now(),title:tit,url,type,coins:cn});sv(K.sTasks,st);
+    const st=ld(K.st,[]);st.unshift({id:Date.now(),title:tit,url,type,coins:cn});sv(K.st,st);
   }
   el('atTit').value='';el('atUrl').value='';el('atCn').value='';el('atSec').value='';
-  aRefresh();renderAll();
-  Swal.fire({title:'Task Added ✅',icon:'success',background:'#0C1525',color:'#EDF4FF',timer:1300,showConfirmButton:false});
+  aRef();rAll();
+  sw({title:'Task Add Ho Gaya ✅',icon:'success',timer:1300,showConfirmButton:false});
 }
 
-function aRefresh(){
-  const wt=ld(K.wTasks,[]),st=ld(K.sTasks,[]),reqs=ld(K.wReqs,[]),ae=ld(K.aEarn,0);
+function aRef(){
+  if(!adminIn)return;
+  const wt=ld(K.wt,[]),st=ld(K.st,[]),reqs=ld(K.wr,[]),ae=ld(K.ae,0);
   const pend=reqs.filter(r=>r.status==='pending');
-  tx('aE','PKR '+ae);tx('aPd',pend.length);tx('aTk',wt.length+st.length);tx('aCn',gcoins());
-  const s=gcfg();el('sCpr').value=s.cpr;el('sMin').value=s.minW;el('sCut').value=s.cut;
+  tx('aE','PKR '+ae);tx('aPd',pend.length);tx('aTk',wt.length+st.length);tx('aCn',gc());
+  const s=cfg();
+  if(el('sCpr'))el('sCpr').value=s.cpr;
+  if(el('sMin'))el('sMin').value=s.minW;
+  if(el('sCut'))el('sCut').value=s.cut;
 
+  // Tasks list
   const all=[...wt.map(t=>({...t,_k:'watch'})),...st.map(t=>({...t,_k:t.type}))];
-  el('aTkList').innerHTML=all.length?all.map(t=>'<div class="tr"><div class="tr-info"><div class="tr-name">'+(TE[t._k]||'⭐')+' '+esc(t.title)+'</div><div class="tr-meta">+'+t.coins+' Coins · '+(TL[t._k]||t._k)+'</div></div><button class="btn bd bxs" onclick="delTask('+t.id+','+(t._k==='watch'?'\'watch\'':'\'social\'')+')" ><i class="fas fa-trash"></i></button></div>').join(''):empty('📋','No tasks added yet');
+  el('aTkL').innerHTML=all.length
+    ?all.map(t=>'<div class="tr"><div class="tri"><div class="tn2">'+(TE[t._k]||'⭐')+' '+esc(t.title)+'</div><div class="tm">+'+t.coins+' Coins · '+(TL[t._k]||t._k)+'</div></div>'
+      +'<button class="btn bd bxs" onclick="delT('+t.id+',\''+(t._k==='watch'?'w':'s')+'\')"><i class="fas fa-trash"></i></button></div>').join('')
+    :emp('📋','Koi task nahi');
 
-  el('aWPend').innerHTML=pend.length?pend.map(r=>'<div class="wrc"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:9px"><div><div class="wrm">💸 '+esc(r.method)+'</div><div class="wri">'+esc(r.name)+' — '+esc(r.acc)+'</div><div class="wri">'+r.coins+' Coins → PKR '+r.clientPkr+' (Admin Cut: PKR '+(r.cut||0)+')</div><div class="wrt">'+esc(r.t||'')+'</div></div><button class="btn bp bsm" onclick="markPaid('+r.id+')"><i class="fas fa-check"></i> Mark Paid</button></div></div>').join(''):empty('✅','No pending requests');
+  // Pending withdrawals — admin ko poori detail dikhti hai
+  el('aWP').innerHTML=pend.length
+    ?pend.map(r=>'<div class="wrc">'
+      +'<div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:9px">'
+      +'<div>'
+      +'<div class="wrm">💸 Withdrawal Request</div>'
+      +'<div class="wri">👤 '+esc(r.name)+'</div>'
+      +'<div class="wri">📱 '+esc(r.acc)+'</div>'
+      +'<div class="wri">🪙 '+r.coins+' Coins → <b style="color:#5BBF72">PKR '+r.clientPkr+'</b>'+(r.cut?' (Admin: PKR '+r.cut+')':'')+'</div>'
+      +'<div class="wrt">🕐 '+esc(r.t||'')+'</div>'
+      +'</div>'
+      +'<button class="btn bp bsm" onclick="markP('+r.id+')"><i class="fas fa-check"></i>Paid</button>'
+      +'</div></div>').join('')
+    :emp('✅','Koi pending request nahi');
 
   const paid=reqs.filter(r=>r.status==='paid');
-  el('aWPaid').innerHTML=paid.length?paid.slice(0,6).map(r=>'<div class="paid-r">✅ '+esc(r.method)+' — '+esc(r.name)+' ('+esc(r.acc)+') — '+r.coins+' Coins — PKR '+r.clientPkr+' — '+esc(r.t||'')+'</div>').join(''):'<div style="color:var(--txt3);font-size:12px;padding:8px">No paid withdrawals yet</div>';
+  el('aWD2').innerHTML=paid.length
+    ?paid.slice(0,8).map(r=>'<div class="pr">✅ '+esc(r.name)+' · '+esc(r.acc)+' · '+r.coins+' Coins · PKR '+r.clientPkr+' · '+esc(r.t||'')+'</div>').join('')
+    :'<div style="color:var(--t3);font-size:12px;padding:6px 0">Abhi koi paid withdrawal nahi</div>';
 }
 
-function delTask(id,kind){
-  Swal.fire({title:'Delete Task?',text:'This cannot be undone.',icon:'warning',showCancelButton:true,confirmButtonColor:'#EF5350',background:'#0C1525',color:'#EDF4FF'}).then(r=>{
+function delT(id,kind){
+  sw({title:'Task delete karein?',text:'Wapis nahi hoga.',icon:'warning',showCancelButton:true,confirmButtonColor:'#E84545'}).then(r=>{
     if(!r.isConfirmed)return;
-    if(kind==='watch')sv(K.wTasks,ld(K.wTasks,[]).filter(t=>t.id!==id));
-    else sv(K.sTasks,ld(K.sTasks,[]).filter(t=>t.id!==id));
-    aRefresh();renderAll();
-    Swal.fire({title:'Deleted',icon:'success',background:'#0C1525',color:'#EDF4FF',timer:1200,showConfirmButton:false});
+    if(kind==='w')sv(K.wt,ld(K.wt,[]).filter(t=>t.id!==id));
+    else sv(K.st,ld(K.st,[]).filter(t=>t.id!==id));
+    aRef();rAll();
+    sw({title:'Delete Ho Gaya',icon:'success',timer:1200,showConfirmButton:false});
   });
 }
 
-function markPaid(id){
-  const reqs=ld(K.wReqs,[]),i=reqs.findIndex(r=>r.id===id);
-  if(i<0)return;reqs[i].status='paid';sv(K.wReqs,reqs);
-  Swal.fire({title:'Marked Paid ✅',icon:'success',background:'#0C1525',color:'#EDF4FF',timer:1400,showConfirmButton:false});
-  aRefresh();
+function markP(id){
+  const reqs=ld(K.wr,[]),i=reqs.findIndex(r=>r.id===id);
+  if(i<0)return;reqs[i].status='paid';sv(K.wr,reqs);
+  sw({title:'Paid Mark Ho Gaya ✅',icon:'success',timer:1400,showConfirmButton:false});
+  aRef();
 }
 
 function adjC(add){
-  const amt=parseInt(el('acAmt').value)||0;
-  if(amt<1)return Swal.fire({title:'Enter amount',icon:'warning',background:'#0C1525',color:'#EDF4FF',confirmButtonColor:'#63CA77'});
-  scoins(add?gcoins()+amt:gcoins()-amt);
-  log('🪙','Admin '+(add?'added':'removed')+' '+amt+' coins');
-  aRefresh();renderAll();el('acAmt').value='';
-  Swal.fire({title:(add?'+':'-')+amt+' Coins',icon:'success',background:'#0C1525',color:'#EDF4FF',timer:1300,showConfirmButton:false});
+  const amt=parseInt(el('acA').value)||0;
+  if(amt<1)return sw({title:'Amount likhein',icon:'warning'});
+  sc(add?gc()+amt:gc()-amt);
+  log('🪙','Admin ne '+(add?'add':'remove')+' kiye '+amt+' coins');
+  aRef();rAll();el('acA').value='';
+  sw({title:(add?'+':'-')+amt+' Coins',icon:'success',timer:1300,showConfirmButton:false});
 }
 
-function addEarn(){
-  const amt=parseFloat(el('aeAmt').value)||0;
-  if(amt<1)return Swal.fire({title:'Enter amount',icon:'warning',background:'#0C1525',color:'#EDF4FF',confirmButtonColor:'#63CA77'});
-  sv(K.aEarn,ld(K.aEarn,0)+amt);aRefresh();el('aeAmt').value='';
-  Swal.fire({title:'PKR '+amt+' Added',icon:'success',background:'#0C1525',color:'#EDF4FF',timer:1300,showConfirmButton:false});
+function addE(){
+  const amt=parseFloat(el('aeA').value)||0;
+  if(amt<1)return sw({title:'Amount likhein',icon:'warning'});
+  sv(K.ae,ld(K.ae,0)+amt);aRef();el('aeA').value='';
+  sw({title:'PKR '+amt+' Add Ho Gaya',icon:'success',timer:1300,showConfirmButton:false});
 }
 
-function sendMsg(){
-  const msg=(el('amTx').value||'').trim();
-  if(!msg)return Swal.fire({title:'Write a message',icon:'warning',background:'#0C1525',color:'#EDF4FF',confirmButtonColor:'#63CA77'});
-  const msgs=ld(K.msgs,[]);msgs.unshift({id:Date.now(),msg,t:new Date().toLocaleString()});sv(K.msgs,msgs);
-  el('amTx').value='';renderAll();
-  Swal.fire({title:'📣 Broadcasted!',icon:'success',background:'#0C1525',color:'#EDF4FF',timer:1400,showConfirmButton:false});
+function sendM(){
+  const msg=(el('amT').value||'').trim();
+  if(!msg)return sw({title:'Message likhein',icon:'warning'});
+  const ms=ld(K.ms,[]);ms.unshift({id:Date.now(),msg,t:new Date().toLocaleString()});
+  sv(K.ms,ms);el('amT').value='';rAll();
+  sw({title:'📣 Message Send Ho Gaya!',icon:'success',timer:1400,showConfirmButton:false});
 }
 
 function saveSt(){
   const cpr=parseInt(el('sCpr').value)||10,minW=parseInt(el('sMin').value)||500;
   const cut=Math.min(50,Math.max(0,parseInt(el('sCut').value)||10));
-  sv(K.cfg,{cpr,minW,cut});
-  Swal.fire({title:'Settings Saved ✅',icon:'success',background:'#0C1525',color:'#EDF4FF',timer:1400,showConfirmButton:false});
-  aRefresh();
+  sv(K.cf,{cpr,minW,cut});
+  sw({title:'Settings Save Ho Gayi ✅',icon:'success',timer:1400,showConfirmButton:false});
+  aRef();
 }
 
-// ── INIT ──
+// ═══════════ INIT ═══════════
 (function(){
-  onType();
-  if(!ld(K.wTasks,null)&&!ld(K.sTasks,null)){
-    sv(K.wTasks,[{id:1001,title:'Watch this Welcome Video to Get Started',url:'https://www.youtube.com/watch?v=dQw4w9WgXcQ',coins:50,watchTime:30,thumb:''}]);
-    sv(K.sTasks,[{id:1002,type:'like',title:'Like GM Tube Pro Channel',url:'https://youtube.com',coins:20},{id:1003,type:'subscribe',title:'Subscribe to Earn Daily Coins',url:'https://youtube.com',coins:35}]);
+  onTyp();
+  if(!ld(K.wt,null)&&!ld(K.st,null)){
+    sv(K.wt,[{id:1001,title:'Welcome Video dekho aur pehle coins kamao!',url:'https://www.youtube.com/watch?v=dQw4w9WgXcQ',coins:50,watchTime:30,thumb:''}]);
+    sv(K.st,[
+      {id:1002,type:'like',title:'GM Tube Pro channel ko like karein',url:'https://youtube.com',coins:20},
+      {id:1003,type:'subscribe',title:'Subscribe karke daily coins kamao',url:'https://youtube.com',coins:35}
+    ]);
   }
-  renderAll();
-  setInterval(renderAll,4000);
+  rAll();
+  setInterval(rAll,5000);
 })();
 </script>
 </body>
