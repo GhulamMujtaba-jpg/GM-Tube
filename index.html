@@ -2,868 +2,793 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
-<title>GM Tube Pro</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
+<title>GM TUBE | Earn Coins & PKR</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{
-  --bg:#03060F;--bg2:#060C1A;--card:#0A1422;--card2:#0D1929;
-  --b:#162236;--bg:#02060E;
-  --g:#5BBF72;--g2:#3D9E52;--glo:rgba(91,191,114,.1);
-  --gold:#F0A500;--gold2:#C8861A;
-  --sky:#3FB8F0;--red:#E84545;--pur:#9D8FD4;
-  --t:#E8F2FF;--t2:#6A90B0;--t3:#243650;
-  --ra:15px;--rb:10px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'DM Sans', sans-serif;
 }
-html,body{font-family:'DM Sans',sans-serif;background:#02060E;color:var(--t);min-height:100vh;overflow-x:hidden}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:#060C1A}::-webkit-scrollbar-thumb{background:#162236;border-radius:9px}
 
-/* ╔══════════════════════════════╗
-   ║       COVER PHOTO            ║
-   ╚══════════════════════════════╝ */
-.cover{width:100%;position:relative;overflow:hidden;background:#030810}
-.cover svg{display:block;width:100%;height:auto}
+:root {
+  --dark-bg: #03060E;
+  --card-bg: #0A1422;
+  --card-alt: #0D1929;
+  --border-dim: #162236;
+  --green: #5BBF72;
+  --green-dark: #3D9E52;
+  --gold: #F0A500;
+  --blue: #3FB8F0;
+  --red: #E84545;
+  --text-main: #E8F2FF;
+  --text-muted: #6A90B0;
+  --text-dim: #243650;
+}
 
-/* ╔══════════════════════════════╗
-   ║           NAV                ║
-   ╚══════════════════════════════╝ */
-.nav{position:sticky;top:0;z-index:99;background:rgba(2,6,14,.96);backdrop-filter:blur(20px);border-bottom:1px solid #162236}
-.ni{max-width:1300px;margin:0 auto;padding:0 20px;height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.logo{display:flex;align-items:center;gap:9px;user-select:none;cursor:default}
-.logo-box{width:34px;height:34px;background:linear-gradient(135deg,var(--g),var(--g2));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:transform .15s}
-.logo-box:active{transform:scale(.92)}
-.logo-tx{font-family:'Syne',sans-serif;font-size:15px;font-weight:700}
-.cpill{background:rgba(91,191,114,.1);border:1px solid rgba(91,191,114,.25);border-radius:99px;padding:7px 15px;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--g);display:flex;align-items:center;gap:6px}
+body {
+  background: var(--dark-bg);
+  color: var(--text-main);
+}
 
-/* ╔══════════════════════════════╗
-   ║          LAYOUT              ║
-   ╚══════════════════════════════╝ */
-.wrap{max-width:1300px;margin:0 auto;padding:0 20px 110px}
-.sec{margin-bottom:22px}
-.panel{background:var(--card);border:1px solid #162236;border-radius:var(--ra);padding:20px}
-.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:8px}
-.pt{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;display:flex;align-items:center;gap:7px}
-.dot{width:6px;height:6px;border-radius:50%;background:var(--g);box-shadow:0 0 5px var(--g);flex-shrink:0}
+/* Cover banner */
+.cover-svg {
+  width: 100%;
+  background: linear-gradient(145deg, #03060F 0%, #071128 100%);
+  padding: 2rem 1rem 1.8rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border-dim);
+}
 
-/* ╔══════════════════════════════╗
-   ║           STATS              ║
-   ╚══════════════════════════════╝ */
-.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:12px;margin:22px 0 24px}
-.sc{background:var(--card);border:1px solid #162236;border-radius:var(--ra);padding:16px 14px;display:flex;align-items:center;gap:12px;transition:all .2s}
-.sc:hover{border-color:rgba(91,191,114,.28);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
-.si{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.ig{background:rgba(91,191,114,.1);color:var(--g)}
-.ib{background:rgba(63,184,240,.1);color:var(--sky)}
-.io{background:rgba(240,165,0,.1);color:var(--gold)}
-.ip{background:rgba(157,143,212,.1);color:var(--pur)}
-.sl{font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
-.sv{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;line-height:1}
+.cover-svg h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 2.2rem;
+  background: linear-gradient(135deg, var(--green), var(--gold), var(--blue));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 0.5rem;
+}
 
-/* ╔══════════════════════════════╗
-   ║          INPUTS              ║
-   ╚══════════════════════════════╝ */
-.f{margin-bottom:13px}
-.f label{display:block;font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px}
-.inp,.sel,.txa{width:100%;padding:11px 13px;background:#040A15;border:1px solid #162236;border-radius:var(--rb);color:var(--t);font-size:14px;font-family:'DM Sans',sans-serif;transition:all .2s;-webkit-appearance:none}
-.inp:focus,.sel:focus,.txa:focus{border-color:var(--g);outline:none;box-shadow:0 0 0 3px rgba(91,191,114,.08)}
-.inp::placeholder{color:var(--t3)}
-.txa{resize:vertical;min-height:80px}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.cover-svg p {
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
 
-/* ╔══════════════════════════════╗
-   ║          BUTTONS             ║
-   ╚══════════════════════════════╝ */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 18px;border-radius:var(--rb);font-weight:600;font-size:13px;font-family:'DM Sans',sans-serif;border:none;cursor:pointer;transition:all .2s;white-space:nowrap;line-height:1;text-decoration:none}
-.btn:active{transform:scale(.96)}
-.bp{background:linear-gradient(135deg,var(--g),var(--g2));color:#021006;box-shadow:0 4px 16px rgba(91,191,114,.25)}
-.bp:hover{box-shadow:0 6px 24px rgba(91,191,114,.42);transform:translateY(-1px)}
-.bgo{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#120600;box-shadow:0 4px 16px rgba(240,165,0,.25)}
-.bgo:hover{box-shadow:0 6px 24px rgba(240,165,0,.42);transform:translateY(-1px)}
-.bd{background:var(--red);color:#fff}.bd:hover{background:#C43030}
-.bh{background:transparent;border:1px solid #162236;color:var(--t2)}.bh:hover{border-color:rgba(91,191,114,.3);color:var(--g)}
-.bsk{background:linear-gradient(135deg,#29B5F5,#0280C8);color:#fff}
-.bpu{background:linear-gradient(135deg,#9327AC,#711E99);color:#fff}
-.bsm{padding:7px 13px;font-size:12px;border-radius:8px}
-.bxs{padding:5px 9px;font-size:11px;border-radius:7px}
-.bfw{width:100%}
+/* navbar */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 99;
+  background: rgba(2, 6, 14, 0.96);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border-dim);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.7rem 1.5rem;
+  flex-wrap: wrap;
+  gap: 10px;
+}
 
-/* ╔══════════════════════════════╗
-   ║        TASK TABS             ║
-   ╚══════════════════════════════╝ */
-.ttabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:18px;background:var(--bg2);padding:5px;border-radius:13px;border:1px solid #162236}
-.ttab{padding:6px 14px;border-radius:9px;font-size:12px;font-weight:600;background:transparent;border:none;color:var(--t2);cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
-.ttab:hover{color:var(--t)}
-.ttab.on{background:var(--card2);color:var(--g);border:1px solid #162236;box-shadow:0 2px 6px rgba(0,0,0,.25)}
-.tpane{display:none}.tpane.on{display:block}
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
 
-/* ╔══════════════════════════════╗
-   ║        TASK CARDS            ║
-   ╚══════════════════════════════╝ */
-.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:15px}
-.tcard{background:var(--card2);border:1px solid #162236;border-radius:var(--ra);padding:16px;transition:all .22s;position:relative;overflow:hidden}
-.tcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--g),var(--sky));opacity:0;transition:opacity .3s;border-radius:var(--ra) var(--ra) 0 0}
-.tcard:hover{border-color:rgba(91,191,114,.26);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.35)}
-.tcard:hover::before{opacity:1}
-.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;font-size:10px;font-weight:700;margin-bottom:11px;letter-spacing:.3px}
-.cw{background:rgba(63,184,240,.09);color:#7DD6F5;border:1px solid rgba(63,184,240,.13)}
-.cl{background:rgba(91,191,114,.09);color:#97D6A9;border:1px solid rgba(91,191,114,.13)}
-.cs{background:rgba(232,69,69,.09);color:#F09898;border:1px solid rgba(232,69,69,.13)}
-.cc{background:rgba(157,143,212,.09);color:#C4BAE8;border:1px solid rgba(157,143,212,.13)}
-.csh{background:rgba(240,165,0,.09);color:#F5CC60;border:1px solid rgba(240,165,0,.13)}
-.cv{background:rgba(0,200,200,.09);color:#7DE8E8;border:1px solid rgba(0,200,200,.13)}
-.thumb{width:100%;height:145px;border-radius:10px;overflow:hidden;background:var(--card);margin-bottom:12px;display:flex;align-items:center;justify-content:center}
-.thumb img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
-.tcard:hover .thumb img{transform:scale(1.05)}
-.tn{font-size:36px;opacity:.25}
-.tc-tit{font-size:13px;font-weight:600;line-height:1.5;margin-bottom:9px}
-.tc-url{font-size:10px;color:var(--t3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:9px}
-.pw{background:rgba(255,255,255,.04);border-radius:99px;height:4px;overflow:hidden;margin-bottom:11px}
-.pb{height:100%;background:linear-gradient(90deg,var(--gold),var(--g));border-radius:99px;transition:width .5s}
-.coi{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:700;background:rgba(91,191,114,.07);border:1px solid rgba(91,191,114,.14);color:var(--g)}
-.don{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:700;background:rgba(91,191,114,.05);color:#82C792;border:1px solid rgba(91,191,114,.1)}
-.tfoot{display:flex;align-items:center;justify-content:space-between;gap:7px;flex-wrap:wrap}
-.emp{text-align:center;padding:42px 16px;color:var(--t3)}
-.emp-i{font-size:38px;margin-bottom:11px;opacity:.28}
-.emp p{font-size:13px}
+.logo-icon {
+  background: linear-gradient(145deg, var(--green), var(--green-dark));
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  box-shadow: 0 4px 12px rgba(91,191,114,0.2);
+}
 
-/* ╔══════════════════════════════╗
-   ║         MESSAGES             ║
-   ╚══════════════════════════════╝ */
-.mc{background:var(--card2);border:1px solid rgba(63,184,240,.11);border-left:3px solid var(--sky);border-radius:var(--rb);padding:13px;margin-bottom:8px}
-.mc-b{font-size:13px;line-height:1.7}
-.mc-t{font-size:10px;color:var(--t3);margin-top:5px;font-family:'Syne',sans-serif}
+.logo-text {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.1rem;
+}
 
-/* ╔══════════════════════════════╗
-   ║          ACTIVITY            ║
-   ╚══════════════════════════════╝ */
-.ai{display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:10px;background:var(--card2);margin-bottom:7px;border:1px solid transparent;transition:border-color .2s}
-.ai:hover{border-color:#162236}
-.ai-i{width:32px;height:32px;flex-shrink:0;border-radius:8px;background:var(--glo);display:flex;align-items:center;justify-content:center;font-size:13px}
-.ai-t{font-size:12px;color:var(--t2);flex:1;line-height:1.5}
-.ai-d{font-size:10px;color:var(--t3);margin-top:2px;font-family:'Syne',sans-serif}
+.coin-badge {
+  background: rgba(91, 191, 114, 0.12);
+  border: 1px solid rgba(91, 191, 114, 0.3);
+  border-radius: 60px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--green);
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
 
-/* ╔══════════════════════════════╗
-   ║       OVERLAY / MODAL        ║
-   ╚══════════════════════════════╝ */
-.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.93);backdrop-filter:blur(18px);z-index:200;align-items:center;justify-content:center;padding:14px}
-.ov.open{display:flex;animation:fOv .18s ease}
-@keyframes fOv{from{opacity:0}to{opacity:1}}
-.modal{background:var(--card);border-radius:18px;width:100%;max-width:800px;max-height:92vh;overflow-y:auto;border:1px solid #162236;animation:sUp .22s ease}
-@keyframes sUp{from{transform:translateY(18px);opacity:0}to{transform:translateY(0);opacity:1}}
-.msm{max-width:460px}
-.mh{padding:20px 20px 0;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;position:sticky;top:0;background:var(--card);z-index:2;padding-bottom:16px;border-bottom:1px solid #162236}
-.mt{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
-.cx{background:var(--card2);border:1px solid #162236;color:var(--t2);width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;transition:all .2s;flex-shrink:0}
-.cx:hover{border-color:var(--red);color:var(--red)}
-.mb{padding:0 20px 20px}
+.btn-sm {
+  padding: 6px 14px;
+  border-radius: 40px;
+  border: none;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
 
-/* Withdraw hero */
-.wh{background:linear-gradient(135deg,rgba(91,191,114,.08),rgba(61,158,82,.04));border:1px solid rgba(91,191,114,.17);border-radius:var(--rb);padding:22px;margin-bottom:18px;text-align:center}
-.wn{font-family:'Syne',sans-serif;font-size:50px;font-weight:800;color:var(--g);line-height:1}
-.wl{font-size:11px;color:var(--t2);margin-top:4px;text-transform:uppercase;letter-spacing:.9px}
-.info-row{display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid #162236;border-radius:var(--rb);padding:12px 14px;margin-bottom:13px;font-size:13px;color:var(--t2)}
-.info-row i{color:var(--sky);flex-shrink:0}
-.note{background:rgba(63,184,240,.04);border:1px solid rgba(63,184,240,.13);border-radius:var(--rb);padding:11px 14px;margin-bottom:15px;font-size:12px;color:var(--t2);display:flex;gap:8px;align-items:flex-start;line-height:1.7}
-.note i{color:var(--sky);flex-shrink:0;margin-top:1px}
+.btn-green {
+  background: linear-gradient(135deg, var(--green), var(--green-dark));
+  color: #021006;
+  box-shadow: 0 2px 8px rgba(91,191,114,0.3);
+}
 
-/* Admin login */
-.alb{background:linear-gradient(135deg,rgba(91,191,114,.06),var(--bg2));border:1px solid rgba(91,191,114,.2);border-radius:16px;padding:26px;text-align:center;margin-bottom:20px}
-.al-ic{font-size:42px;margin-bottom:10px;display:block}
-.al-tit{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:4px}
-.al-sub{font-size:12px;color:var(--t2)}
+.btn-green:active { transform: scale(0.96);}
 
-/* Admin stats */
-.asr{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:9px;margin-bottom:18px}
-.ast{background:var(--card2);border:1px solid #162236;border-radius:var(--rb);padding:13px;text-align:center}
-.ast-v{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;color:var(--g);margin-bottom:2px}
-.ast-l{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.7px}
+.wrapper {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 24px 20px 90px;
+}
 
-/* Admin tabs */
-.atabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:18px;background:var(--bg2);padding:4px;border-radius:12px;border:1px solid #162236}
-.atab{padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;background:transparent;border:none;color:var(--t2);font-family:'DM Sans',sans-serif;transition:all .2s}
-.atab:hover{color:var(--t)}
-.atab.on{background:var(--card2);color:var(--g);border:1px solid #162236}
-.apane{display:none}.apane.on{display:block}
+/* stat cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
+  margin-bottom: 32px;
+}
 
-.tr{display:flex;align-items:center;gap:9px;padding:10px;background:var(--bg2);border-radius:10px;margin-bottom:6px;border:1px solid #162236}
-.tr:last-child{margin-bottom:0}
-.tri{flex:1;min-width:0}
-.tn2{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tm{font-size:10px;color:var(--t3);margin-top:2px}
+.stat-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-dim);
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
-.wrc{background:linear-gradient(135deg,rgba(240,165,0,.04),var(--bg2));border:1px solid rgba(240,165,0,.17);border-radius:var(--rb);padding:13px;margin-bottom:7px}
-.wrc:last-child{margin-bottom:0}
-.wrm{font-size:13px;font-weight:700;color:var(--gold)}
-.wri{font-size:12px;color:var(--t2);margin:3px 0}
-.wrt{font-size:10px;color:var(--t3);font-family:'Syne',sans-serif}
-.pr{background:rgba(91,191,114,.04);border:1px solid rgba(91,191,114,.1);border-radius:8px;padding:8px 12px;margin-bottom:5px;font-size:11px;color:var(--t2)}
+.stat-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: rgba(91, 191, 114, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
 
-hr.sep{border:none;border-top:1px solid #162236;margin:16px 0}
-.slbl{font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:9px}
+.stat-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+.stat-value {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.7rem;
+  font-weight: 800;
+  line-height: 1;
+}
 
-@media(max-width:620px){
-  .sgrid{grid-template-columns:1fr 1fr;gap:9px;margin:16px 0 18px}
-  .g2{grid-template-columns:1fr}
-  .tgrid{grid-template-columns:1fr}
-  .asr{grid-template-columns:1fr 1fr}
-  .logo-tx{display:none}
+/* Panel */
+.panel {
+  background: var(--card-bg);
+  border: 1px solid var(--border-dim);
+  border-radius: 24px;
+  padding: 1.3rem;
+  margin-bottom: 28px;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.panel-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  display: flex;
+  gap: 8px;
+  font-size: 1rem;
+}
+.green-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--green);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--green);
+}
+
+/* task tabs */
+.task-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  background: #050B16;
+  padding: 6px;
+  border-radius: 60px;
+  margin-bottom: 20px;
+}
+.tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 6px 14px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.tab-btn.active {
+  background: var(--card-alt);
+  color: var(--green);
+  border: 1px solid var(--border-dim);
+}
+.task-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+.task-card {
+  background: var(--card-alt);
+  border: 1px solid var(--border-dim);
+  border-radius: 20px;
+  padding: 1rem;
+  transition: 0.2s;
+}
+.task-card:hover { transform: translateY(-3px); border-color: rgba(91,191,114,0.4);}
+.task-chip {
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: inline-flex;
+  gap: 4px;
+  background: rgba(63,184,240,0.1);
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+.thumb-place {
+  width: 100%;
+  height: 130px;
+  background: #03070e;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.thumb-place img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.task-title {
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+.coin-reward {
+  background: rgba(91,191,114,0.1);
+  border-radius: 40px;
+  padding: 4px 10px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  color: var(--green);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.progress-wrapper {
+  margin: 12px 0;
+  background: #03070e;
+  border-radius: 30px;
+  height: 5px;
+  overflow: hidden;
+}
+.progress-fill {
+  background: linear-gradient(90deg, var(--gold), var(--green));
+  width: 0%;
+  height: 100%;
+}
+.task-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  gap: 8px;
+}
+.btn-task {
+  background: var(--green-dark);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 26px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+}
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border-dim);
+  color: var(--text-muted);
+}
+
+/* activity */
+.activity-item {
+  background: var(--card-alt);
+  border-radius: 16px;
+  padding: 12px;
+  margin-bottom: 8px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.act-icon {
+  width: 32px;
+  height: 32px;
+  background: rgba(91,191,114,0.08);
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.act-msg {
+  font-size: 0.8rem;
+  flex: 1;
+  color: var(--text-muted);
+}
+.act-time {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+}
+
+/* ADMIN MODAL */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.94);
+  backdrop-filter: blur(20px);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+.modal-overlay.open { display: flex; }
+.modal-container {
+  background: var(--card-bg);
+  border: 1px solid var(--border-dim);
+  border-radius: 28px;
+  width: 100%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border-dim);
+}
+.modal-body { padding: 18px 22px; }
+
+.admin-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  background: #050B16;
+  padding: 5px;
+  border-radius: 60px;
+  margin-bottom: 20px;
+}
+.admin-tab {
+  background: transparent;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.admin-tab.active {
+  background: var(--card-alt);
+  color: var(--green);
+  border: 1px solid var(--border-dim);
+}
+.admin-pane { display: none; }
+.admin-pane.active { display: block; }
+.input-field {
+  background: #030A13;
+  border: 1px solid var(--border-dim);
+  padding: 10px 12px;
+  border-radius: 14px;
+  color: white;
+  width: 100%;
+  margin-bottom: 12px;
+}
+.withdraw-request {
+  background: #0c1422;
+  border-radius: 18px;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-left: 3px solid var(--gold);
+}
+.msg-broadcast {
+  background: rgba(63,184,240,0.08);
+  padding: 12px;
+  border-radius: 14px;
+  margin-bottom: 8px;
+}
+hr { border-color: var(--border-dim); margin: 16px 0;}
+@media (max-width:640px){
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .wrapper{padding: 16px;}
 }
 </style>
 </head>
 <body>
 
-<!-- ╔══════════════════════════════════════════╗
-     ║            COVER PHOTO (SVG)             ║
-     ╚══════════════════════════════════════════╝ -->
-<div class="cover">
-<svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg" style="max-height:420px">
-  <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#040C1A"/>
-      <stop offset="50%" style="stop-color:#061224"/>
-      <stop offset="100%" style="stop-color:#040C16"/>
-    </linearGradient>
-    <linearGradient id="gr" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#5BBF72"/>
-      <stop offset="100%" style="stop-color:#3D9E52"/>
-    </linearGradient>
-    <linearGradient id="go" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#F0A500"/>
-      <stop offset="100%" style="stop-color:#C8861A"/>
-    </linearGradient>
-    <linearGradient id="sk" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#5BBF72"/>
-      <stop offset="50%" style="stop-color:#3FB8F0"/>
-      <stop offset="100%" style="stop-color:#F0A500"/>
-    </linearGradient>
-    <radialGradient id="gl1" cx="20%" cy="40%">
-      <stop offset="0%" style="stop-color:#5BBF72;stop-opacity:.18"/>
-      <stop offset="100%" style="stop-color:#5BBF72;stop-opacity:0"/>
-    </radialGradient>
-    <radialGradient id="gl2" cx="80%" cy="60%">
-      <stop offset="0%" style="stop-color:#F0A500;stop-opacity:.12"/>
-      <stop offset="100%" style="stop-color:#F0A500;stop-opacity:0"/>
-    </radialGradient>
-    <radialGradient id="gl3" cx="55%" cy="30%">
-      <stop offset="0%" style="stop-color:#3FB8F0;stop-opacity:.1"/>
-      <stop offset="100%" style="stop-color:#3FB8F0;stop-opacity:0"/>
-    </radialGradient>
-    <filter id="blur"><feGaussianBlur stdDeviation="2"/></filter>
-    <linearGradient id="fade" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#02060E;stop-opacity:0"/>
-      <stop offset="100%" style="stop-color:#02060E;stop-opacity:1"/>
-    </linearGradient>
-  </defs>
-
-  <!-- Background -->
-  <rect width="1200" height="400" fill="url(#bg)"/>
-
-  <!-- Grid lines -->
-  <g stroke="rgba(91,191,114,0.055)" stroke-width="1">
-    <line x1="0" y1="50" x2="1200" y2="50"/><line x1="0" y1="100" x2="1200" y2="100"/>
-    <line x1="0" y1="150" x2="1200" y2="150"/><line x1="0" y1="200" x2="1200" y2="200"/>
-    <line x1="0" y1="250" x2="1200" y2="250"/><line x1="0" y1="300" x2="1200" y2="300"/>
-    <line x1="0" y1="350" x2="1200" y2="350"/>
-    <line x1="100" y1="0" x2="100" y2="400"/><line x1="200" y1="0" x2="200" y2="400"/>
-    <line x1="300" y1="0" x2="300" y2="400"/><line x1="400" y1="0" x2="400" y2="400"/>
-    <line x1="500" y1="0" x2="500" y2="400"/><line x1="600" y1="0" x2="600" y2="400"/>
-    <line x1="700" y1="0" x2="700" y2="400"/><line x1="800" y1="0" x2="800" y2="400"/>
-    <line x1="900" y1="0" x2="900" y2="400"/><line x1="1000" y1="0" x2="1000" y2="400"/>
-    <line x1="1100" y1="0" x2="1100" y2="400"/>
-  </g>
-
-  <!-- Glow blobs -->
-  <ellipse cx="220" cy="160" rx="320" ry="220" fill="url(#gl1)"/>
-  <ellipse cx="980" cy="250" rx="280" ry="200" fill="url(#gl2)"/>
-  <ellipse cx="600" cy="100" rx="240" ry="160" fill="url(#gl3)"/>
-
-  <!-- Decorative circles -->
-  <circle cx="1080" cy="80" r="60" fill="none" stroke="rgba(91,191,114,.08)" stroke-width="1.5"/>
-  <circle cx="1080" cy="80" r="40" fill="none" stroke="rgba(91,191,114,.06)" stroke-width="1"/>
-  <circle cx="120" cy="330" r="50" fill="none" stroke="rgba(240,165,0,.08)" stroke-width="1.5"/>
-  <circle cx="600" cy="380" r="80" fill="none" stroke="rgba(63,184,240,.06)" stroke-width="1"/>
-
-  <!-- Floating coins right side -->
-  <text x="950" y="90" font-size="28" opacity=".22" fill="#F0A500">🪙</text>
-  <text x="1050" y="170" font-size="22" opacity=".18" fill="#F0A500">💰</text>
-  <text x="900" y="220" font-size="18" opacity=".15" fill="#5BBF72">🪙</text>
-  <text x="1100" y="280" font-size="24" opacity=".16" fill="#F0A500">🪙</text>
-  <text x="150" y="80" font-size="20" opacity=".14" fill="#5BBF72">💎</text>
-  <text x="80" y="280" font-size="18" opacity=".13" fill="#3FB8F0">🪙</text>
-
-  <!-- YouTube play button shape -->
-  <rect x="760" y="100" width="180" height="130" rx="20" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
-  <polygon points="800,135 800,195 860,165" fill="rgba(255,255,255,.12)"/>
-  <!-- Progress bar on fake video -->
-  <rect x="760" y="225" width="180" height="3" rx="2" fill="rgba(255,255,255,.05)"/>
-  <rect x="760" y="225" width="110" height="3" rx="2" fill="url(#sk)"/>
-  <!-- Fake like/subscribe icons -->
-  <text x="765" y="250" font-size="11" fill="rgba(255,255,255,.3)">👍 4.2K</text>
-  <text x="820" y="250" font-size="11" fill="rgba(255,255,255,.3)">🔔 Subscribe</text>
-
-  <!-- Second mini card -->
-  <rect x="960" y="120" width="140" height="100" rx="14" fill="rgba(255,255,255,.025)" stroke="rgba(240,165,0,.12)" stroke-width="1"/>
-  <text x="975" y="150" font-size="12" fill="rgba(255,255,255,.35)">💸 Withdrawal</text>
-  <text x="975" y="172" font-size="20" font-family="sans-serif" font-weight="700" fill="#F0A500">+500</text>
-  <text x="975" y="190" font-size="11" fill="rgba(91,191,114,.7)">Coins Earned</text>
-  <rect x="975" y="198" width="100" height="3" rx="2" fill="url(#go)"/>
-
-  <!-- Main logo box -->
-  <rect x="60" y="120" width="68" height="68" rx="18" fill="url(#gr)" opacity=".95"/>
-  <rect x="60" y="120" width="68" height="68" rx="18" fill="none" stroke="rgba(91,191,114,.4)" stroke-width="1.5"/>
-  <text x="94" y="163" text-anchor="middle" font-size="32">📺</text>
-
-  <!-- Main title -->
-  <text x="148" y="158" font-family="Syne,sans-serif" font-size="42" font-weight="800" fill="white" opacity=".97">GM Tube</text>
-  <text x="148" y="158" font-family="Syne,sans-serif" font-size="42" font-weight="800" fill="white" opacity=".97"/>
-  <!-- "Pro" in gradient color -->
-  <text x="358" y="158" font-family="Syne,sans-serif" font-size="42" font-weight="800" fill="url(#sk)">Pro</text>
-
-  <!-- Subtitle -->
-  <text x="148" y="185" font-family="DM Sans,sans-serif" font-size="16" fill="rgba(255,255,255,.48)">Complete Tasks · Earn Coins · Withdraw Anytime</text>
-
-  <!-- Divider line -->
-  <rect x="148" y="198" width="200" height="2" rx="1" fill="url(#sk)" opacity=".6"/>
-
-  <!-- Badges -->
-  <rect x="148" y="216" width="110" height="28" rx="99" fill="rgba(91,191,114,.12)" stroke="rgba(91,191,114,.22)" stroke-width="1"/>
-  <text x="203" y="234" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="600" fill="#86EFA6">⚡ Live Now</text>
-
-  <rect x="270" y="216" width="130" height="28" rx="99" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
-  <text x="335" y="234" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="600" fill="rgba(255,255,255,.7)">👥 50K+ Members</text>
-
-  <rect x="412" y="216" width="120" height="28" rx="99" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
-  <text x="472" y="234" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="600" fill="rgba(255,255,255,.7)">🛡️ 100% Verified</text>
-
-  <rect x="544" y="216" width="110" height="28" rx="99" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
-  <text x="599" y="234" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="600" fill="rgba(255,255,255,.7)">⏰ 24hr Payout</text>
-
-  <!-- Bottom fade -->
-  <rect width="1200" height="400" fill="url(#fade)"/>
-</svg>
+<!-- SVG Cover -->
+<div class="cover-svg">
+  <h1>📺 GM TUBE <span style="background:linear-gradient(135deg,#F0A500,#5BBF72); -webkit-background-clip:text; background-clip:text; color:transparent;">PRO</span></h1>
+  <p>Earn Coins by Watching Videos · Convert Coins to PKR · Admin Withdraw JazzCash</p>
 </div>
 
-<!-- ╔══════════════════════════════════════════╗
-     ║                  NAV                     ║
-     ╚══════════════════════════════════════════╝ -->
-<nav class="nav">
-  <div class="ni">
-    <!-- Logo: clicking 5 times opens admin panel -->
-    <div class="logo" id="logoClick">
-      <div class="logo-box" id="logoBox">📺</div>
-      <div class="logo-tx">GM Tube Pro</div>
-    </div>
-    <div style="display:flex;align-items:center;gap:9px">
-      <div class="cpill"><i class="fas fa-coins"></i><span id="navC">0</span> Coins</div>
-      <button class="btn bp bsm" onclick="openAdmin()"><i class="fas fa-shield-halved"></i> Admin</button>
-    </div>
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="logo-area" id="logoClickTrigger">
+    <div class="logo-icon">🎬</div>
+    <div class="logo-text">GM TUBE</div>
+  </div>
+  <div style="display: flex; gap: 12px; align-items: center;">
+    <div class="coin-badge"><i class="fas fa-coins"></i> <span id="navCoins">0</span> Coins</div>
+    <button class="btn-sm btn-green" onclick="openAdminPanel()"><i class="fas fa-shield-alt"></i> Admin</button>
   </div>
 </nav>
 
-<div class="wrap">
+<div class="wrapper">
+  <!-- Stats -->
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-icon"><i class="fas fa-coins"></i></div><div><div class="stat-label">My Coins</div><div class="stat-value" id="statCoins">0</div></div></div>
+    <div class="stat-card"><div class="stat-icon"><i class="fas fa-check-circle"></i></div><div><div class="stat-label">Completed</div><div class="stat-value" id="statCompleted">0</div></div></div>
+    <div class="stat-card"><div class="stat-icon"><i class="fas fa-clock"></i></div><div><div class="stat-label">Pending Tasks</div><div class="stat-value" id="statPending">0</div></div></div>
+    <div class="stat-card"><div class="stat-icon"><i class="fas fa-chart-line"></i></div><div><div class="stat-label">Total Earned</div><div class="stat-value" id="statTotalEarned">0</div></div></div>
+  </div>
 
-<!-- STATS -->
-<div class="sgrid">
-  <div class="sc"><div class="si ig"><i class="fas fa-coins"></i></div><div><div class="sl">My Coins</div><div class="sv" id="s1">0</div></div></div>
-  <div class="sc"><div class="si ib"><i class="fas fa-check-circle"></i></div><div><div class="sl">Completed</div><div class="sv" id="s2">0</div></div></div>
-  <div class="sc"><div class="si io"><i class="fas fa-list-check"></i></div><div><div class="sl">Remaining</div><div class="sv" id="s3">0</div></div></div>
-  <div class="sc"><div class="si ip"><i class="fas fa-star"></i></div><div><div class="sl">Total Earned</div><div class="sv" id="s4">0</div></div></div>
-</div>
+  <!-- Announcements -->
+  <div id="announcementBox" style="margin-bottom:20px;"></div>
 
-<!-- ANNOUNCEMENTS -->
-<div class="sec" id="msgSec" style="display:none">
+  <!-- Tasks Panel -->
   <div class="panel">
-    <div class="ph"><div class="pt"><div class="dot"></div>📣 Announcements</div></div>
-    <div id="msgList"></div>
+    <div class="panel-header"><div class="panel-title"><div class="green-dot"></div>🚀 Complete Tasks & Earn Coins</div></div>
+    <div class="task-tabs" id="taskTabList">
+      <button class="tab-btn active" data-cat="watch">🎬 Watch Video</button>
+      <button class="tab-btn" data-cat="like">👍 Like</button>
+      <button class="tab-btn" data-cat="subscribe">🔔 Subscribe</button>
+      <button class="tab-btn" data-cat="comment">💬 Comment</button>
+      <button class="tab-btn" data-cat="share">📢 Share</button>
+      <button class="tab-btn" data-cat="views">👁️ Views</button>
+    </div>
+    <div id="tasksContainer" class="task-grid"></div>
+  </div>
+
+  <!-- Activity Log -->
+  <div class="panel">
+    <div class="panel-header"><div class="panel-title"><div class="green-dot"></div>📜 Recent Activity</div></div>
+    <div id="activityList"></div>
   </div>
 </div>
 
-<!-- TASKS -->
-<div class="sec">
-  <div class="panel">
-    <div class="ph">
-      <div class="pt"><div class="dot"></div>Available Tasks</div>
-      <span style="font-size:11px;color:var(--t3);font-weight:500">Task complete karo → Coins kamao</span>
-    </div>
-    <div class="ttabs" id="tabBar">
-      <button class="ttab on" onclick="swTab(this,'watch')">🎬 Watch</button>
-      <button class="ttab" onclick="swTab(this,'like')">👍 Like</button>
-      <button class="ttab" onclick="swTab(this,'subscribe')">🔔 Subscribe</button>
-      <button class="ttab" onclick="swTab(this,'comment')">💬 Comment</button>
-      <button class="ttab" onclick="swTab(this,'share')">📢 Share</button>
-      <button class="ttab" onclick="swTab(this,'views')">👁️ Views</button>
-    </div>
-    <div class="tpane on" id="tp-watch"><div class="tgrid" id="g-watch"></div></div>
-    <div class="tpane" id="tp-like"><div class="tgrid" id="g-like"></div></div>
-    <div class="tpane" id="tp-subscribe"><div class="tgrid" id="g-subscribe"></div></div>
-    <div class="tpane" id="tp-comment"><div class="tgrid" id="g-comment"></div></div>
-    <div class="tpane" id="tp-share"><div class="tgrid" id="g-share"></div></div>
-    <div class="tpane" id="tp-views"><div class="tgrid" id="g-views"></div></div>
-  </div>
-</div>
-
-<!-- ACTIVITY -->
-<div class="sec">
-  <div class="panel">
-    <div class="ph"><div class="pt"><div class="dot"></div>Activity Log</div></div>
-    <div id="actList"></div>
-  </div>
-</div>
-
-</div><!-- /wrap -->
-
-
-
-<!-- ╔══════════════════════════════════════════╗
-     ║       ADMIN PANEL MODAL                  ║
-     ╚══════════════════════════════════════════╝ -->
-<div class="ov" id="aOv">
-  <div class="modal">
-    <div class="mh">
-      <div class="mt"><i class="fas fa-shield-halved" style="color:var(--gold)"></i>Admin Control Panel</div>
-      <div class="cx" onclick="cOv('aOv')">×</div>
-    </div>
-    <div class="mb">
-
-      <!-- LOGIN -->
-      <div id="aLogin">
-        <div class="alb">
-          <span class="al-ic">🔐</span>
-          <div class="al-tit">Admin Login</div>
-          <div class="al-sub">Sirf authorized admin access kar sakta hai</div>
-        </div>
-        <div class="f">
-          <label>Admin Email</label>
-          <input class="inp" id="aEml" type="email" placeholder="admin@example.com" autocomplete="off"/>
-        </div>
-        <div class="f">
-          <label>Password</label>
-          <input class="inp" id="aPwd" type="password" placeholder="••••••••" autocomplete="new-password"/>
-        </div>
-        <button class="btn bp bfw" onclick="doLogin()" style="margin-top:5px">
-          <i class="fas fa-unlock-alt"></i> Admin Panel Kholein
-        </button>
+<!-- ADMIN MODAL -->
+<div id="adminModal" class="modal-overlay">
+  <div class="modal-container">
+    <div class="modal-header"><h3><i class="fas fa-crown"></i> Admin Panel</h3><button onclick="closeAdminModal()" style="background:none; border:none; color:white; font-size:24px;">&times;</button></div>
+    <div class="modal-body">
+      <div id="adminLoginArea">
+        <div style="margin-bottom:20px;text-align:center;"><i class="fas fa-lock" style="font-size:40px;color:var(--gold)"></i><p>Admin Credentials Required</p></div>
+        <input type="email" id="adminEmail" class="input-field" placeholder="Email" value="ghulammujtaba30@gmail.com" readonly disabled style="opacity:0.7;">
+        <input type="password" id="adminPass" class="input-field" placeholder="Password">
+        <button class="btn-sm btn-green" onclick="adminLogin()">Login & Access</button>
       </div>
-
-      <!-- DASHBOARD -->
-      <div id="aDash" style="display:none">
-        <div class="asr">
-          <div class="ast"><div class="ast-v" id="aE">PKR 0</div><div class="ast-l">Earning</div></div>
-          <div class="ast"><div class="ast-v" id="aPd">0</div><div class="ast-l">Pending</div></div>
-          <div class="ast"><div class="ast-v" id="aTk">0</div><div class="ast-l">Tasks</div></div>
-          <div class="ast"><div class="ast-v" id="aCn">0</div><div class="ast-l">Coins</div></div>
+      <div id="adminDashboardArea" style="display:none;">
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">
+          <div class="stat-card" style="background:#071120;"><div>💰 PKR Earned</div><div id="adminPkrEarn" style="font-size:22px;font-weight:800;">0</div></div>
+          <div class="stat-card" style="background:#071120;"><div>⏳ Withdrawals</div><div id="adminPendingCount" style="font-size:22px;">0</div></div>
         </div>
-        <div class="atabs">
-          <button class="atab on" onclick="aTab(this,'aAT')">➕ Task Add</button>
-          <button class="atab" onclick="aTab(this,'aMT')">📋 Tasks</button>
-          <button class="atab" onclick="aTab(this,'aWD')">💸 Withdrawals</button>
-          <button class="atab" onclick="aTab(this,'aCC')">🪙 Coins</button>
-          <button class="atab" onclick="aTab(this,'aBM')">📣 Message</button>
-          <button class="atab" onclick="aTab(this,'aST')">⚙️ Settings</button>
+        <div class="admin-tabs">
+          <button class="admin-tab active" data-apane="addTaskPane">➕ Add Task</button>
+          <button class="admin-tab" data-apane="manageTasksPane">📋 Manage Tasks</button>
+          <button class="admin-tab" data-apane="withdrawPane">💸 Withdrawals</button>
+          <button class="admin-tab" data-apane="coinsPane">🪙 Manage Coins</button>
+          <button class="admin-tab" data-apane="messagePane">📣 Broadcast</button>
+          <button class="admin-tab" data-apane="settingsPane">⚙️ Settings</button>
         </div>
-
-        <!-- ADD TASK -->
-        <div class="apane on" id="aAT">
-          <div class="f"><label>Task Type</label>
-            <select class="sel" id="atType" onchange="onTyp()">
-              <option value="watch">🎬 Watch Video</option>
-              <option value="like">👍 Like</option>
-              <option value="subscribe">🔔 Subscribe</option>
-              <option value="comment">💬 Comment</option>
-              <option value="share">📢 Share</option>
-              <option value="views">👁️ Views</option>
-            </select>
-          </div>
-          <div class="f"><label>Title</label><input class="inp" id="atTit" placeholder="Task ka title..."/></div>
-          <div class="f"><label>URL</label><input class="inp" id="atUrl" placeholder="https://youtube.com/..."/></div>
-          <div class="g2">
-            <div class="f"><label>Coins Reward</label><input class="inp" type="number" id="atCn" placeholder="e.g. 50" min="1"/></div>
-            <div class="f" id="atSW"><label>Watch Time (sec, min 8)</label><input class="inp" type="number" id="atSec" placeholder="e.g. 30" min="8"/></div>
-          </div>
-          <button class="btn bp bfw" onclick="doAdd()"><i class="fas fa-plus-circle"></i> Task Add Karein</button>
+        <!-- Add Task -->
+        <div id="addTaskPane" class="admin-pane active">
+          <select id="taskType" class="input-field"><option value="watch">Watch Video</option><option value="like">Like</option><option value="subscribe">Subscribe</option><option value="comment">Comment</option><option value="share">Share</option><option value="views">Views</option></select>
+          <input id="taskTitle" class="input-field" placeholder="Title"><input id="taskUrl" class="input-field" placeholder="Video / Channel URL">
+          <input id="taskCoins" class="input-field" type="number" placeholder="Coins Reward"><div id="watchSecDiv"><input id="watchSeconds" class="input-field" type="number" placeholder="Required watch seconds (min 8)"></div>
+          <button class="btn-sm btn-green" onclick="adminAddTask()"><i class="fas fa-plus"></i> Create Task</button>
         </div>
-
-        <!-- MANAGE TASKS -->
-        <div class="apane" id="aMT"><div id="aTkL"></div></div>
-
-        <!-- WITHDRAWALS — Admin dekhta hai poori detail + payment info -->
-        <div class="apane" id="aWD">
-          <div class="slbl">⏳ Pending Requests</div><div id="aWP"></div>
-          <hr class="sep">
-          <div class="slbl">✅ Paid</div><div id="aWD2"></div>
-        </div>
-
-        <!-- COINS -->
-        <div class="apane" id="aCC">
-          <p style="font-size:12px;color:var(--t2);margin-bottom:14px;line-height:1.6">Client ke coins manually adjust karein.</p>
-          <div class="f"><label>Coins Amount</label><input class="inp" type="number" id="acA" placeholder="e.g. 100" min="1"/></div>
-          <div class="g2" style="margin-bottom:16px">
-            <button class="btn bp" onclick="adjC(true)"><i class="fas fa-plus"></i> Add</button>
-            <button class="btn bd" onclick="adjC(false)"><i class="fas fa-minus"></i> Remove</button>
-          </div>
-          <hr class="sep">
-          <p style="font-size:12px;color:var(--t2);margin-bottom:12px;line-height:1.6">Admin earning record mein add karein (PKR)</p>
-          <div class="f"><label>PKR Amount</label><input class="inp" type="number" id="aeA" placeholder="e.g. 500" min="1"/></div>
-          <button class="btn bgo" onclick="addE()"><i class="fas fa-rupee-sign"></i> Earning Add</button>
-        </div>
-
-        <!-- BROADCAST -->
-        <div class="apane" id="aBM">
-          <div class="f"><label>Message (sabko dikhega)</label>
-            <textarea class="txa inp" id="amT" placeholder="Naye tasks aa gaye hain! Ab earn karein..."></textarea>
-          </div>
-          <button class="btn bpu bfw" onclick="sendM()"><i class="fas fa-bullhorn"></i> Message Bhejein</button>
-        </div>
-
-        <!-- SETTINGS -->
-        <div class="apane" id="aST">
-          <div class="g2">
-            <div class="f"><label>Coins per PKR 1</label><input class="inp" type="number" id="sCpr" placeholder="10"/></div>
-            <div class="f"><label>Min Withdraw (Coins)</label><input class="inp" type="number" id="sMin" placeholder="500"/></div>
-          </div>
-          <div class="f"><label>Admin Cut % (per withdrawal)</label><input class="inp" type="number" id="sCut" placeholder="10" min="0" max="50"/></div>
-          <button class="btn bp bfw" onclick="saveSt()" style="margin-bottom:13px"><i class="fas fa-save"></i> Settings Save</button>
-          <hr class="sep">
-          <button class="btn bh bfw" onclick="doOut()"><i class="fas fa-sign-out-alt"></i> Logout</button>
-        </div>
-      </div><!-- /aDash -->
+        <div id="manageTasksPane" class="admin-pane"><div id="manageTasksList"></div></div>
+        <div id="withdrawPane" class="admin-pane"><div id="withdrawListAdmin"></div></div>
+        <div id="coinsPane" class="admin-pane"><input id="coinAmount" class="input-field" type="number" placeholder="Coins"><button class="btn-sm btn-green" onclick="adminAddCoins()">➕ Add Coins to Client</button><button class="btn-sm" style="background:var(--red);margin-left:10px;" onclick="adminRemoveCoins()">➖ Remove Coins</button><hr><input id="pkrAmountAdmin" class="input-field" type="number" placeholder="Admin PKR earning"><button class="btn-sm" style="background:var(--gold);" onclick="addAdminPkr()">Add PKR Earnings</button></div>
+        <div id="messagePane" class="admin-pane"><textarea id="broadcastMsg" class="input-field" rows="2" placeholder="Global announcement..."></textarea><button class="btn-sm btn-green" onclick="sendBroadcast()">Send to All</button></div>
+        <div id="settingsPane" class="admin-pane"><label>Coins per PKR 1</label><input id="cprSetting" class="input-field" type="number"><label>Min Withdraw Coins</label><input id="minWithdrawSetting" class="input-field" type="number"><button class="btn-sm btn-green" onclick="saveSettings()">Save Settings</button><hr><button class="btn-sm" style="background:var(--red);" onclick="adminLogout()">Logout</button></div>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
-// ═══════════ STORAGE ═══════════
-const K={c:'gm5_coins',d:'gm5_done',wp:'gm5_wp',wt:'gm5_wt',st:'gm5_st',wr:'gm5_wr',ae:'gm5_ae',ms:'gm5_ms',ac:'gm5_ac',cf:'gm5_cf'};
-const ADM={e:'ghulammujtaba30@gmail.com',p:'Sahibzada6060'};
-const TL={watch:'Watch',like:'Like',subscribe:'Subscribe',comment:'Comment',share:'Share',views:'Views'};
-const TE={watch:'🎬',like:'👍',subscribe:'🔔',comment:'💬',share:'📢',views:'👁️'};
-const TC={watch:'cw',like:'cl',subscribe:'cs',comment:'cc',share:'csh',views:'cv'};
+  // ---------- STORAGE KEYS ----------
+  const STORAGE = {
+    coins: 'gmtube_coins',
+    doneTasks: 'gmtube_done',
+    watchProgress: 'gmtube_wprog',
+    watchTasks: 'gmtube_wtasks',
+    socialTasks: 'gmtube_stasks',
+    withdrawals: 'gmtube_withdraws',
+    adminEarnings: 'gmtube_adminkr',
+    announcements: 'gmtube_announce',
+    activity: 'gmtube_activity',
+    config: 'gmtube_config'
+  };
+  const ADMIN_CRED = { email: 'ghulammujtaba30@gmail.com', pass: 'Sahibzada6060' };
+  let activeWatchInterval = null;
 
-function ld(k,fb){try{const v=localStorage.getItem(k);return v!=null?JSON.parse(v):fb}catch{return fb}}
-function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
-function cfg(){return ld(K.cf,{cpr:10,minW:500,cut:10})}
-function gc(){return ld(K.c,0)}
-function sc(n){sv(K.c,Math.max(0,Math.floor(n)||0))}
-function gd(){return ld(K.d,{})}
-function gwp(){return ld(K.wp,{})}
-function log(ic,msg){let a=ld(K.ac,[]);a.unshift({ic,msg,t:new Date().toLocaleString()});if(a.length>40)a=a.slice(0,40);sv(K.ac,a)}
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-function el(id){return document.getElementById(id)}
-function tx(id,v){const e=el(id);if(e)e.textContent=v}
-function yt(url){try{const u=new URL(url);if(u.hostname.includes('youtube')||u.hostname.includes('youtu.be')){const id=u.searchParams.get('v')||u.pathname.replace('/','').split('?')[0];return id?'https://i.ytimg.com/vi/'+id+'/mqdefault.jpg':''}}catch{}return''}
-function sw(o){return Swal.fire({background:'#0A1422',color:'#E8F2FF',confirmButtonColor:'#5BBF72',...o})}
-function emp(ic,msg){return'<div class="emp"><div class="emp-i">'+ic+'</div><p>'+msg+'</p></div>'}
+  function getItem(key, def=null){ let d=localStorage.getItem(key); return d?JSON.parse(d):def; }
+  function setItem(key,val){ localStorage.setItem(key,JSON.stringify(val)); }
 
-// ═══════════ ADMIN OPEN ═══════════
-function openAdmin(){
-  el('aOv').classList.add('open');
-  if(adminIn)aRef();
-}
-
-// ═══════════ STATS ═══════════
-function updS(){
-  const c=gc(),d=gd(),dc=Object.keys(d).length;
-  const wt=ld(K.wt,[]),st=ld(K.st,[]),tot=wt.length+st.length,rem=Math.max(0,tot-dc);
-  tx('navC',c);tx('s1',c);tx('s2',dc);tx('s3',rem);tx('s4',c);
-}
-
-function swTab(btn,type){
-  document.querySelectorAll('#tabBar .ttab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
-  document.querySelectorAll('.tpane').forEach(p=>p.classList.remove('on'));
-  el('tp-'+type)?.classList.add('on');
-}
-
-// ═══════════ RENDER WATCH ═══════════
-function rWatch(){
-  const tasks=ld(K.wt,[]),d=gd(),wp=gwp(),g=el('g-watch');
-  if(!tasks.length){g.innerHTML=emp('🎬','Admin ne abhi koi watch task nahi lagaya');return}
-  g.innerHTML=tasks.map(t=>{
-    const k='w_'+t.id,done=!!d[k],pr=wp[k]||0;
-    const pct=done?100:Math.min(100,Math.round(pr/t.watchTime*100));
-    const th=t.thumb||yt(t.url);
-    return'<div class="tcard">'
-      +'<span class="chip cw">🎬 Watch</span>'
-      +'<div class="thumb">'+(th?'<img src="'+esc(th)+'" loading="lazy" onerror="this.parentElement.innerHTML=\'<div class=tn>🎬</div>\'">'
-        :'<div class="tn">🎬</div>')+'</div>'
-      +'<div class="tc-tit">'+esc(t.title)+'</div>'
-      +'<div class="pw"><div class="pb" id="pb_'+t.id+'" style="width:'+pct+'%"></div></div>'
-      +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'
-        +'<span style="font-size:11px;color:var(--t3)">'+(done?'✅ Mukammal':(pr>0?pr+'/'+t.watchTime+'s':'⏱️ '+t.watchTime+'s watch karo'))+'</span>'
-        +'<span class="coi"><i class="fas fa-coins"></i>+'+t.coins+'</span>'
-      +'</div>'
-      +'<div class="tfoot">'
-        +(done
-          ?'<span class="don"><i class="fas fa-check-circle"></i>+'+t.coins+' Coins Mil Gaye</span>'
-          :'<button class="btn bp bsm" onclick="startW('+t.id+')"><i class="fas fa-play"></i>Watch & Earn</button>'
-           +'<a href="'+esc(t.url)+'" target="_blank" rel="noopener" class="btn bsk bsm" onclick="void 0"><i class="fas fa-external-link-alt"></i>Open</a>')
-      +'</div></div>';
-  }).join('');
-}
-
-// ═══════════ RENDER SOCIAL ═══════════
-function rSocial(type){
-  const tasks=ld(K.st,[]).filter(t=>t.type===type),d=gd(),g=el('g-'+type);
-  if(!tasks.length){g.innerHTML=emp(TE[type],'Is category mein abhi koi task nahi');return}
-  g.innerHTML=tasks.map(t=>{
-    const k='s_'+t.id,done=!!d[k];
-    return'<div class="tcard">'
-      +'<span class="chip '+TC[type]+'">'+TE[type]+' '+TL[type]+'</span>'
-      +'<div class="tc-tit">'+esc(t.title)+'</div>'
-      +'<div class="tc-url">🔗 '+esc(t.url)+'</div>'
-      +'<div class="tfoot">'
-        +'<span class="coi"><i class="fas fa-coins"></i>+'+t.coins+'</span>'
-        +(done
-          ?'<span class="don"><i class="fas fa-check-circle"></i>Done</span>'
-          :'<div style="display:flex;gap:6px;flex-wrap:wrap">'
-            +'<a href="'+esc(t.url)+'" target="_blank" rel="noopener" onclick="markOpened('+t.id+')" class="btn bp bsm"><i class="fas fa-external-link-alt"></i>'+TL[type]+'</a>'
-            +'<button class="btn bh bsm" onclick="claimS('+t.id+')"><i class="fas fa-coins"></i>Claim</button>'
-          +'</div>')
-      +'</div></div>';
-  }).join('');
-}
-
-function rMsgs(){
-  const msgs=ld(K.ms,[]),sec=el('msgSec'),list=el('msgList');
-  if(!msgs.length){sec.style.display='none';return}
-  sec.style.display='block';
-  list.innerHTML=msgs.map(m=>'<div class="mc"><div class="mc-b">'+esc(m.msg)+'</div><div class="mc-t">'+esc(m.t||'')+'</div></div>').join('');
-}
-
-function rAct(){
-  const arr=ld(K.ac,[]),list=el('actList');
-  if(!arr.length){list.innerHTML=emp('📊','Abhi koi activity nahi — pehle task complete karein');return}
-  list.innerHTML=arr.slice(0,15).map(a=>'<div class="ai"><div class="ai-i">'+(a.ic||'✅')+'</div><div style="flex:1"><div class="ai-t">'+esc(a.msg)+'</div><div class="ai-d">'+esc(a.t||'')+'</div></div></div>').join('');
-}
-
-function rAll(){updS();rWatch();['like','subscribe','comment','share','views'].forEach(rSocial);rMsgs();rAct()}
-
-// ═══════════ WATCH TIMER (ANTI-CHEAT) ═══════════
-// Timer real-time mein chalta hai — band karne pe progress save hoti hai
-// Task tab complete hoga jab poora time guzre
-const timers={};
-function startW(tid){
-  const tasks=ld(K.wt,[]),t=tasks.find(x=>x.id===tid);
-  if(!t)return;
-  const d=gd();
-  if(d['w_'+tid]){sw({title:'Pehle se Complete!',text:'Ye task aap already kar chuke hain.',icon:'info'});return}
-  // Open video
-  window.open(t.url,'_blank');
-  const wp=gwp();let cur=wp['w_'+tid]||0;
-  Swal.fire({
-    title:'⏱️ Watch karo aur kamao',
-    html:'<div style="font-family:DM Sans,sans-serif;color:#E8F2FF;padding:8px 0">'
-      +'<div style="font-size:12px;color:#6A90B0;margin-bottom:14px;line-height:1.5">'+esc(t.title)+'</div>'
-      +'<div style="font-family:Syne,sans-serif;font-size:62px;font-weight:800;color:#5BBF72;line-height:1" id="sc_t">'+Math.max(0,t.watchTime-cur)+'</div>'
-      +'<div style="font-size:11px;color:#243650;margin-top:4px;text-transform:uppercase;letter-spacing:1px">seconds baaki</div>'
-      +'<div style="background:#040A15;border-radius:99px;height:6px;margin-top:18px;overflow:hidden">'
-        +'<div id="sb_t" style="background:linear-gradient(90deg,#F0A500,#5BBF72);height:100%;border-radius:99px;width:'+Math.round(cur/t.watchTime*100)+'%;transition:width .6s"></div>'
-      +'</div>'
-      +'<div style="font-size:11px;color:#243650;margin-top:10px">⚠️ Ye window band mat karo</div>'
-      +'</div>',
-    showConfirmButton:false,showCancelButton:true,cancelButtonText:'Cancel',
-    background:'#0A1422',color:'#E8F2FF',allowOutsideClick:false,allowEscapeKey:false,
-    didOpen:()=>{
-      clearInterval(timers[tid]);
-      timers[tid]=setInterval(()=>{
-        const p=gwp();
-        cur=(p['w_'+tid]||0)+1;
-        p['w_'+tid]=cur;sv(K.wp,p);
-        const left=Math.max(0,t.watchTime-cur);
-        const sc=document.getElementById('sc_t');if(sc)sc.textContent=left;
-        const sb=document.getElementById('sb_t');if(sb)sb.style.width=Math.min(100,Math.round(cur/t.watchTime*100))+'%';
-        const pb=el('pb_'+tid);if(pb)pb.style.width=Math.min(100,Math.round(cur/t.watchTime*100))+'%';
-        if(cur>=t.watchTime){
-          clearInterval(timers[tid]);
-          // COINS SIRF TAB MILENGE JAB POORA TIME GUZRE
-          const dd=gd();dd['w_'+tid]=true;sv(K.d,dd);
-          sc(gc()+t.coins);
-          log('🎬','"'+t.title+'" watch mukammal — +'+t.coins+' Coins');
-          Swal.fire({title:'🎉 +'+t.coins+' Coins Mil Gaye!',text:'Watch task kamiyabi se mukammal!',icon:'success',background:'#0A1422',color:'#E8F2FF',timer:2500,showConfirmButton:false});
-          rAll();
-        }
-      },1000);
-    },
-    willClose:()=>clearInterval(timers[tid])
-  });
-}
-
-// Social task anti-cheat: link khola nahi to claim nahi hoga
-const opened={};
-function markOpened(tid){opened[tid]=true}
-
-function claimS(tid){
-  const t=ld(K.st,[]).find(x=>x.id===tid);
-  if(!t)return;
-  const d=gd();
-  if(d['s_'+tid]){sw({title:'Pehle se done hai!',icon:'info'});return}
-  // Anti-cheat: pehle link kholo
-  if(!opened[tid]){
-    sw({title:'Pehle task kholo!',text:'Upar wale button se task open karo, phir claim karo.',icon:'warning'});
-    return;
+  // default tasks init
+  function initData(){
+    if(!getItem(STORAGE.watchTasks, null)){
+      setItem(STORAGE.watchTasks, [{ id:1001, title:"Intro Video - Earn Coins", url:"https://www.youtube.com/watch?v=dQw4w9WgXcQ", coins:45, watchTime:12, thumb:"" }]);
+    }
+    if(!getItem(STORAGE.socialTasks, null)){
+      setItem(STORAGE.socialTasks, [
+        { id:2001, type:"like", title:"Like GM Tube Official", url:"https://youtube.com", coins:15 },
+        { id:2002, type:"subscribe", title:"Subscribe for daily tasks", url:"https://youtube.com", coins:30 }
+      ]);
+    }
+    if(!getItem(STORAGE.config, null)) setItem(STORAGE.config, { cpr:10, minWithdrawCoins:500 });
+    if(!getItem(STORAGE.coins, null)) setItem(STORAGE.coins,0);
+    if(!getItem(STORAGE.doneTasks, null)) setItem(STORAGE.doneTasks,{});
+    if(!getItem(STORAGE.watchProgress, null)) setItem(STORAGE.watchProgress,{});
+    if(!getItem(STORAGE.adminEarnings, null)) setItem(STORAGE.adminEarnings,0);
+    if(!getItem(STORAGE.withdrawals, null)) setItem(STORAGE.withdrawals,[]);
+    if(!getItem(STORAGE.announcements, null)) setItem(STORAGE.announcements,[]);
+    if(!getItem(STORAGE.activity, null)) setItem(STORAGE.activity,[]);
   }
-  Swal.fire({
-    title:'Task complete hua?',
-    html:'<div style="font-size:13px;color:#6A90B0;font-family:DM Sans,sans-serif;line-height:1.6">'+esc(t.title)+'</div>',
-    icon:'question',showCancelButton:true,
-    confirmButtonText:'✅ Han, kar liya',cancelButtonText:'Nahi abhi',
-    confirmButtonColor:'#5BBF72',background:'#0A1422',color:'#E8F2FF'
-  }).then(r=>{
-    if(!r.isConfirmed)return;
-    d['s_'+tid]=true;sv(K.d,d);
-    sc(gc()+t.coins);
-    log(TE[t.type]||'⭐',TL[t.type]+': "'+t.title+'" — +'+t.coins+' Coins');
-    Swal.fire({title:'🎉 +'+t.coins+' Coins!',icon:'success',background:'#0A1422',color:'#E8F2FF',timer:2000,showConfirmButton:false});
-    rAll();
-  });
-}
+  initData();
 
-// ═══════════ ADMIN ═══════════
-let adminIn=false;
-function cOv(id){el(id).classList.remove('open')}
-window.addEventListener('click',e=>{if(e.target===el('aOv'))el('aOv').classList.remove('open')});
+  function addActivity(icon, msg){ let act = getItem(STORAGE.activity,[]); act.unshift({ icon, msg, time: new Date().toLocaleString() }); if(act.length>30) act.pop(); setItem(STORAGE.activity,act); refreshUI(); }
+  function getCoins(){ return getItem(STORAGE.coins,0); }
+  function setCoins(val){ setItem(STORAGE.coins, Math.max(0,val)); refreshUI();}
+  function addCoins(amt){ setCoins(getCoins()+amt); addActivity('🪙', `+${amt} Coins earned!`); }
 
-function doLogin(){
-  const e=(el('aEml').value||'').trim().toLowerCase(),p=el('aPwd').value||'';
-  if(e===ADM.e&&p===ADM.p){
-    adminIn=true;el('aLogin').style.display='none';el('aDash').style.display='block';
-    aRef();
-    sw({title:'✅ Admin Access Mil Gaya',icon:'success',timer:1300,showConfirmButton:false});
-  }else{
-    sw({title:'❌ Galat Credentials',text:'Email ya password galat hai',icon:'error'});
+  // refresh stats, tasks, activity
+  function refreshUI(){
+    let coins = getCoins(); let done = getItem(STORAGE.doneTasks,{});
+    let wtasks = getItem(STORAGE.watchTasks,[]); let stasks = getItem(STORAGE.socialTasks,[]);
+    let totalTasks = wtasks.length + stasks.length;
+    let completedCount = Object.keys(done).length;
+    document.getElementById('navCoins').innerText=coins;
+    document.getElementById('statCoins').innerText=coins;
+    document.getElementById('statCompleted').innerText=completedCount;
+    document.getElementById('statPending').innerText=Math.max(0,totalTasks-completedCount);
+    document.getElementById('statTotalEarned').innerText=coins;
+    renderAnnouncements();
+    renderTasksByCategory();
+    renderActivityLog();
   }
-}
 
-function doOut(){adminIn=false;el('aLogin').style.display='block';el('aDash').style.display='none';el('aEml').value='';el('aPwd').value='';cOv('aOv')}
-
-function aTab(btn,pane){
-  document.querySelectorAll('.atab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
-  document.querySelectorAll('.apane').forEach(p=>p.classList.remove('on'));el(pane)?.classList.add('on');
-  aRef();
-}
-
-function onTyp(){el('atSW').style.display=el('atType').value==='watch'?'block':'none'}
-
-function doAdd(){
-  const type=el('atType').value,tit=(el('atTit').value||'').trim(),url=(el('atUrl').value||'').trim();
-  const cn=parseInt(el('atCn').value)||0;
-  if(!tit)return sw({title:'Title likhein',icon:'warning'});
-  if(!url.startsWith('http'))return sw({title:'Valid URL chahiye',text:'http ya https se shuru hona chahiye',icon:'warning'});
-  if(cn<1)return sw({title:'Coins reward likhein',icon:'warning'});
-  if(type==='watch'){
-    const sec=parseInt(el('atSec').value)||0;
-    if(sec<8)return sw({title:'Watch time kam se kam 8 seconds',icon:'warning'});
-    const wt=ld(K.wt,[]);wt.unshift({id:Date.now(),title:tit,url,coins:cn,watchTime:sec,thumb:yt(url)});sv(K.wt,wt);
-  }else{
-    const st=ld(K.st,[]);st.unshift({id:Date.now(),title:tit,url,type,coins:cn});sv(K.st,st);
+  function renderAnnouncements(){
+    let msgs = getItem(STORAGE.announcements,[]);
+    let box = document.getElementById('announcementBox');
+    if(msgs.length===0){ box.innerHTML=''; return; }
+    box.innerHTML = `<div class="panel" style="padding:12px 16px;"><div class="panel-title">📢 Announcements</div>${msgs.slice(0,2).map(m=>`<div class="msg-broadcast">📣 ${escapeHtml(m.msg)} <div style="font-size:10px;margin-top:4px;">${m.time}</div></div>`).join('')}</div>`;
   }
-  el('atTit').value='';el('atUrl').value='';el('atCn').value='';el('atSec').value='';
-  aRef();rAll();
-  sw({title:'Task Add Ho Gaya ✅',icon:'success',timer:1300,showConfirmButton:false});
-}
-
-function aRef(){
-  if(!adminIn)return;
-  const wt=ld(K.wt,[]),st=ld(K.st,[]),reqs=ld(K.wr,[]),ae=ld(K.ae,0);
-  const pend=reqs.filter(r=>r.status==='pending');
-  tx('aE','PKR '+ae);tx('aPd',pend.length);tx('aTk',wt.length+st.length);tx('aCn',gc());
-  const s=cfg();
-  if(el('sCpr'))el('sCpr').value=s.cpr;
-  if(el('sMin'))el('sMin').value=s.minW;
-  if(el('sCut'))el('sCut').value=s.cut;
-
-  // Tasks list
-  const all=[...wt.map(t=>({...t,_k:'watch'})),...st.map(t=>({...t,_k:t.type}))];
-  el('aTkL').innerHTML=all.length
-    ?all.map(t=>'<div class="tr"><div class="tri"><div class="tn2">'+(TE[t._k]||'⭐')+' '+esc(t.title)+'</div><div class="tm">+'+t.coins+' Coins · '+(TL[t._k]||t._k)+'</div></div>'
-      +'<button class="btn bd bxs" onclick="delT('+t.id+',\''+(t._k==='watch'?'w':'s')+'\')"><i class="fas fa-trash"></i></button></div>').join('')
-    :emp('📋','Koi task nahi');
-
-  // Pending withdrawals — admin ko poori detail dikhti hai
-  el('aWP').innerHTML=pend.length
-    ?pend.map(r=>'<div class="wrc">'
-      +'<div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:9px">'
-      +'<div>'
-      +'<div class="wrm">💸 Withdrawal Request</div>'
-      +'<div class="wri">👤 '+esc(r.name)+'</div>'
-      +'<div class="wri">📱 '+esc(r.acc)+'</div>'
-      +'<div class="wri">🪙 '+r.coins+' Coins → <b style="color:#5BBF72">PKR '+r.clientPkr+'</b>'+(r.cut?' (Admin: PKR '+r.cut+')':'')+'</div>'
-      +'<div class="wrt">🕐 '+esc(r.t||'')+'</div>'
-      +'</div>'
-      +'<button class="btn bp bsm" onclick="markP('+r.id+')"><i class="fas fa-check"></i>Paid</button>'
-      +'</div></div>').join('')
-    :emp('✅','Koi pending request nahi');
-
-  const paid=reqs.filter(r=>r.status==='paid');
-  el('aWD2').innerHTML=paid.length
-    ?paid.slice(0,8).map(r=>'<div class="pr">✅ '+esc(r.name)+' · '+esc(r.acc)+' · '+r.coins+' Coins · PKR '+r.clientPkr+' · '+esc(r.t||'')+'</div>').join('')
-    :'<div style="color:var(--t3);font-size:12px;padding:6px 0">Abhi koi paid withdrawal nahi</div>';
-}
-
-function delT(id,kind){
-  sw({title:'Task delete karein?',text:'Wapis nahi hoga.',icon:'warning',showCancelButton:true,confirmButtonColor:'#E84545'}).then(r=>{
-    if(!r.isConfirmed)return;
-    if(kind==='w')sv(K.wt,ld(K.wt,[]).filter(t=>t.id!==id));
-    else sv(K.st,ld(K.st,[]).filter(t=>t.id!==id));
-    aRef();rAll();
-    sw({title:'Delete Ho Gaya',icon:'success',timer:1200,showConfirmButton:false});
-  });
-}
-
-function markP(id){
-  const reqs=ld(K.wr,[]),i=reqs.findIndex(r=>r.id===id);
-  if(i<0)return;reqs[i].status='paid';sv(K.wr,reqs);
-  sw({title:'Paid Mark Ho Gaya ✅',icon:'success',timer:1400,showConfirmButton:false});
-  aRef();
-}
-
-function adjC(add){
-  const amt=parseInt(el('acA').value)||0;
-  if(amt<1)return sw({title:'Amount likhein',icon:'warning'});
-  sc(add?gc()+amt:gc()-amt);
-  log('🪙','Admin ne '+(add?'add':'remove')+' kiye '+amt+' coins');
-  aRef();rAll();el('acA').value='';
-  sw({title:(add?'+':'-')+amt+' Coins',icon:'success',timer:1300,showConfirmButton:false});
-}
-
-function addE(){
-  const amt=parseFloat(el('aeA').value)||0;
-  if(amt<1)return sw({title:'Amount likhein',icon:'warning'});
-  sv(K.ae,ld(K.ae,0)+amt);aRef();el('aeA').value='';
-  sw({title:'PKR '+amt+' Add Ho Gaya',icon:'success',timer:1300,showConfirmButton:false});
-}
-
-function sendM(){
-  const msg=(el('amT').value||'').trim();
-  if(!msg)return sw({title:'Message likhein',icon:'warning'});
-  const ms=ld(K.ms,[]);ms.unshift({id:Date.now(),msg,t:new Date().toLocaleString()});
-  sv(K.ms,ms);el('amT').value='';rAll();
-  sw({title:'📣 Message Send Ho Gaya!',icon:'success',timer:1400,showConfirmButton:false});
-}
-
-function saveSt(){
-  const cpr=parseInt(el('sCpr').value)||10,minW=parseInt(el('sMin').value)||500;
-  const cut=Math.min(50,Math.max(0,parseInt(el('sCut').value)||10));
-  sv(K.cf,{cpr,minW,cut});
-  sw({title:'Settings Save Ho Gayi ✅',icon:'success',timer:1400,showConfirmButton:false});
-  aRef();
-}
-
-// ═══════════ INIT ═══════════
-(function(){
-  onTyp();
-  if(!ld(K.wt,null)&&!ld(K.st,null)){
-    sv(K.wt,[{id:1001,title:'Welcome Video dekho aur pehle coins kamao!',url:'https://www.youtube.com/watch?v=dQw4w9WgXcQ',coins:50,watchTime:30,thumb:''}]);
-    sv(K.st,[
-      {id:1002,type:'like',title:'GM Tube Pro channel ko like karein',url:'https://youtube.com',coins:20},
-      {id:1003,type:'subscribe',title:'Subscribe karke daily coins kamao',url:'https://youtube.com',coins:35}
-    ]);
+  function renderActivityLog(){
+    let acts = getItem(STORAGE.activity,[]);
+    let container = document.getElementById('activityList');
+    if(acts.length===0){ container.innerHTML='<div style="text-align:center;color:#6A90B0;">✨ No activity yet. Complete tasks!</div>'; return; }
+    container.innerHTML = acts.slice(0,12).map(a=>`<div class="activity-item"><div class="act-icon">${a.icon}</div><div><div class="act-msg">${escapeHtml(a.msg)}</div><div class="act-time">${a.time}</div></div></div>`).join('');
   }
-  rAll();
-  setInterval(rAll,5000);
-})();
+
+  function escapeHtml(s){ return String(s).replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+
+  function renderTasksByCategory(){
+    let activeCat = document.querySelector('.tab-btn.active')?.dataset.cat || 'watch';
+    let wtasks = getItem(STORAGE.watchTasks,[]);
+    let stasks = getItem(STORAGE.socialTasks,[]);
+    let doneMap = getItem(STORAGE.doneTasks,{});
+    let watchProg = getItem(STORAGE.watchProgress,{});
+    let container = document.getElementById('tasksContainer');
+    let tasksToShow = [];
+    if(activeCat === 'watch') tasksToShow = wtasks.map(t => ({ ...t, type:'watch' }));
+    else tasksToShow = stasks.filter(s => s.type === activeCat).map(t => ({ ...t, type:t.type }));
+    if(tasksToShow.length===0){ container.innerHTML='<div style="grid-column:1/-1; text-align:center;padding:40px;">⏳ No tasks in this category. Admin will add soon.</div>'; return; }
+    container.innerHTML = tasksToShow.map(task => {
+      let taskKey = task.type==='watch' ? `w_${task.id}` : `s_${task.id}`;
+      let isDone = !!doneMap[taskKey];
+      let progress = 0;
+      if(task.type==='watch' && !isDone){ progress = watchProg[`w_${task.id}`] || 0; let pct = (progress/task.watchTime)*100; progress = Math.min(100,pct); }
+      let thumbUrl = task.thumb || '';
+      let rewardSpan = `<span class="coin-reward"><i class="fas fa-coins"></i> +${task.coins}</span>`;
+      let actionHtml = '';
+      if(isDone){
+        actionHtml = `<span style="background:rgba(91,191,114,0.1); padding:5px 12px; border-radius:60px;">✅ Completed</span>`;
+      } else if(task.type === 'watch'){
+        actionHtml = `<button class="btn-task" onclick="startWatchTask(${task.id},${task.watchTime},${task.coins},'${escapeHtml(task.url)}')"><i class="fas fa-play"></i> Watch & Earn</button>`;
+        if(progress>0 && progress<100) actionHtml += `<div class="progress-wrapper mt-1"><div class="progress-fill" style="width:${progress}%"></div></div>`;
+      } else {
+        actionHtml = `<button class="btn-task" onclick="openSocialTask(${task.id},'${escapeHtml(task.url)}',${task.coins},'${task.type}')"><i class="fas fa-external-link-alt"></i> Complete & Claim</button>`;
+      }
+      return `<div class="task-card"><div class="task-chip">${task.type==='watch'?'🎬 WATCH':task.type.toUpperCase()}</div><div class="thumb-place">${thumbUrl?`<img src="${thumbUrl}" onerror="this.src=''">`:'<i class="fas fa-video" style="font-size:32px;opacity:0.3;"></i>'}</div><div class="task-title">${escapeHtml(task.title)}</div><div style="display:flex;justify-content:space-between;align-items:center;"><span>${rewardSpan}</span></div><div class="task-footer">${actionHtml}</div></div>`;
+    }).join('');
+  }
+
+  // Watch: coins only if video watched full time (anti-cheat)
+  let activeTimer=null;
+  function startWatchTask(id, requiredSec, coinReward, videoUrl){
+    let doneMap = getItem(STORAGE.doneTasks,{});
+    if(doneMap[`w_${id}`]){ Swal.fire({title:"Already completed!",icon:"info",background:"#0A1422"}); return; }
+    let progressData = getItem(STORAGE.watchProgress,{});
+    let currentSec = progressData[`w_${id}`] || 0;
+    if(currentSec >= requiredSec){ completeWatchTask(id, coinReward); return; }
+    window.open(videoUrl, '_blank');
+    Swal.fire({
+      title: '⏳ Watch & Earn Coins',
+      html: `<div>Watch video for <strong>${requiredSec} seconds</strong><div id="watchTimerDisplay" style="font-size:48px;font-weight:800;margin:15px 0;">${requiredSec-currentSec}</div><div class="progress-wrapper"><div id="timerProgressFill" style="width:${(currentSec/requiredSec)*100}%;height:100%;background:linear-gradient(90deg,#F0A500,#5BBF72);"></div></div><small style="color:#aaa;">Don't close this window until timer ends!</small></div>`,
+      showConfirmButton: false,
+      allowOutsideClick: false,
+      didOpen: ()=>{
+        if(activeTimer) clearInterval(activeTimer);
+        activeTimer = setInterval(()=>{
+          let prog = getItem(STORAGE.watchProgress,{});
+          let now = (prog[`w_${id}`] || 0) + 1;
+          if(now >= requiredSec){
+            clearInterval(activeTimer);
+            prog[`w_${id}`] = requiredSec;
+            setItem(STORAGE.watchProgress, prog);
+            completeWatchTask(id, coinReward);
+            Swal.close();
+          } else {
+            prog[`w_${id}`] = now;
+            setItem(STORAGE.watchProgress, prog);
+            let remain = requiredSec - now;
+            document.getElementById('watchTimerDisplay') && (document.getElementById('watchTimerDisplay').innerText = remain);
+            let percent = (now/requiredSec)*100;
+            let fillDiv = document.getElementById('timerProgressFill');
+            if(fillDiv) fillDiv.style.width = percent+'%';
+            refreshUI();
+          }
+        },1000);
+      },
+      willClose: ()=>{ if(activeTimer) clearInterval(activeTimer); }
+    });
+  }
+  function completeWatchTask(taskId, coinReward){
+    let done = getItem(STORAGE.doneTasks,{});
+    if(done[`w_${taskId}`]) return;
+    done[`w_${taskId}`] = true;
+    setItem(STORAGE.doneTasks, done);
+    addCoins(coinReward);
+    addActivity('✅', `Watch task completed! +${coinReward} Coins`);
+    Swal.fire({title:`🎉 +${coinReward} Coins Earned!`, icon:"success", background:"#0A1422", timer:1800, showConfirmButton:false});
+    refreshUI();
+  }
+
+  // Social tasks: user must open then confirm
+  let openedSocial = {};
+  function openSocialTask(taskId, url, coinReward, type){
+    openedSocial[taskId] = true;
+    window.open(url, '_blank');
+    Swal.fire({
+      title: "Task performed?",
+      text: `Did you ${type} / interact as required? Click YES after completing.`,
+      icon: "question", showCancelButton: true, confirmButtonText: "✅ Yes, claim coins",
+      background:"#0A1422"
+    }).then(res=>{
+      if(res.isConfirmed && openedSocial[taskId]){
+        let done = getItem(STORAGE.doneTasks,{});
+        let key = `s_${taskId}`;
+        if(done[key]) { Swal.fire("Already claimed!", "","info"); return; }
+        done[key] = true;
+        setItem(STORAGE.doneTasks, done);
+        addCoins(coinReward);
+        addActivity('👍', `${type.toUpperCase()} task done: +${coinReward} Coins`);
+        Swal.fire({title:`Earned ${coinReward} Coins!`, icon:"success", timer:1500, showConfirmButton:false});
+        refreshUI();
+      } else if(res.isConfirmed && !openedSocial[taskId]) Swal.fire("Please open the task link first!", "", "warning");
+    });
+  }
+
+  // Admin
+  function openAdminPanel(){ document.getElementById('adminModal').classList.add('open'); }
+  function closeAdminModal(){ document.getElementById('adminModal').classList.remove('open'); if(activeWatchInterval)clearInterval(activeWatchInterval); }
+  function adminLogin(){
+    let p = document.getElementById('adminPass').value;
+    if(p === ADMIN_CRED.pass){
+      document.getElementById('adminLoginArea').style.display='none';
+      document.getElementById('adminDashboardArea').style.display='block';
+      refreshAdminUI();
+    } else Swal.fire("Access Denied","Wrong password","error");
+  }
+  function refreshAdminUI(){
+    let earnings = getItem(STORAGE.adminEarnings,0);
+    let withdrawals = getItem(STORAGE.withdrawals,[]);
+    let pending = withdrawals.filter(w=>w.status==='pending');
+    document.getElementById('adminPkrEarn').innerHTML = `PKR ${earnings}`;
+    document.getElementById('adminPendingCount').innerText = pending.length;
+    let manageDiv = document.getElementById('manageTasksList');
+    let wt= getItem(STORAGE.watchTasks,[]); let st= getItem(STORAGE.socialTasks,[]);
+    let allTasks = [...wt.map(t=>({...t, cat:'watch'})), ...st.map(t=>({...t, cat:t.type}))];
+    manageDiv.innerHTML = allTasks.map(t=>`<div style="background:#0C1422;padding:8px 12px;border-radius:16px;margin-bottom:8px;display:flex;justify-content:space-between;"><span>${t.title} (+${t.coins})</span><button class="btn-sm" style="background:var(--red);" onclick="deleteTaskById(${t.id},'${t.cat==='watch'?'watch':'social'}')">Delete</button></div>`).join('');
+    // withdrawals list
+    let wlist = getItem(STORAGE.withdrawals,[]);
+    document.getElementById('withdrawListAdmin').innerHTML = wlist.filter(w=>w.status==='pending').map(w=>`<div class="withdraw-request"><b>${escapeHtml(w.name)}</b> | ${w.acc} <br> Coins: ${w.coins} → PKR ${w.pkrValue}  <button class="btn-sm btn-green" onclick="markWithdrawPaid(${w.id})">Mark Paid</button></div>`).join('');
+    let cpr = getItem(STORAGE.config,{}).cpr || 10;
+    let minW = getItem(STORAGE.config,{}).minWithdrawCoins || 500;
+    document.getElementById('cprSetting').value = cpr;
+    document.getElementById('minWithdrawSetting').value = minW;
+  }
+  function deleteTaskById(id, type){
+    if(type==='watch'){ let arr = getItem(STORAGE.watchTasks,[]); setItem(STORAGE.watchTasks, arr.filter(t=>t.id!==id)); }
+    else { let arr = getItem(STORAGE.socialTasks,[]); setItem(STORAGE.socialTasks, arr.filter(t=>t.id!==id)); }
+    refreshAdminUI(); refreshUI();
+  }
+  function adminAddTask(){
+    let type = document.getElementById('taskType').value;
+    let title = document.getElementById('taskTitle').value.trim();
+    let url = document.getElementById('taskUrl').value.trim();
+    let coins = parseInt(document.getElementById('taskCoins').value);
+    if(!title || !url || coins<1){ Swal.fire("Fill all fields","","warning"); return; }
+    if(type === 'watch'){
+      let sec = parseInt(document.getElementById('watchSeconds').value);
+      if(sec<8){ Swal.fire("Watch time min 8 seconds","","warning"); return; }
+      let tasks = getItem(STORAGE.watchTasks,[]);
+      tasks.unshift({ id:Date.now(), title, url, coins, watchTime:sec, thumb:"" });
+      setItem(STORAGE.watchTasks, tasks);
+    } else {
+      let tasks = getItem(STORAGE.socialTasks,[]);
+      tasks.unshift({ id:Date.now(), type, title, url, coins });
+      setItem(STORAGE.socialTasks, tasks);
+    }
+    Swal.fire("Task added!","","success");
+    document.getElementById('taskTitle').value=''; document.getElementById('taskUrl').value=''; document.getElementById('taskCoins').value='';
+    refreshAdminUI(); refreshUI();
+  }
+  function adminAddCoins(){ let amt=parseInt(document.getElementById('coinAmount').value); if(amt>0){ setCoins(getCoins()+amt); addActivity('🪙', `Admin added +${amt} coins`); Swal.fire(`+${amt} Coins`); refreshAdminUI(); refreshUI(); } }
+  function adminRemoveCoins(){ let amt=parseInt(document.getElementById('coinAmount').value); if(amt>0){ setCoins(getCoins()-amt); addActivity('⚠️', `Admin removed ${amt} coins`); Swal.fire(`-${amt} Coins`); refreshAdminUI(); refreshUI(); } }
+  function addAdminPkr(){ let pkr=parseFloat(document.getElementById('pkrAmountAdmin').value); if(pkr>0){ let cur= getItem(STORAGE.adminEarnings,0); setItem(STORAGE.adminEarnings, cur+pkr); Swal.fire(`PKR ${pkr} added to earnings`); refreshAdminUI();} }
+  function sendBroadcast(){ let msg=document.getElementById('broadcastMsg').value.trim(); if(!msg)return; let ann= getItem(STORAGE.announcements,[]); ann.unshift({msg,time:new Date().toLocaleString()}); setItem(STORAGE.announcements,ann); Swal.fire("Broadcast Sent!"); refreshUI(); document.getElementById('broadcastMsg').value='';}
+  function saveSettings(){ let cpr=parseInt(document.getElementById('cprSetting').value); let minW=parseInt(document.getElementById('minWithdrawSetting').value); let cfg = getItem(STORAGE.config,{}); cfg.cpr = cpr||10; cfg.minWithdrawCoins = minW||500; setItem(STORAGE.config,cfg); Swal.fire("Settings saved!","","success");}
+  function markWithdrawPaid(id){ let wlist = getItem(STORAGE.withdrawals,[]); let idx = wlist.findIndex(w=>w.id===id); if(idx!==-1){ wlist[idx].status='paid'; setItem(STORAGE.withdrawals,wlist); refreshAdminUI(); Swal.fire("Marked as paid","","success"); } }
+  function adminLogout(){ document.getElementById('adminLoginArea').style.display='block'; document.getElementById('adminDashboardArea').style.display='none'; closeAdminModal();}
+  window.addEventListener('click',e=>{ if(e.target===document.getElementById('adminModal')) closeAdminModal(); });
+  document.querySelectorAll('.admin-tab').forEach(btn=>{ btn.addEventListener('click',function(){ let paneId=this.dataset.apane; document.querySelectorAll('.admin-pane').forEach(p=>p.classList.remove('active')); document.getElementById(paneId).classList.add('active'); document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active')); this.classList.add('active'); });});
+  document.querySelectorAll('.tab-btn').forEach(btn=>{ btn.addEventListener('click',function(){ document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active'); refreshUI(); }); });
+  document.getElementById('logoClickTrigger')?.addEventListener('dblclick',()=>{ openAdminPanel(); });
+  refreshUI();
+  setInterval(()=>{ refreshUI(); }, 5000);
 </script>
 </body>
 </html>
