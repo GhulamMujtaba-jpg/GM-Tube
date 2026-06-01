@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
+<title>GM TUBE | Admin Panel - Complete Control</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'DM Sans', sans-serif;
+}
+
+:root {
+  --dark-bg: #03060E;
+  --card-bg: #0A1422;
+  --card-alt: #0D1929;
+  --border-dim: #162236;
+  --green: #5BBF72;
+  --green-dark: #3D9E52;
+  --gold: #F0A500;
+  --blue: #3FB8F0;
+  --red: #E84545;
+  --text-main: #E8F2FF;
+  --text-muted: #6A90B0;
+  --text-dim: #243650;
+}
+
+body {
+  background: var(--dark-bg);
+  color: var(--text-main);
+}
+
+.admin-header {
+  background: linear-gradient(145deg, #03060F 0%, #071128 100%);
+  padding: 1.5rem;
+  text-align: center;
+  border-bottom: 2px solid var(--gold);
+}
+
+.admin-header h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.8rem;
+  color: var(--gold);
+}
+
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 24px 20px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-dim);
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stat-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: rgba(91, 191, 114, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+.stat-value {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.7rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.panel {
+  background: var(--card-bg);
+  border: 1px solid var(--border-dim);
+  border-radius: 24px;
+  padding: 1.3rem;
+  margin-bottom: 28px;
+}
+
+.panel-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  border-left: 4px solid var(--gold);
+  padding-left: 12px;
+}
+
+.admin-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  background: #050B16;
+  padding: 6px;
+  border-radius: 60px;
+  margin-bottom: 20px;
+}
+
+.admin-tab {
+  background: transparent;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 30px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.admin-tab.active {
+  background: var(--card-alt);
+  color: var(--green);
+  border: 1px solid var(--border-dim);
+}
+
+.admin-pane {
+  display: none;
+}
+
+.admin-pane.active {
+  display: block;
+}
+
+.input-field {
+  background: #030A13;
+  border: 1px solid var(--border-dim);
+  padding: 10px 12px;
+  border-radius: 14px;
+  color: white;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.btn-sm {
+  padding: 8px 18px;
+  border-radius: 40px;
+  border: none;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-green {
+  background: linear-gradient(135deg, var(--green), var(--green-dark));
+  color: #021006;
+}
+
+.btn-red {
+  background: var(--red);
+  color: white;
+}
+
+.btn-gold {
+  background: var(--gold);
+  color: #021006;
+}
+
+.task-item {
+  background: #0C1422;
+  padding: 12px;
+  border-radius: 16px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.withdraw-request {
+  background: #0c1422;
+  border-radius: 18px;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-left: 3px solid var(--gold);
+}
+
+.msg-broadcast {
+  background: rgba(63,184,240,0.08);
+  padding: 12px;
+  border-radius: 14px;
+  margin-bottom: 8px;
+}
+
+hr {
+  border-color: var(--border-dim);
+  margin: 16px 0;
+}
+
+.login-box {
+  max-width: 400px;
+  margin: 50px auto;
+  background: var(--card-bg);
+  border: 1px solid var(--border-dim);
+  border-radius: 28px;
+  padding: 30px;
+  text-align: center;
+}
+
+button:active {
+  transform: scale(0.96);
+}
+
+@media (max-width:640px) {
+  .container{padding: 16px;}
+  .admin-tab{padding: 6px 12px; font-size: 0.7rem;}
+}
+</style>
+</head>
+<body>
+
+<div class="admin-header">
+  <h1><i class="fas fa-crown"></i> GM TUBE - ADMIN DASHBOARD</h1>
+  <p style="color: var(--text-muted); margin-top: 8px;">Complete Control Panel | Manage Tasks, Users, Coins & Withdrawals</p>
+</div>
+
+<div class="container" id="adminContainer">
+  <!-- Login Section -->
+  <div id="loginSection" class="login-box">
+    <i class="fas fa-lock" style="font-size: 60px; color: var(--gold); margin-bottom: 20px; display: inline-block;"></i>
+    <h2 style="margin-bottom: 20px;">Admin Access</h2>
+    <input type="email" id="adminEmail" class="input-field" placeholder="Email" value="ghulammujtaba30@gmail.com" readonly disabled>
+    <input type="password" id="adminPass" class="input-field" placeholder="Password">
+    <button class="btn-sm btn-green" onclick="adminLogin()" style="width: 100%;"><i class="fas fa-sign-in-alt"></i> Login</button>
+  </div>
+
+  <!-- Dashboard Section (Hidden until login) -->
+  <div id="dashboardSection" style="display: none;">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-icon"><i class="fas fa-dollar-sign"></i></div><div><div class="stat-label">Total PKR Earned</div><div class="stat-value" id="adminPkrEarn">0</div></div></div>
+      <div class="stat-card"><div class="stat-icon"><i class="fas fa-clock"></i></div><div><div class="stat-label">Pending Withdrawals</div><div class="stat-value" id="adminPendingCount">0</div></div></div>
+      <div class="stat-card"><div class="stat-icon"><i class="fas fa-tasks"></i></div><div><div class="stat-label">Total Tasks</div><div class="stat-value" id="totalTasksCount">0</div></div></div>
+    </div>
+
+    <div class="panel">
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-pane="addTaskPane">➕ Add Task</button>
+        <button class="admin-tab" data-pane="manageTasksPane">📋 Manage Tasks</button>
+        <button class="admin-tab" data-pane="withdrawPane">💸 Withdrawals</button>
+        <button class="admin-tab" data-pane="coinsPane">🪙 Manage Coins</button>
+        <button class="admin-tab" data-pane="messagePane">📣 Broadcast</button>
+        <button class="admin-tab" data-pane="settingsPane">⚙️ Settings</button>
+      </div>
+
+      <!-- Add Task Pane -->
+      <div id="addTaskPane" class="admin-pane active">
+        <select id="taskType" class="input-field">
+          <option value="watch">🎬 Watch Video</option>
+          <option value="like">👍 Like</option>
+          <option value="subscribe">🔔 Subscribe</option>
+          <option value="comment">💬 Comment</option>
+          <option value="share">📢 Share</option>
+          <option value="views">👁️ Views</option>
+        </select>
+        <input id="taskTitle" class="input-field" placeholder="Task Title *">
+        <input id="taskUrl" class="input-field" placeholder="Video / Channel URL *">
+        <input id="taskCoins" class="input-field" type="number" placeholder="Coins Reward *">
+        <div id="watchSecDiv">
+          <input id="watchSeconds" class="input-field" type="number" placeholder="Required watch seconds (min 8)">
+        </div>
+        <button class="btn-sm btn-green" onclick="addTask()"><i class="fas fa-plus"></i> Create Task</button>
+      </div>
+
+      <!-- Manage Tasks Pane -->
+      <div id="manageTasksPane" class="admin-pane">
+        <div id="manageTasksList"></div>
+      </div>
+
+      <!-- Withdrawals Pane -->
+      <div id="withdrawPane" class="admin-pane">
+        <div id="withdrawListAdmin"></div>
+      </div>
+
+      <!-- Manage Coins Pane -->
+      <div id="coinsPane" class="admin-pane">
+        <input id="coinAmount" class="input-field" type="number" placeholder="Amount of Coins">
+        <button class="btn-sm btn-green" onclick="addCoinsToClient()">➕ Add Coins to User</button>
+        <button class="btn-sm btn-red" onclick="removeCoinsFromClient()">➖ Remove Coins</button>
+        <hr>
+        <input id="pkrAmountAdmin" class="input-field" type="number" placeholder="Admin PKR Earnings">
+        <button class="btn-sm btn-gold" onclick="addAdminPkr()">💰 Add PKR Earnings</button>
+      </div>
+
+      <!-- Broadcast Pane -->
+      <div id="messagePane" class="admin-pane">
+        <textarea id="broadcastMsg" class="input-field" rows="3" placeholder="Type announcement message here..."></textarea>
+        <button class="btn-sm btn-green" onclick="sendBroadcast()"><i class="fas fa-bullhorn"></i> Send to All Users</button>
+      </div>
+
+      <!-- Settings Pane -->
+      <div id="settingsPane" class="admin-pane">
+        <label>💰 Coins per 1 PKR</label>
+        <input id="cprSetting" class="input-field" type="number">
+        <label>🔒 Minimum Withdraw Coins</label>
+        <input id="minWithdrawSetting" class="input-field" type="number">
+        <button class="btn-sm btn-green" onclick="saveSettings()">💾 Save Settings</button>
+        <hr>
+        <button class="btn-sm btn-red" onclick="adminLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ADMIN SIDE CODE - Full management functionality
+const STORAGE = {
+  coins: 'gmtube_coins',
+  doneTasks: 'gmtube_done',
+  watchProgress: 'gmtube_wprog',
+  watchTasks: 'gmtube_wtasks',
+  socialTasks: 'gmtube_stasks',
+  withdrawals: 'gmtube_withdraws',
+  adminEarnings: 'gmtube_adminkr',
+  announcements: 'gmtube_announce',
+  activity: 'gmtube_activity',
+  config: 'gmtube_config'
+};
+
+const ADMIN_CRED = { email: 'ghulammujtaba30@gmail.com', pass: 'Sahibzada6060' };
+
+function getItem(key, def=null){ let d=localStorage.getItem(key); return d?JSON.parse(d):def; }
+function setItem(key,val){ localStorage.setItem(key,JSON.stringify(val)); }
+
+function initData(){
+  if(!getItem(STORAGE.watchTasks, null)) setItem(STORAGE.watchTasks, [{ id:1001, title:"Intro Video - Earn Coins", url:"https://www.youtube.com/watch?v=dQw4w9WgXcQ", coins:45, watchTime:12, thumb:"" }]);
+  if(!getItem(STORAGE.socialTasks, null)) setItem(STORAGE.socialTasks, [{ id:2001, type:"like", title:"Like GM Tube Official", url:"https://youtube.com", coins:15 },{ id:2002, type:"subscribe", title:"Subscribe for daily tasks", url:"https://youtube.com", coins:30 }]);
+  if(!getItem(STORAGE.config, null)) setItem(STORAGE.config, { cpr:10, minWithdrawCoins:500 });
+  if(!getItem(STORAGE.coins, null)) setItem(STORAGE.coins,0);
+  if(!getItem(STORAGE.doneTasks, null)) setItem(STORAGE.doneTasks,{});
+  if(!getItem(STORAGE.watchProgress, null)) setItem(STORAGE.watchProgress,{});
+  if(!getItem(STORAGE.adminEarnings, null)) setItem(STORAGE.adminEarnings,0);
+  if(!getItem(STORAGE.withdrawals, null)) setItem(STORAGE.withdrawals,[]);
+  if(!getItem(STORAGE.announcements, null)) setItem(STORAGE.announcements,[]);
+  if(!getItem(STORAGE.activity, null)) setItem(STORAGE.activity,[]);
+}
+initData();
+
+function escapeHtml(s){ return String(s).replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+
+function adminLogin(){
+  let p = document.getElementById('adminPass').value;
+  if(p === ADMIN_CRED.pass){
+    document.getElementById('loginSection').style.display = 'none';
+    document.getElementById('dashboardSection').style.display = 'block';
+    refreshAdminUI();
+    Swal.fire("Welcome Admin!", "You have full control over the platform", "success");
+  } else {
+    Swal.fire("Access Denied!", "Wrong password", "error");
+  }
+}
+
+function refreshAdminUI(){
+  let earnings = getItem(STORAGE.adminEarnings,0);
+  let withdrawals = getItem(STORAGE.withdrawals,[]);
+  let pending = withdrawals.filter(w=>w.status==='pending');
+  let wtasks = getItem(STORAGE.watchTasks,[]);
+  let stasks = getItem(STORAGE.socialTasks,[]);
+  let totalTasks = wtasks.length + stasks.length;
+  
+  document.getElementById('adminPkrEarn').innerHTML = `PKR ${earnings}`;
+  document.getElementById('adminPendingCount').innerText = pending.length;
+  document.getElementById('totalTasksCount').innerText = totalTasks;
+  
+  // Manage Tasks List
+  let manageDiv = document.getElementById('manageTasksList');
+  let allTasks = [...wtasks.map(t=>({...t, cat:'watch'})), ...stasks.map(t=>({...t, cat:t.type}))];
+  manageDiv.innerHTML = allTasks.map(t => `
+    <div class="task-item">
+      <div>
+        <strong>${escapeHtml(t.title)}</strong><br>
+        <small>🎁 +${t.coins} Coins | ${t.cat === 'watch' ? '⏱️ Watch Task' : '📱 ' + t.cat.toUpperCase()}</small>
+      </div>
+      <button class="btn-sm btn-red" onclick="deleteTask(${t.id},'${t.cat==='watch'?'watch':'social'}')">Delete</button>
+    </div>
+  `).join('');
+  
+  // Withdrawals List
+  let wlist = getItem(STORAGE.withdrawals,[]);
+  document.getElementById('withdrawListAdmin').innerHTML = wlist.filter(w=>w.status==='pending').map(w => `
+    <div class="withdraw-request">
+      <strong>👤 ${escapeHtml(w.name)}</strong> | 📱 ${w.acc}<br>
+      🪙 ${w.coins} Coins → 💰 PKR ${w.pkrValue}
+      <br><br>
+      <button class="btn-sm btn-green" onclick="markWithdrawPaid(${w.id})">✅ Mark as Paid</button>
+    </div>
+  `).join('');
+  
+  if(wlist.filter(w=>w.status==='pending').length === 0){
+    document.getElementById('withdrawListAdmin').innerHTML = '<div style="text-align:center;padding:20px;">No pending withdrawal requests</div>';
+  }
+  
+  let cfg = getItem(STORAGE.config,{});
+  document.getElementById('cprSetting').value = cfg.cpr || 10;
+  document.getElementById('minWithdrawSetting').value = cfg.minWithdrawCoins || 500;
+}
+
+function deleteTask(id, type){
+  Swal.fire({
+    title: "Delete Task?",
+    text: "This action cannot be undone!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    confirmButtonText: "Yes, delete"
+  }).then((result) => {
+    if(result.isConfirmed){
+      if(type==='watch'){
+        let arr = getItem(STORAGE.watchTasks,[]);
+        setItem(STORAGE.watchTasks, arr.filter(t=>t.id!==id));
+      } else {
+        let arr = getItem(STORAGE.socialTasks,[]);
+        setItem(STORAGE.socialTasks, arr.filter(t=>t.id!==id));
+      }
+      refreshAdminUI();
+      Swal.fire("Deleted!", "Task has been removed.", "success");
+    }
+  });
+}
+
+function addTask(){
+  let type = document.getElementById('taskType').value;
+  let title = document.getElementById('taskTitle').value.trim();
+  let url = document.getElementById('taskUrl').value.trim();
+  let coins = parseInt(document.getElementById('taskCoins').value);
+  
+  if(!title || !url || coins<1){
+    Swal.fire("Error", "Please fill all fields correctly", "warning");
+    return;
+  }
+  
+  if(type === 'watch'){
+    let sec = parseInt(document.getElementById('watchSeconds').value);
+    if(sec<8){
+      Swal.fire("Error", "Watch time must be at least 8 seconds", "warning");
+      return;
+    }
+    let tasks = getItem(STORAGE.watchTasks,[]);
+    tasks.unshift({ id: Date.now(), title, url, coins, watchTime: sec, thumb: "" });
+    setItem(STORAGE.watchTasks, tasks);
+    Swal.fire("Success!", "Watch task added successfully", "success");
+  } else {
+    let tasks = getItem(STORAGE.socialTasks,[]);
+    tasks.unshift({ id: Date.now(), type, title, url, coins });
+    setItem(STORAGE.socialTasks, tasks);
+    Swal.fire("Success!", `${type.toUpperCase()} task added successfully`, "success");
+  }
+  
+  document.getElementById('taskTitle').value = '';
+  document.getElementById('taskUrl').value = '';
+  document.getElementById('taskCoins').value = '';
+  refreshAdminUI();
+}
+
+function addCoinsToClient(){
+  let amt = parseInt(document.getElementById('coinAmount').value);
+  if(amt > 0){
+    let current = getItem(STORAGE.coins, 0);
+    setItem(STORAGE.coins, current + amt);
+    let acts = getItem(STORAGE.activity,[]);
+    acts.unshift({ icon: '🪙', msg: `Admin added +${amt} coins`, time: new Date().toLocaleString() });
+    setItem(STORAGE.activity, acts);
+    Swal.fire("Success!", `+${amt} Coins added to user`, "success");
+    refreshAdminUI();
+  } else {
+    Swal.fire("Error", "Enter valid amount", "warning");
+  }
+}
+
+function removeCoinsFromClient(){
+  let amt = parseInt(document.getElementById('coinAmount').value);
+  if(amt > 0){
+    let current = getItem(STORAGE.coins, 0);
+    let newAmount = Math.max(0, current - amt);
+    setItem(STORAGE.coins, newAmount);
+    let acts = getItem(STORAGE.activity,[]);
+    acts.unshift({ icon: '⚠️', msg: `Admin removed ${amt} coins`, time: new Date().toLocaleString() });
+    setItem(STORAGE.activity, acts);
+    Swal.fire("Success!", `-${amt} Coins removed from user`, "success");
+    refreshAdminUI();
+  } else {
+    Swal.fire("Error", "Enter valid amount", "warning");
+  }
+}
+
+function addAdminPkr(){
+  let pkr = parseFloat(document.getElementById('pkrAmountAdmin').value);
+  if(pkr > 0){
+    let cur = getItem(STORAGE.adminEarnings, 0);
+    setItem(STORAGE.adminEarnings, cur + pkr);
+    Swal.fire("Success!", `PKR ${pkr} added to earnings`, "success");
+    refreshAdminUI();
+  } else {
+    Swal.fire("Error", "Enter valid PKR amount", "warning");
+  }
+}
+
+function sendBroadcast(){
+  let msg = document.getElementById('broadcastMsg').value.trim();
+  if(!msg){
+    Swal.fire("Error", "Please enter a message", "warning");
+    return;
+  }
+  let ann = getItem(STORAGE.announcements, []);
+  ann.unshift({ msg, time: new Date().toLocaleString() });
+  setItem(STORAGE.announcements, ann);
+  Swal.fire("Broadcast Sent!", "All users will see this announcement", "success");
+  document.getElementById('broadcastMsg').value = '';
+}
+
+function saveSettings(){
+  let cpr = parseInt(document.getElementById('cprSetting').value);
+  let minW = parseInt(document.getElementById('minWithdrawSetting').value);
+  let cfg = getItem(STORAGE.config, {});
+  cfg.cpr = cpr || 10;
+  cfg.minWithdrawCoins = minW || 500;
+  setItem(STORAGE.config, cfg);
+  Swal.fire("Settings Saved!", "Configuration updated successfully", "success");
+}
+
+function markWithdrawPaid(id){
+  Swal.fire({
+    title: "Confirm Payment",
+    text: "Mark this withdrawal as paid?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "#5BBF72",
+    confirmButtonText: "Yes, Paid"
+  }).then((result) => {
+    if(result.isConfirmed){
+      let wlist = getItem(STORAGE.withdrawals, []);
+      let idx = wlist.findIndex(w => w.id === id);
+      if(idx !== -1){
+        wlist[idx].status = 'paid';
+        setItem(STORAGE.withdrawals, wlist);
+        refreshAdminUI();
+        Swal.fire("Updated!", "Withdrawal marked as paid", "success");
+      }
+    }
+  });
+}
+
+function adminLogout(){
+  Swal.fire({
+    title: "Logout?",
+    text: "You will be redirected to login screen",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "Yes, Logout"
+  }).then((result) => {
+    if(result.isConfirmed){
+      document.getElementById('loginSection').style.display = 'block';
+      document.getElementById('dashboardSection').style.display = 'none';
+      document.getElementById('adminPass').value = '';
+      Swal.fire("Logged Out", "Admin session ended", "info");
+    }
+  });
+}
+
+// Tab switching
+document.querySelectorAll('.admin-tab').forEach(btn => {
+  btn.addEventListener('click', function(){
+    let paneId = this.dataset.pane;
+    document.querySelectorAll('.admin-pane').forEach(pane => pane.classList.remove('active'));
+    document.getElementById(paneId).classList.add('active');
+    document.querySelectorAll('.admin-tab').forEach(tab => tab.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// Show/hide watch seconds field based on task type
+document.getElementById('taskType').addEventListener('change', function(){
+  let watchDiv = document.getElementById('watchSecDiv');
+  if(this.value === 'watch'){
+    watchDiv.style.display = 'block';
+  } else {
+    watchDiv.style.display = 'none';
+  }
+});
+document.getElementById('taskType').dispatchEvent(new Event('change'));
+</script>
+</body>
+</html>
