@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
-<title>GM TUBE | Admin Panel - Complete Control</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<title>GM TUBE | Admin Panel - Control Center</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -48,6 +48,11 @@ body {
   color: var(--gold);
 }
 
+.admin-header p {
+  color: var(--text-muted);
+  margin-top: 5px;
+}
+
 .container {
   max-width: 1300px;
   margin: 0 auto;
@@ -80,6 +85,13 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 1.3rem;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-dim);
 }
 
 .stat-value {
@@ -152,6 +164,11 @@ body {
   margin-bottom: 12px;
 }
 
+.input-field:focus {
+  outline: none;
+  border-color: var(--green);
+}
+
 .btn-sm {
   padding: 8px 18px;
   border-radius: 40px;
@@ -177,6 +194,10 @@ body {
   color: #021006;
 }
 
+.btn-sm:active {
+  transform: scale(0.96);
+}
+
 .task-item {
   background: #0C1422;
   padding: 12px;
@@ -197,13 +218,6 @@ body {
   border-left: 3px solid var(--gold);
 }
 
-.msg-broadcast {
-  background: rgba(63,184,240,0.08);
-  padding: 12px;
-  border-radius: 14px;
-  margin-bottom: 8px;
-}
-
 hr {
   border-color: var(--border-dim);
   margin: 16px 0;
@@ -219,39 +233,63 @@ hr {
   text-align: center;
 }
 
-button:active {
-  transform: scale(0.96);
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
 }
 
-@media (max-width:640px) {
-  .container{padding: 16px;}
-  .admin-tab{padding: 6px 12px; font-size: 0.7rem;}
+@media (max-width: 640px) {
+  .container {
+    padding: 16px;
+  }
+  .admin-tab {
+    padding: 6px 12px;
+    font-size: 0.7rem;
+  }
 }
 </style>
 </head>
 <body>
 
 <div class="admin-header">
-  <h1><i class="fas fa-crown"></i> GM TUBE - ADMIN DASHBOARD</h1>
-  <p style="color: var(--text-muted); margin-top: 8px;">Complete Control Panel | Manage Tasks, Users, Coins & Withdrawals</p>
+  <h1><i class="fas fa-crown"></i> GM TUBE - ADMIN PANEL</h1>
+  <p>Complete Control | Manage Tasks, Users, Coins & Withdrawals</p>
 </div>
 
 <div class="container" id="adminContainer">
-  <!-- Login Section -->
   <div id="loginSection" class="login-box">
-    <i class="fas fa-lock" style="font-size: 60px; color: var(--gold); margin-bottom: 20px; display: inline-block;"></i>
+    <i class="fas fa-lock" style="font-size: 60px; color: var(--gold); margin-bottom: 20px;"></i>
     <h2 style="margin-bottom: 20px;">Admin Access</h2>
     <input type="email" id="adminEmail" class="input-field" placeholder="Email" value="ghulammujtaba30@gmail.com" readonly disabled>
     <input type="password" id="adminPass" class="input-field" placeholder="Password">
     <button class="btn-sm btn-green" onclick="adminLogin()" style="width: 100%;"><i class="fas fa-sign-in-alt"></i> Login</button>
   </div>
 
-  <!-- Dashboard Section (Hidden until login) -->
   <div id="dashboardSection" style="display: none;">
     <div class="stats-grid">
-      <div class="stat-card"><div class="stat-icon"><i class="fas fa-dollar-sign"></i></div><div><div class="stat-label">Total PKR Earned</div><div class="stat-value" id="adminPkrEarn">0</div></div></div>
-      <div class="stat-card"><div class="stat-icon"><i class="fas fa-clock"></i></div><div><div class="stat-label">Pending Withdrawals</div><div class="stat-value" id="adminPendingCount">0</div></div></div>
-      <div class="stat-card"><div class="stat-icon"><i class="fas fa-tasks"></i></div><div><div class="stat-label">Total Tasks</div><div class="stat-value" id="totalTasksCount">0</div></div></div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
+        <div>
+          <div class="stat-label">Total PKR Earned</div>
+          <div class="stat-value" id="adminPkrEarn">0</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-clock"></i></div>
+        <div>
+          <div class="stat-label">Pending Withdrawals</div>
+          <div class="stat-value" id="adminPendingCount">0</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-tasks"></i></div>
+        <div>
+          <div class="stat-label">Total Tasks</div>
+          <div class="stat-value" id="totalTasksCount">0</div>
+        </div>
+      </div>
     </div>
 
     <div class="panel">
@@ -264,7 +302,6 @@ button:active {
         <button class="admin-tab" data-pane="settingsPane">⚙️ Settings</button>
       </div>
 
-      <!-- Add Task Pane -->
       <div id="addTaskPane" class="admin-pane active">
         <select id="taskType" class="input-field">
           <option value="watch">🎬 Watch Video</option>
@@ -283,17 +320,14 @@ button:active {
         <button class="btn-sm btn-green" onclick="addTask()"><i class="fas fa-plus"></i> Create Task</button>
       </div>
 
-      <!-- Manage Tasks Pane -->
       <div id="manageTasksPane" class="admin-pane">
         <div id="manageTasksList"></div>
       </div>
 
-      <!-- Withdrawals Pane -->
       <div id="withdrawPane" class="admin-pane">
         <div id="withdrawListAdmin"></div>
       </div>
 
-      <!-- Manage Coins Pane -->
       <div id="coinsPane" class="admin-pane">
         <input id="coinAmount" class="input-field" type="number" placeholder="Amount of Coins">
         <button class="btn-sm btn-green" onclick="addCoinsToClient()">➕ Add Coins to User</button>
@@ -303,13 +337,11 @@ button:active {
         <button class="btn-sm btn-gold" onclick="addAdminPkr()">💰 Add PKR Earnings</button>
       </div>
 
-      <!-- Broadcast Pane -->
       <div id="messagePane" class="admin-pane">
         <textarea id="broadcastMsg" class="input-field" rows="3" placeholder="Type announcement message here..."></textarea>
         <button class="btn-sm btn-green" onclick="sendBroadcast()"><i class="fas fa-bullhorn"></i> Send to All Users</button>
       </div>
 
-      <!-- Settings Pane -->
       <div id="settingsPane" class="admin-pane">
         <label>💰 Coins per 1 PKR</label>
         <input id="cprSetting" class="input-field" type="number">
@@ -324,7 +356,7 @@ button:active {
 </div>
 
 <script>
-// ADMIN SIDE CODE - Full management functionality
+// ==================== ADMIN SIDE CODE ONLY ====================
 const STORAGE = {
   coins: 'gmtube_coins',
   doneTasks: 'gmtube_done',
@@ -338,30 +370,75 @@ const STORAGE = {
   config: 'gmtube_config'
 };
 
-const ADMIN_CRED = { email: 'ghulammujtaba30@gmail.com', pass: 'Sahibzada6060' };
+const ADMIN_CRED = {
+  email: 'ghulammujtaba30@gmail.com',
+  pass: 'Sahibzada6060'
+};
 
-function getItem(key, def=null){ let d=localStorage.getItem(key); return d?JSON.parse(d):def; }
-function setItem(key,val){ localStorage.setItem(key,JSON.stringify(val)); }
-
-function initData(){
-  if(!getItem(STORAGE.watchTasks, null)) setItem(STORAGE.watchTasks, [{ id:1001, title:"Intro Video - Earn Coins", url:"https://www.youtube.com/watch?v=dQw4w9WgXcQ", coins:45, watchTime:12, thumb:"" }]);
-  if(!getItem(STORAGE.socialTasks, null)) setItem(STORAGE.socialTasks, [{ id:2001, type:"like", title:"Like GM Tube Official", url:"https://youtube.com", coins:15 },{ id:2002, type:"subscribe", title:"Subscribe for daily tasks", url:"https://youtube.com", coins:30 }]);
-  if(!getItem(STORAGE.config, null)) setItem(STORAGE.config, { cpr:10, minWithdrawCoins:500 });
-  if(!getItem(STORAGE.coins, null)) setItem(STORAGE.coins,0);
-  if(!getItem(STORAGE.doneTasks, null)) setItem(STORAGE.doneTasks,{});
-  if(!getItem(STORAGE.watchProgress, null)) setItem(STORAGE.watchProgress,{});
-  if(!getItem(STORAGE.adminEarnings, null)) setItem(STORAGE.adminEarnings,0);
-  if(!getItem(STORAGE.withdrawals, null)) setItem(STORAGE.withdrawals,[]);
-  if(!getItem(STORAGE.announcements, null)) setItem(STORAGE.announcements,[]);
-  if(!getItem(STORAGE.activity, null)) setItem(STORAGE.activity,[]);
+function getItem(key, def = null) {
+  let d = localStorage.getItem(key);
+  return d ? JSON.parse(d) : def;
 }
+
+function setItem(key, val) {
+  localStorage.setItem(key, JSON.stringify(val));
+}
+
+function initData() {
+  if (!getItem(STORAGE.watchTasks, null)) {
+    setItem(STORAGE.watchTasks, [{
+      id: 1001,
+      title: "Intro Video - Earn Coins",
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      coins: 45,
+      watchTime: 12,
+      thumb: ""
+    }]);
+  }
+  if (!getItem(STORAGE.socialTasks, null)) {
+    setItem(STORAGE.socialTasks, [{
+        id: 2001,
+        type: "like",
+        title: "Like GM Tube Official",
+        url: "https://youtube.com",
+        coins: 15
+      },
+      {
+        id: 2002,
+        type: "subscribe",
+        title: "Subscribe for daily tasks",
+        url: "https://youtube.com",
+        coins: 30
+      }
+    ]);
+  }
+  if (!getItem(STORAGE.config, null)) setItem(STORAGE.config, {
+    cpr: 10,
+    minWithdrawCoins: 500
+  });
+  if (!getItem(STORAGE.coins, null)) setItem(STORAGE.coins, 0);
+  if (!getItem(STORAGE.doneTasks, null)) setItem(STORAGE.doneTasks, {});
+  if (!getItem(STORAGE.watchProgress, null)) setItem(STORAGE.watchProgress, {});
+  if (!getItem(STORAGE.adminEarnings, null)) setItem(STORAGE.adminEarnings, 0);
+  if (!getItem(STORAGE.withdrawals, null)) setItem(STORAGE.withdrawals, []);
+  if (!getItem(STORAGE.announcements, null)) setItem(STORAGE.announcements, []);
+  if (!getItem(STORAGE.activity, null)) setItem(STORAGE.activity, []);
+}
+
 initData();
 
-function escapeHtml(s){ return String(s).replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+function escapeHtml(s) {
+  return String(s).replace(/[&<>]/g, function(m) {
+    if (m === '&') return '&amp;';
+    if (m === '<') return '&lt;';
+    if (m === '>') return '&gt;';
+    return m;
+  });
+}
 
-function adminLogin(){
+function adminLogin() {
   let p = document.getElementById('adminPass').value;
-  if(p === ADMIN_CRED.pass){
+  if (p === ADMIN_CRED.pass) {
     document.getElementById('loginSection').style.display = 'none';
     document.getElementById('dashboardSection').style.display = 'block';
     refreshAdminUI();
@@ -371,52 +448,55 @@ function adminLogin(){
   }
 }
 
-function refreshAdminUI(){
-  let earnings = getItem(STORAGE.adminEarnings,0);
-  let withdrawals = getItem(STORAGE.withdrawals,[]);
-  let pending = withdrawals.filter(w=>w.status==='pending');
-  let wtasks = getItem(STORAGE.watchTasks,[]);
-  let stasks = getItem(STORAGE.socialTasks,[]);
+function refreshAdminUI() {
+  let earnings = getItem(STORAGE.adminEarnings, 0);
+  let withdrawals = getItem(STORAGE.withdrawals, []);
+  let pending = withdrawals.filter(w => w.status === 'pending');
+  let wtasks = getItem(STORAGE.watchTasks, []);
+  let stasks = getItem(STORAGE.socialTasks, []);
   let totalTasks = wtasks.length + stasks.length;
-  
+
   document.getElementById('adminPkrEarn').innerHTML = `PKR ${earnings}`;
   document.getElementById('adminPendingCount').innerText = pending.length;
   document.getElementById('totalTasksCount').innerText = totalTasks;
-  
-  // Manage Tasks List
+
   let manageDiv = document.getElementById('manageTasksList');
-  let allTasks = [...wtasks.map(t=>({...t, cat:'watch'})), ...stasks.map(t=>({...t, cat:t.type}))];
+  let allTasks = [...wtasks.map(t => ({ ...t,
+    cat: 'watch'
+  })), ...stasks.map(t => ({ ...t,
+    cat: t.type
+  }))];
   manageDiv.innerHTML = allTasks.map(t => `
     <div class="task-item">
       <div>
         <strong>${escapeHtml(t.title)}</strong><br>
         <small>🎁 +${t.coins} Coins | ${t.cat === 'watch' ? '⏱️ Watch Task' : '📱 ' + t.cat.toUpperCase()}</small>
       </div>
-      <button class="btn-sm btn-red" onclick="deleteTask(${t.id},'${t.cat==='watch'?'watch':'social'}')">Delete</button>
+      <button class="btn-sm btn-red" onclick="deleteTask(${t.id},'${t.cat === 'watch' ? 'watch' : 'social'}')">Delete</button>
     </div>
   `).join('');
-  
-  // Withdrawals List
-  let wlist = getItem(STORAGE.withdrawals,[]);
-  document.getElementById('withdrawListAdmin').innerHTML = wlist.filter(w=>w.status==='pending').map(w => `
-    <div class="withdraw-request">
-      <strong>👤 ${escapeHtml(w.name)}</strong> | 📱 ${w.acc}<br>
-      🪙 ${w.coins} Coins → 💰 PKR ${w.pkrValue}
-      <br><br>
-      <button class="btn-sm btn-green" onclick="markWithdrawPaid(${w.id})">✅ Mark as Paid</button>
-    </div>
-  `).join('');
-  
-  if(wlist.filter(w=>w.status==='pending').length === 0){
-    document.getElementById('withdrawListAdmin').innerHTML = '<div style="text-align:center;padding:20px;">No pending withdrawal requests</div>';
+
+  let wlist = getItem(STORAGE.withdrawals, []);
+  let pendingList = wlist.filter(w => w.status === 'pending');
+  if (pendingList.length === 0) {
+    document.getElementById('withdrawListAdmin').innerHTML = '<div style="text-align:center;padding:20px;">✅ No pending withdrawal requests</div>';
+  } else {
+    document.getElementById('withdrawListAdmin').innerHTML = pendingList.map(w => `
+      <div class="withdraw-request">
+        <strong>👤 ${escapeHtml(w.name)}</strong> | 📱 ${w.acc}<br>
+        🪙 ${w.coins} Coins → 💰 PKR ${w.pkrValue}
+        <br><br>
+        <button class="btn-sm btn-green" onclick="markWithdrawPaid(${w.id})">✅ Mark as Paid</button>
+      </div>
+    `).join('');
   }
-  
-  let cfg = getItem(STORAGE.config,{});
+
+  let cfg = getItem(STORAGE.config, {});
   document.getElementById('cprSetting').value = cfg.cpr || 10;
   document.getElementById('minWithdrawSetting').value = cfg.minWithdrawCoins || 500;
 }
 
-function deleteTask(id, type){
+function deleteTask(id, type) {
   Swal.fire({
     title: "Delete Task?",
     text: "This action cannot be undone!",
@@ -425,13 +505,13 @@ function deleteTask(id, type){
     confirmButtonColor: "#d33",
     confirmButtonText: "Yes, delete"
   }).then((result) => {
-    if(result.isConfirmed){
-      if(type==='watch'){
-        let arr = getItem(STORAGE.watchTasks,[]);
-        setItem(STORAGE.watchTasks, arr.filter(t=>t.id!==id));
+    if (result.isConfirmed) {
+      if (type === 'watch') {
+        let arr = getItem(STORAGE.watchTasks, []);
+        setItem(STORAGE.watchTasks, arr.filter(t => t.id !== id));
       } else {
-        let arr = getItem(STORAGE.socialTasks,[]);
-        setItem(STORAGE.socialTasks, arr.filter(t=>t.id!==id));
+        let arr = getItem(STORAGE.socialTasks, []);
+        setItem(STORAGE.socialTasks, arr.filter(t => t.id !== id));
       }
       refreshAdminUI();
       Swal.fire("Deleted!", "Task has been removed.", "success");
@@ -439,47 +519,64 @@ function deleteTask(id, type){
   });
 }
 
-function addTask(){
+function addTask() {
   let type = document.getElementById('taskType').value;
   let title = document.getElementById('taskTitle').value.trim();
   let url = document.getElementById('taskUrl').value.trim();
   let coins = parseInt(document.getElementById('taskCoins').value);
-  
-  if(!title || !url || coins<1){
+
+  if (!title || !url || coins < 1) {
     Swal.fire("Error", "Please fill all fields correctly", "warning");
     return;
   }
-  
-  if(type === 'watch'){
+
+  if (type === 'watch') {
     let sec = parseInt(document.getElementById('watchSeconds').value);
-    if(sec<8){
+    if (sec < 8) {
       Swal.fire("Error", "Watch time must be at least 8 seconds", "warning");
       return;
     }
-    let tasks = getItem(STORAGE.watchTasks,[]);
-    tasks.unshift({ id: Date.now(), title, url, coins, watchTime: sec, thumb: "" });
+    let tasks = getItem(STORAGE.watchTasks, []);
+    tasks.unshift({
+      id: Date.now(),
+      title,
+      url,
+      coins,
+      watchTime: sec,
+      thumb: ""
+    });
     setItem(STORAGE.watchTasks, tasks);
     Swal.fire("Success!", "Watch task added successfully", "success");
   } else {
-    let tasks = getItem(STORAGE.socialTasks,[]);
-    tasks.unshift({ id: Date.now(), type, title, url, coins });
+    let tasks = getItem(STORAGE.socialTasks, []);
+    tasks.unshift({
+      id: Date.now(),
+      type,
+      title,
+      url,
+      coins
+    });
     setItem(STORAGE.socialTasks, tasks);
     Swal.fire("Success!", `${type.toUpperCase()} task added successfully`, "success");
   }
-  
+
   document.getElementById('taskTitle').value = '';
   document.getElementById('taskUrl').value = '';
   document.getElementById('taskCoins').value = '';
   refreshAdminUI();
 }
 
-function addCoinsToClient(){
+function addCoinsToClient() {
   let amt = parseInt(document.getElementById('coinAmount').value);
-  if(amt > 0){
+  if (amt > 0) {
     let current = getItem(STORAGE.coins, 0);
     setItem(STORAGE.coins, current + amt);
-    let acts = getItem(STORAGE.activity,[]);
-    acts.unshift({ icon: '🪙', msg: `Admin added +${amt} coins`, time: new Date().toLocaleString() });
+    let acts = getItem(STORAGE.activity, []);
+    acts.unshift({
+      icon: '🪙',
+      msg: `Admin added +${amt} coins`,
+      time: new Date().toLocaleString()
+    });
     setItem(STORAGE.activity, acts);
     Swal.fire("Success!", `+${amt} Coins added to user`, "success");
     refreshAdminUI();
@@ -488,14 +585,18 @@ function addCoinsToClient(){
   }
 }
 
-function removeCoinsFromClient(){
+function removeCoinsFromClient() {
   let amt = parseInt(document.getElementById('coinAmount').value);
-  if(amt > 0){
+  if (amt > 0) {
     let current = getItem(STORAGE.coins, 0);
     let newAmount = Math.max(0, current - amt);
     setItem(STORAGE.coins, newAmount);
-    let acts = getItem(STORAGE.activity,[]);
-    acts.unshift({ icon: '⚠️', msg: `Admin removed ${amt} coins`, time: new Date().toLocaleString() });
+    let acts = getItem(STORAGE.activity, []);
+    acts.unshift({
+      icon: '⚠️',
+      msg: `Admin removed ${amt} coins`,
+      time: new Date().toLocaleString()
+    });
     setItem(STORAGE.activity, acts);
     Swal.fire("Success!", `-${amt} Coins removed from user`, "success");
     refreshAdminUI();
@@ -504,9 +605,9 @@ function removeCoinsFromClient(){
   }
 }
 
-function addAdminPkr(){
+function addAdminPkr() {
   let pkr = parseFloat(document.getElementById('pkrAmountAdmin').value);
-  if(pkr > 0){
+  if (pkr > 0) {
     let cur = getItem(STORAGE.adminEarnings, 0);
     setItem(STORAGE.adminEarnings, cur + pkr);
     Swal.fire("Success!", `PKR ${pkr} added to earnings`, "success");
@@ -516,20 +617,23 @@ function addAdminPkr(){
   }
 }
 
-function sendBroadcast(){
+function sendBroadcast() {
   let msg = document.getElementById('broadcastMsg').value.trim();
-  if(!msg){
+  if (!msg) {
     Swal.fire("Error", "Please enter a message", "warning");
     return;
   }
   let ann = getItem(STORAGE.announcements, []);
-  ann.unshift({ msg, time: new Date().toLocaleString() });
+  ann.unshift({
+    msg,
+    time: new Date().toLocaleString()
+  });
   setItem(STORAGE.announcements, ann);
   Swal.fire("Broadcast Sent!", "All users will see this announcement", "success");
   document.getElementById('broadcastMsg').value = '';
 }
 
-function saveSettings(){
+function saveSettings() {
   let cpr = parseInt(document.getElementById('cprSetting').value);
   let minW = parseInt(document.getElementById('minWithdrawSetting').value);
   let cfg = getItem(STORAGE.config, {});
@@ -539,7 +643,7 @@ function saveSettings(){
   Swal.fire("Settings Saved!", "Configuration updated successfully", "success");
 }
 
-function markWithdrawPaid(id){
+function markWithdrawPaid(id) {
   Swal.fire({
     title: "Confirm Payment",
     text: "Mark this withdrawal as paid?",
@@ -548,10 +652,10 @@ function markWithdrawPaid(id){
     confirmButtonColor: "#5BBF72",
     confirmButtonText: "Yes, Paid"
   }).then((result) => {
-    if(result.isConfirmed){
+    if (result.isConfirmed) {
       let wlist = getItem(STORAGE.withdrawals, []);
       let idx = wlist.findIndex(w => w.id === id);
-      if(idx !== -1){
+      if (idx !== -1) {
         wlist[idx].status = 'paid';
         setItem(STORAGE.withdrawals, wlist);
         refreshAdminUI();
@@ -561,7 +665,7 @@ function markWithdrawPaid(id){
   });
 }
 
-function adminLogout(){
+function adminLogout() {
   Swal.fire({
     title: "Logout?",
     text: "You will be redirected to login screen",
@@ -569,7 +673,7 @@ function adminLogout(){
     showCancelButton: true,
     confirmButtonText: "Yes, Logout"
   }).then((result) => {
-    if(result.isConfirmed){
+    if (result.isConfirmed) {
       document.getElementById('loginSection').style.display = 'block';
       document.getElementById('dashboardSection').style.display = 'none';
       document.getElementById('adminPass').value = '';
@@ -578,9 +682,8 @@ function adminLogout(){
   });
 }
 
-// Tab switching
 document.querySelectorAll('.admin-tab').forEach(btn => {
-  btn.addEventListener('click', function(){
+  btn.addEventListener('click', function() {
     let paneId = this.dataset.pane;
     document.querySelectorAll('.admin-pane').forEach(pane => pane.classList.remove('active'));
     document.getElementById(paneId).classList.add('active');
@@ -589,10 +692,9 @@ document.querySelectorAll('.admin-tab').forEach(btn => {
   });
 });
 
-// Show/hide watch seconds field based on task type
-document.getElementById('taskType').addEventListener('change', function(){
+document.getElementById('taskType').addEventListener('change', function() {
   let watchDiv = document.getElementById('watchSecDiv');
-  if(this.value === 'watch'){
+  if (this.value === 'watch') {
     watchDiv.style.display = 'block';
   } else {
     watchDiv.style.display = 'none';
