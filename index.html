@@ -108,27 +108,6 @@ body {
   align-items: center;
 }
 
-.btn-sm {
-  padding: 6px 14px;
-  border-radius: 40px;
-  border: none;
-  font-weight: 600;
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.btn-green {
-  background: linear-gradient(135deg, var(--green), var(--green-dark));
-  color: #021006;
-}
-
-.btn-outline {
-  background: transparent;
-  border: 1px solid var(--border-dim);
-  color: var(--text-muted);
-}
-
 .wrapper {
   max-width: 1300px;
   margin: 0 auto;
@@ -280,12 +259,6 @@ body {
   overflow: hidden;
 }
 
-.thumb-place img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
 .task-title {
   font-weight: 600;
   font-size: 0.85rem;
@@ -336,6 +309,11 @@ body {
   font-weight: 600;
   color: white;
   cursor: pointer;
+}
+
+.btn-task:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .activity-item {
@@ -467,7 +445,7 @@ body {
 </div>
 
 <script>
-// ==================== CLIENT SIDE CODE ONLY ====================
+// ==================== CLIENT SIDE CODE (SCAM-PROOF) ====================
 const STORAGE = {
   coins: 'gmtube_coins',
   doneTasks: 'gmtube_done',
@@ -556,7 +534,7 @@ function setCoins(val) {
 
 function addCoins(amt) {
   setCoins(getCoins() + amt);
-  addActivity('🪙', `+${amt} Coins earned!`);
+  addActivity('🪙', `+${amt} Coins earned! (Task completed)`);
 }
 
 function refreshUI() {
@@ -590,7 +568,7 @@ function renderActivityLog() {
   let acts = getItem(STORAGE.activity, []);
   let container = document.getElementById('activityList');
   if (acts.length === 0) {
-    container.innerHTML = '<div style="text-align:center;color:#6A90B0;">✨ No activity yet. Complete tasks!</div>';
+    container.innerHTML = '<div style="text-align:center;color:#6A90B0;">✨ No activity yet. Complete tasks to earn coins!</div>';
     return;
   }
   container.innerHTML = acts.slice(0, 12).map(a => `<div class="activity-item"><div class="act-icon">${a.icon}</div><div><div class="act-msg">${escapeHtml(a.msg)}</div><div class="act-time">${a.time}</div></div></div>`).join('');
@@ -637,7 +615,12 @@ function renderTasksByCategory() {
     if (isDone) {
       actionHtml = `<span style="background:rgba(91,191,114,0.1); padding:5px 12px; border-radius:60px;">✅ Completed</span>`;
     } else if (task.type === 'watch') {
-      actionHtml = `<button class="btn-task" onclick="startWatchTask(${task.id},${task.watchTime},${task.coins},'${escapeHtml(task.url)}')"><i class="fas fa-play"></i> Watch & Earn</button>`;
+      let remaining = task.watchTime - (watchProg[`w_${task.id}`] || 0);
+      if (remaining <= 0) {
+        actionHtml = `<button class="btn-task" onclick="claimWatchReward(${task.id},${task.coins})"><i class="fas fa-gift"></i> Claim Reward</button>`;
+      } else {
+        actionHtml = `<button class="btn-task" onclick="startWatchTask(${task.id},${task.watchTime},${task.coins},'${escapeHtml(task.url)}')"><i class="fas fa-play"></i> Watch Video (${remaining}s left)</button>`;
+      }
       if (progress > 0 && progress < 100) actionHtml += `<div class="progress-wrapper mt-1"><div class="progress-fill" style="width:${progress}%"></div></div>`;
     } else {
       actionHtml = `<button class="btn-task" onclick="openSocialTask(${task.id},'${escapeHtml(task.url)}',${task.coins},'${task.type}')"><i class="fas fa-external-link-alt"></i> Complete & Claim</button>`;
@@ -646,7 +629,9 @@ function renderTasksByCategory() {
   }).join('');
 }
 
+// Watch Task - Timer must complete fully
 let activeTimer = null;
+let currentWatchTaskId = null;
 
 function startWatchTask(id, requiredSec, coinReward, videoUrl) {
   let doneMap = getItem(STORAGE.doneTasks, {});
@@ -658,18 +643,32 @@ function startWatchTask(id, requiredSec, coinReward, videoUrl) {
     });
     return;
   }
+  
   let progressData = getItem(STORAGE.watchProgress, {});
   let currentSec = progressData[`w_${id}`] || 0;
+  
   if (currentSec >= requiredSec) {
-    completeWatchTask(id, coinReward);
+    claimWatchReward(id, coinReward);
     return;
   }
+  
+  // Open video in new tab
   window.open(videoUrl, '_blank');
+  currentWatchTaskId = id;
+  
   Swal.fire({
-    title: '⏳ Watch & Earn Coins',
-    html: `<div>Watch video for <strong>${requiredSec} seconds</strong><div id="watchTimerDisplay" style="font-size:48px;font-weight:800;margin:15px 0;">${requiredSec - currentSec}</div><div class="progress-wrapper"><div id="timerProgressFill" style="width:${(currentSec / requiredSec) * 100}%;height:100%;background:linear-gradient(90deg,#F0A500,#5BBF72);"></div></div><small style="color:#aaa;">Don't close this window until timer ends!</small></div>`,
+    title: '⏳ WATCH VIDEO TO EARN COINS',
+    html: `<div style="text-align:center">
+      <div style="font-size:16px; margin-bottom:15px;">👉 Video ek naye tab mein khul gaya hai! 👈</div>
+      <div style="font-size:14px; color:#F0A500; margin-bottom:10px;">⚠️ Cheating nahi chalegi! Poora video dekhna hoga ⚠️</div>
+      <div style="font-size:48px;font-weight:800;margin:15px 0;" id="watchTimerDisplay">${requiredSec - currentSec}</div>
+      <div class="progress-wrapper"><div id="timerProgressFill" style="width:${(currentSec/requiredSec)*100}%;height:100%;background:linear-gradient(90deg,#F0A500,#5BBF72);"></div></div>
+      <div style="font-size:12px; color:#6A90B0; margin-top:15px;">Timer automatically countdown kar raha hai...</div>
+      <div style="font-size:12px; color:#E84545; margin-top:10px;">❌ Is window ko band mat karein! ❌</div>
+    </div>`,
     showConfirmButton: false,
     allowOutsideClick: false,
+    allowEscapeKey: false,
     didOpen: () => {
       if (activeTimer) clearInterval(activeTimer);
       activeTimer = setInterval(() => {
@@ -679,54 +678,101 @@ function startWatchTask(id, requiredSec, coinReward, videoUrl) {
           clearInterval(activeTimer);
           prog[`w_${id}`] = requiredSec;
           setItem(STORAGE.watchProgress, prog);
-          completeWatchTask(id, coinReward);
           Swal.close();
+          Swal.fire({
+            title: "✅ Video Watch Complete!",
+            text: `Click "Claim Reward" to get +${coinReward} Coins`,
+            icon: "success",
+            background: "#0A1422",
+            confirmButtonText: "Claim Now!",
+            confirmButtonColor: "#5BBF72"
+          }).then(() => {
+            claimWatchReward(id, coinReward);
+          });
+          refreshUI();
         } else {
           prog[`w_${id}`] = now;
           setItem(STORAGE.watchProgress, prog);
           let remain = requiredSec - now;
-          document.getElementById('watchTimerDisplay') && (document.getElementById('watchTimerDisplay').innerText = remain);
-          let percent = (now / requiredSec) * 100;
+          let displayDiv = document.getElementById('watchTimerDisplay');
+          if (displayDiv) displayDiv.innerText = remain;
           let fillDiv = document.getElementById('timerProgressFill');
-          if (fillDiv) fillDiv.style.width = percent + '%';
+          if (fillDiv) fillDiv.style.width = (now / requiredSec) * 100 + '%';
           refreshUI();
         }
       }, 1000);
     },
     willClose: () => {
-      if (activeTimer) clearInterval(activeTimer);
+      if (activeTimer && currentWatchTaskId === id) {
+        // Don't clear timer if task is complete
+        let prog = getItem(STORAGE.watchProgress, {});
+        if ((prog[`w_${id}`] || 0) < requiredSec) {
+          clearInterval(activeTimer);
+          activeTimer = null;
+        }
+      }
     }
   });
 }
 
-function completeWatchTask(taskId, coinReward) {
+function claimWatchReward(taskId, coinReward) {
   let done = getItem(STORAGE.doneTasks, {});
-  if (done[`w_${taskId}`]) return;
+  let progressData = getItem(STORAGE.watchProgress, {});
+  let wtasks = getItem(STORAGE.watchTasks, []);
+  let task = wtasks.find(t => t.id === taskId);
+  
+  if (!task) return;
+  
+  let requiredSec = task.watchTime;
+  let watched = progressData[`w_${taskId}`] || 0;
+  
+  if (done[`w_${taskId}`]) {
+    Swal.fire("Already claimed!", "", "info");
+    return;
+  }
+  
+  if (watched < requiredSec) {
+    Swal.fire({
+      title: "⛔ CHEATING DETECTED!",
+      text: `You only watched ${watched} out of ${requiredSec} seconds. Watch the full video first!`,
+      icon: "error",
+      background: "#0A1422"
+    });
+    return;
+  }
+  
   done[`w_${taskId}`] = true;
   setItem(STORAGE.doneTasks, done);
   addCoins(coinReward);
-  addActivity('✅', `Watch task completed! +${coinReward} Coins`);
+  addActivity('✅', `Watch task completed! +${coinReward} Coins (Watched ${requiredSec}s)`);
   Swal.fire({
     title: `🎉 +${coinReward} Coins Earned!`,
+    text: "Thank you for watching the full video!",
     icon: "success",
     background: "#0A1422",
-    timer: 1800,
+    timer: 2000,
     showConfirmButton: false
   });
   refreshUI();
 }
 
+// Social Tasks - Must open link and confirm
 let openedSocial = {};
 
 function openSocialTask(taskId, url, coinReward, type) {
   openedSocial[taskId] = true;
   window.open(url, '_blank');
+  
   Swal.fire({
-    title: "Task performed?",
-    text: `Did you ${type} / interact as required? Click YES after completing.`,
+    title: "🤔 Did you complete the task?",
+    html: `<div style="text-align:center">
+      <div>Please ${type} / interact on the opened page.</div>
+      <div style="margin-top:10px; font-size:12px; color:#F0A500;">⚠️ Only click YES after actually completing the task! ⚠️</div>
+    </div>`,
     icon: "question",
     showCancelButton: true,
-    confirmButtonText: "✅ Yes, claim coins",
+    confirmButtonText: "✅ Yes, I completed it!",
+    cancelButtonText: "No, not yet",
     background: "#0A1422"
   }).then(res => {
     if (res.isConfirmed && openedSocial[taskId]) {
@@ -739,9 +785,10 @@ function openSocialTask(taskId, url, coinReward, type) {
       done[key] = true;
       setItem(STORAGE.doneTasks, done);
       addCoins(coinReward);
-      addActivity('👍', `${type.toUpperCase()} task done: +${coinReward} Coins`);
+      addActivity('👍', `${type.toUpperCase()} task completed! +${coinReward} Coins`);
       Swal.fire({
         title: `Earned ${coinReward} Coins!`,
+        text: `Thanks for completing the ${type} task!`,
         icon: "success",
         timer: 1500,
         showConfirmButton: false
