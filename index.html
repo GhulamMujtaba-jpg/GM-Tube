@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
-<title>GM TUBE | Client Dashboard - Earn Coins</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<title>GM TUBE | Client - Earn Coins</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -35,27 +35,26 @@ body {
   color: var(--text-main);
 }
 
-.cover-svg {
+.header {
   width: 100%;
   background: linear-gradient(145deg, #03060F 0%, #071128 100%);
-  padding: 2rem 1rem 1.8rem;
+  padding: 2rem 1rem 1.5rem;
   text-align: center;
   border-bottom: 1px solid var(--border-dim);
 }
 
-.cover-svg h1 {
+.header h1 {
   font-family: 'Syne', sans-serif;
-  font-size: 2.2rem;
+  font-size: 2rem;
   background: linear-gradient(135deg, var(--green), var(--gold), var(--blue));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  margin-bottom: 0.5rem;
 }
 
-.cover-svg p {
+.header p {
   color: var(--text-muted);
-  letter-spacing: 0.5px;
+  margin-top: 8px;
 }
 
 .navbar {
@@ -73,7 +72,7 @@ body {
   gap: 10px;
 }
 
-.logo-area {
+.logo {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -88,7 +87,6 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 1.3rem;
-  box-shadow: 0 4px 12px rgba(91,191,114,0.2);
 }
 
 .logo-text {
@@ -123,10 +121,13 @@ body {
 .btn-green {
   background: linear-gradient(135deg, var(--green), var(--green-dark));
   color: #021006;
-  box-shadow: 0 2px 8px rgba(91,191,114,0.3);
 }
 
-.btn-green:active { transform: scale(0.96);}
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border-dim);
+  color: var(--text-muted);
+}
 
 .wrapper {
   max-width: 1300px;
@@ -169,6 +170,7 @@ body {
   color: var(--text-dim);
   letter-spacing: 1px;
 }
+
 .stat-value {
   font-family: 'Syne', sans-serif;
   font-size: 1.7rem;
@@ -191,6 +193,7 @@ body {
   margin-bottom: 20px;
   flex-wrap: wrap;
 }
+
 .panel-title {
   font-family: 'Syne', sans-serif;
   font-weight: 700;
@@ -198,6 +201,7 @@ body {
   gap: 8px;
   font-size: 1rem;
 }
+
 .green-dot {
   width: 8px;
   height: 8px;
@@ -215,6 +219,7 @@ body {
   border-radius: 60px;
   margin-bottom: 20px;
 }
+
 .tab-btn {
   background: transparent;
   border: none;
@@ -226,16 +231,19 @@ body {
   cursor: pointer;
   transition: 0.2s;
 }
+
 .tab-btn.active {
   background: var(--card-alt);
   color: var(--green);
   border: 1px solid var(--border-dim);
 }
+
 .task-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 18px;
 }
+
 .task-card {
   background: var(--card-alt);
   border: 1px solid var(--border-dim);
@@ -243,17 +251,23 @@ body {
   padding: 1rem;
   transition: 0.2s;
 }
-.task-card:hover { transform: translateY(-3px); border-color: rgba(91,191,114,0.4);}
+
+.task-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(91, 191, 114, 0.4);
+}
+
 .task-chip {
   font-size: 0.65rem;
   font-weight: 700;
   display: inline-flex;
   gap: 4px;
-  background: rgba(63,184,240,0.1);
+  background: rgba(63, 184, 240, 0.1);
   padding: 3px 10px;
   border-radius: 20px;
   margin-bottom: 12px;
 }
+
 .thumb-place {
   width: 100%;
   height: 130px;
@@ -265,18 +279,21 @@ body {
   margin-bottom: 12px;
   overflow: hidden;
 }
+
 .thumb-place img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
+
 .task-title {
   font-weight: 600;
   font-size: 0.85rem;
   margin-bottom: 8px;
 }
+
 .coin-reward {
-  background: rgba(91,191,114,0.1);
+  background: rgba(91, 191, 114, 0.1);
   border-radius: 40px;
   padding: 4px 10px;
   font-size: 0.7rem;
@@ -286,6 +303,7 @@ body {
   align-items: center;
   gap: 4px;
 }
+
 .progress-wrapper {
   margin: 12px 0;
   background: #03070e;
@@ -293,11 +311,13 @@ body {
   height: 5px;
   overflow: hidden;
 }
+
 .progress-fill {
   background: linear-gradient(90deg, var(--gold), var(--green));
   width: 0%;
   height: 100%;
 }
+
 .task-footer {
   display: flex;
   justify-content: space-between;
@@ -306,6 +326,7 @@ body {
   margin-top: 12px;
   gap: 8px;
 }
+
 .btn-task {
   background: var(--green-dark);
   border: none;
@@ -316,6 +337,7 @@ body {
   color: white;
   cursor: pointer;
 }
+
 .activity-item {
   background: var(--card-alt);
   border-radius: 16px;
@@ -325,66 +347,103 @@ body {
   gap: 10px;
   align-items: flex-start;
 }
+
 .act-icon {
   width: 32px;
   height: 32px;
-  background: rgba(91,191,114,0.08);
+  background: rgba(91, 191, 114, 0.08);
   border-radius: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .act-msg {
   font-size: 0.8rem;
   flex: 1;
   color: var(--text-muted);
 }
+
 .act-time {
   font-size: 0.65rem;
   color: var(--text-dim);
 }
+
 .msg-broadcast {
-  background: rgba(63,184,240,0.08);
+  background: rgba(63, 184, 240, 0.08);
   padding: 12px;
   border-radius: 14px;
   margin-bottom: 8px;
 }
-@media (max-width:640px){
-  .stats-grid{grid-template-columns:1fr 1fr;}
-  .wrapper{padding: 16px;}
+
+@media (max-width: 640px) {
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .wrapper {
+    padding: 16px;
+  }
 }
 </style>
 </head>
 <body>
 
-<div class="cover-svg">
-  <h1>📺 GM TUBE <span style="background:linear-gradient(135deg,#F0A500,#5BBF72); -webkit-background-clip:text; background-clip:text; color:transparent;">CLIENT</span></h1>
-  <p>Earn Coins by Watching Videos · Convert Coins to PKR</p>
+<div class="header">
+  <h1>📺 GM TUBE</h1>
+  <p>Complete Tasks & Earn Coins</p>
 </div>
 
 <nav class="navbar">
-  <div class="logo-area">
+  <div class="logo">
     <div class="logo-icon">🎬</div>
     <div class="logo-text">GM TUBE</div>
   </div>
   <div style="display: flex; gap: 12px; align-items: center;">
     <div class="coin-badge"><i class="fas fa-coins"></i> <span id="navCoins">0</span> Coins</div>
-    <button class="btn-sm btn-green" onclick="window.open('admin.html', '_blank')"><i class="fas fa-shield-alt"></i> Admin Panel</button>
   </div>
 </nav>
 
 <div class="wrapper">
   <div class="stats-grid">
-    <div class="stat-card"><div class="stat-icon"><i class="fas fa-coins"></i></div><div><div class="stat-label">My Coins</div><div class="stat-value" id="statCoins">0</div></div></div>
-    <div class="stat-card"><div class="stat-icon"><i class="fas fa-check-circle"></i></div><div><div class="stat-label">Completed</div><div class="stat-value" id="statCompleted">0</div></div></div>
-    <div class="stat-card"><div class="stat-icon"><i class="fas fa-clock"></i></div><div><div class="stat-label">Pending Tasks</div><div class="stat-value" id="statPending">0</div></div></div>
-    <div class="stat-card"><div class="stat-icon"><i class="fas fa-chart-line"></i></div><div><div class="stat-label">Total Earned</div><div class="stat-value" id="statTotalEarned">0</div></div></div>
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fas fa-coins"></i></div>
+      <div>
+        <div class="stat-label">My Coins</div>
+        <div class="stat-value" id="statCoins">0</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+      <div>
+        <div class="stat-label">Completed</div>
+        <div class="stat-value" id="statCompleted">0</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fas fa-clock"></i></div>
+      <div>
+        <div class="stat-label">Pending Tasks</div>
+        <div class="stat-value" id="statPending">0</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+      <div>
+        <div class="stat-label">Total Earned</div>
+        <div class="stat-value" id="statTotalEarned">0</div>
+      </div>
+    </div>
   </div>
 
-  <div id="announcementBox" style="margin-bottom:20px;"></div>
+  <div id="announcementBox" style="margin-bottom: 20px;"></div>
 
   <div class="panel">
-    <div class="panel-header"><div class="panel-title"><div class="green-dot"></div>🚀 Complete Tasks & Earn Coins</div></div>
+    <div class="panel-header">
+      <div class="panel-title">
+        <div class="green-dot"></div>
+        🚀 Complete Tasks & Earn Coins
+      </div>
+    </div>
     <div class="task-tabs" id="taskTabList">
       <button class="tab-btn active" data-cat="watch">🎬 Watch Video</button>
       <button class="tab-btn" data-cat="like">👍 Like</button>
@@ -397,13 +456,18 @@ body {
   </div>
 
   <div class="panel">
-    <div class="panel-header"><div class="panel-title"><div class="green-dot"></div>📜 Recent Activity</div></div>
+    <div class="panel-header">
+      <div class="panel-title">
+        <div class="green-dot"></div>
+        📜 Recent Activity
+      </div>
+    </div>
     <div id="activityList"></div>
   </div>
 </div>
 
 <script>
-// CLIENT SIDE CODE - Only user functionality
+// ==================== CLIENT SIDE CODE ONLY ====================
 const STORAGE = {
   coins: 'gmtube_coins',
   doneTasks: 'gmtube_done',
@@ -417,108 +481,201 @@ const STORAGE = {
   config: 'gmtube_config'
 };
 
-function getItem(key, def=null){ let d=localStorage.getItem(key); return d?JSON.parse(d):def; }
-function setItem(key,val){ localStorage.setItem(key,JSON.stringify(val)); }
-
-function initData(){
-  if(!getItem(STORAGE.watchTasks, null)) setItem(STORAGE.watchTasks, [{ id:1001, title:"Intro Video - Earn Coins", url:"https://www.youtube.com/watch?v=dQw4w9WgXcQ", coins:45, watchTime:12, thumb:"" }]);
-  if(!getItem(STORAGE.socialTasks, null)) setItem(STORAGE.socialTasks, [{ id:2001, type:"like", title:"Like GM Tube Official", url:"https://youtube.com", coins:15 },{ id:2002, type:"subscribe", title:"Subscribe for daily tasks", url:"https://youtube.com", coins:30 }]);
-  if(!getItem(STORAGE.config, null)) setItem(STORAGE.config, { cpr:10, minWithdrawCoins:500 });
-  if(!getItem(STORAGE.coins, null)) setItem(STORAGE.coins,0);
-  if(!getItem(STORAGE.doneTasks, null)) setItem(STORAGE.doneTasks,{});
-  if(!getItem(STORAGE.watchProgress, null)) setItem(STORAGE.watchProgress,{});
-  if(!getItem(STORAGE.adminEarnings, null)) setItem(STORAGE.adminEarnings,0);
-  if(!getItem(STORAGE.withdrawals, null)) setItem(STORAGE.withdrawals,[]);
-  if(!getItem(STORAGE.announcements, null)) setItem(STORAGE.announcements,[]);
-  if(!getItem(STORAGE.activity, null)) setItem(STORAGE.activity,[]);
+function getItem(key, def = null) {
+  let d = localStorage.getItem(key);
+  return d ? JSON.parse(d) : def;
 }
+
+function setItem(key, val) {
+  localStorage.setItem(key, JSON.stringify(val));
+}
+
+function initData() {
+  if (!getItem(STORAGE.watchTasks, null)) {
+    setItem(STORAGE.watchTasks, [{
+      id: 1001,
+      title: "Intro Video - Earn Coins",
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      coins: 45,
+      watchTime: 12,
+      thumb: ""
+    }]);
+  }
+  if (!getItem(STORAGE.socialTasks, null)) {
+    setItem(STORAGE.socialTasks, [{
+        id: 2001,
+        type: "like",
+        title: "Like GM Tube Official",
+        url: "https://youtube.com",
+        coins: 15
+      },
+      {
+        id: 2002,
+        type: "subscribe",
+        title: "Subscribe for daily tasks",
+        url: "https://youtube.com",
+        coins: 30
+      }
+    ]);
+  }
+  if (!getItem(STORAGE.config, null)) setItem(STORAGE.config, {
+    cpr: 10,
+    minWithdrawCoins: 500
+  });
+  if (!getItem(STORAGE.coins, null)) setItem(STORAGE.coins, 0);
+  if (!getItem(STORAGE.doneTasks, null)) setItem(STORAGE.doneTasks, {});
+  if (!getItem(STORAGE.watchProgress, null)) setItem(STORAGE.watchProgress, {});
+  if (!getItem(STORAGE.adminEarnings, null)) setItem(STORAGE.adminEarnings, 0);
+  if (!getItem(STORAGE.withdrawals, null)) setItem(STORAGE.withdrawals, []);
+  if (!getItem(STORAGE.announcements, null)) setItem(STORAGE.announcements, []);
+  if (!getItem(STORAGE.activity, null)) setItem(STORAGE.activity, []);
+}
+
 initData();
 
-function addActivity(icon, msg){ let act = getItem(STORAGE.activity,[]); act.unshift({ icon, msg, time: new Date().toLocaleString() }); if(act.length>30) act.pop(); setItem(STORAGE.activity,act); refreshUI(); }
-function getCoins(){ return getItem(STORAGE.coins,0); }
-function setCoins(val){ setItem(STORAGE.coins, Math.max(0,val)); refreshUI();}
-function addCoins(amt){ setCoins(getCoins()+amt); addActivity('🪙', `+${amt} Coins earned!`); }
+function addActivity(icon, msg) {
+  let act = getItem(STORAGE.activity, []);
+  act.unshift({
+    icon,
+    msg,
+    time: new Date().toLocaleString()
+  });
+  if (act.length > 30) act.pop();
+  setItem(STORAGE.activity, act);
+  refreshUI();
+}
 
-function refreshUI(){
-  let coins = getCoins(); let done = getItem(STORAGE.doneTasks,{});
-  let wtasks = getItem(STORAGE.watchTasks,[]); let stasks = getItem(STORAGE.socialTasks,[]);
+function getCoins() {
+  return getItem(STORAGE.coins, 0);
+}
+
+function setCoins(val) {
+  setItem(STORAGE.coins, Math.max(0, val));
+  refreshUI();
+}
+
+function addCoins(amt) {
+  setCoins(getCoins() + amt);
+  addActivity('🪙', `+${amt} Coins earned!`);
+}
+
+function refreshUI() {
+  let coins = getCoins();
+  let done = getItem(STORAGE.doneTasks, {});
+  let wtasks = getItem(STORAGE.watchTasks, []);
+  let stasks = getItem(STORAGE.socialTasks, []);
   let totalTasks = wtasks.length + stasks.length;
   let completedCount = Object.keys(done).length;
-  document.getElementById('navCoins').innerText=coins;
-  document.getElementById('statCoins').innerText=coins;
-  document.getElementById('statCompleted').innerText=completedCount;
-  document.getElementById('statPending').innerText=Math.max(0,totalTasks-completedCount);
-  document.getElementById('statTotalEarned').innerText=coins;
+  document.getElementById('navCoins').innerText = coins;
+  document.getElementById('statCoins').innerText = coins;
+  document.getElementById('statCompleted').innerText = completedCount;
+  document.getElementById('statPending').innerText = Math.max(0, totalTasks - completedCount);
+  document.getElementById('statTotalEarned').innerText = coins;
   renderAnnouncements();
   renderTasksByCategory();
   renderActivityLog();
 }
 
-function renderAnnouncements(){
-  let msgs = getItem(STORAGE.announcements,[]);
+function renderAnnouncements() {
+  let msgs = getItem(STORAGE.announcements, []);
   let box = document.getElementById('announcementBox');
-  if(msgs.length===0){ box.innerHTML=''; return; }
-  box.innerHTML = `<div class="panel" style="padding:12px 16px;"><div class="panel-title">📢 Announcements</div>${msgs.slice(0,2).map(m=>`<div class="msg-broadcast">📣 ${escapeHtml(m.msg)} <div style="font-size:10px;margin-top:4px;">${m.time}</div></div>`).join('')}</div>`;
+  if (msgs.length === 0) {
+    box.innerHTML = '';
+    return;
+  }
+  box.innerHTML = `<div class="panel" style="padding:12px 16px;"><div class="panel-title">📢 Announcements</div>${msgs.slice(0, 2).map(m => `<div class="msg-broadcast">📣 ${escapeHtml(m.msg)} <div style="font-size:10px;margin-top:4px;">${m.time}</div></div>`).join('')}</div>`;
 }
 
-function renderActivityLog(){
-  let acts = getItem(STORAGE.activity,[]);
+function renderActivityLog() {
+  let acts = getItem(STORAGE.activity, []);
   let container = document.getElementById('activityList');
-  if(acts.length===0){ container.innerHTML='<div style="text-align:center;color:#6A90B0;">✨ No activity yet. Complete tasks!</div>'; return; }
-  container.innerHTML = acts.slice(0,12).map(a=>`<div class="activity-item"><div class="act-icon">${a.icon}</div><div><div class="act-msg">${escapeHtml(a.msg)}</div><div class="act-time">${a.time}</div></div></div>`).join('');
+  if (acts.length === 0) {
+    container.innerHTML = '<div style="text-align:center;color:#6A90B0;">✨ No activity yet. Complete tasks!</div>';
+    return;
+  }
+  container.innerHTML = acts.slice(0, 12).map(a => `<div class="activity-item"><div class="act-icon">${a.icon}</div><div><div class="act-msg">${escapeHtml(a.msg)}</div><div class="act-time">${a.time}</div></div></div>`).join('');
 }
 
-function escapeHtml(s){ return String(s).replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+function escapeHtml(s) {
+  return String(s).replace(/[&<>]/g, function(m) {
+    if (m === '&') return '&amp;';
+    if (m === '<') return '&lt;';
+    if (m === '>') return '&gt;';
+    return m;
+  });
+}
 
-function renderTasksByCategory(){
+function renderTasksByCategory() {
   let activeCat = document.querySelector('.tab-btn.active')?.dataset.cat || 'watch';
-  let wtasks = getItem(STORAGE.watchTasks,[]);
-  let stasks = getItem(STORAGE.socialTasks,[]);
-  let doneMap = getItem(STORAGE.doneTasks,{});
-  let watchProg = getItem(STORAGE.watchProgress,{});
+  let wtasks = getItem(STORAGE.watchTasks, []);
+  let stasks = getItem(STORAGE.socialTasks, []);
+  let doneMap = getItem(STORAGE.doneTasks, {});
+  let watchProg = getItem(STORAGE.watchProgress, {});
   let container = document.getElementById('tasksContainer');
   let tasksToShow = [];
-  if(activeCat === 'watch') tasksToShow = wtasks.map(t => ({ ...t, type:'watch' }));
-  else tasksToShow = stasks.filter(s => s.type === activeCat).map(t => ({ ...t, type:t.type }));
-  if(tasksToShow.length===0){ container.innerHTML='<div style="grid-column:1/-1; text-align:center;padding:40px;">⏳ No tasks in this category.</div>'; return; }
+  if (activeCat === 'watch') tasksToShow = wtasks.map(t => ({ ...t,
+    type: 'watch'
+  }));
+  else tasksToShow = stasks.filter(s => s.type === activeCat).map(t => ({ ...t,
+    type: t.type
+  }));
+  if (tasksToShow.length === 0) {
+    container.innerHTML = '<div style="grid-column:1/-1; text-align:center;padding:40px;">⏳ No tasks in this category.</div>';
+    return;
+  }
   container.innerHTML = tasksToShow.map(task => {
-    let taskKey = task.type==='watch' ? `w_${task.id}` : `s_${task.id}`;
+    let taskKey = task.type === 'watch' ? `w_${task.id}` : `s_${task.id}`;
     let isDone = !!doneMap[taskKey];
     let progress = 0;
-    if(task.type==='watch' && !isDone){ progress = watchProg[`w_${task.id}`] || 0; let pct = (progress/task.watchTime)*100; progress = Math.min(100,pct); }
+    if (task.type === 'watch' && !isDone) {
+      progress = watchProg[`w_${task.id}`] || 0;
+      let pct = (progress / task.watchTime) * 100;
+      progress = Math.min(100, pct);
+    }
     let rewardSpan = `<span class="coin-reward"><i class="fas fa-coins"></i> +${task.coins}</span>`;
     let actionHtml = '';
-    if(isDone){
+    if (isDone) {
       actionHtml = `<span style="background:rgba(91,191,114,0.1); padding:5px 12px; border-radius:60px;">✅ Completed</span>`;
-    } else if(task.type === 'watch'){
+    } else if (task.type === 'watch') {
       actionHtml = `<button class="btn-task" onclick="startWatchTask(${task.id},${task.watchTime},${task.coins},'${escapeHtml(task.url)}')"><i class="fas fa-play"></i> Watch & Earn</button>`;
-      if(progress>0 && progress<100) actionHtml += `<div class="progress-wrapper mt-1"><div class="progress-fill" style="width:${progress}%"></div></div>`;
+      if (progress > 0 && progress < 100) actionHtml += `<div class="progress-wrapper mt-1"><div class="progress-fill" style="width:${progress}%"></div></div>`;
     } else {
       actionHtml = `<button class="btn-task" onclick="openSocialTask(${task.id},'${escapeHtml(task.url)}',${task.coins},'${task.type}')"><i class="fas fa-external-link-alt"></i> Complete & Claim</button>`;
     }
-    return `<div class="task-card"><div class="task-chip">${task.type==='watch'?'🎬 WATCH':task.type.toUpperCase()}</div><div class="thumb-place">${task.thumb?`<img src="${task.thumb}" onerror="this.src=''">`:'<i class="fas fa-video" style="font-size:32px;opacity:0.3;"></i>'}</div><div class="task-title">${escapeHtml(task.title)}</div><div style="display:flex;justify-content:space-between;align-items:center;"><span>${rewardSpan}</span></div><div class="task-footer">${actionHtml}</div></div>`;
+    return `<div class="task-card"><div class="task-chip">${task.type === 'watch' ? '🎬 WATCH' : task.type.toUpperCase()}</div><div class="thumb-place">${task.thumb ? `<img src="${task.thumb}" onerror="this.src=''">` : '<i class="fas fa-video" style="font-size:32px;opacity:0.3;"></i>'}</div><div class="task-title">${escapeHtml(task.title)}</div><div style="display:flex;justify-content:space-between;align-items:center;"><span>${rewardSpan}</span></div><div class="task-footer">${actionHtml}</div></div>`;
   }).join('');
 }
 
-let activeTimer=null;
-function startWatchTask(id, requiredSec, coinReward, videoUrl){
-  let doneMap = getItem(STORAGE.doneTasks,{});
-  if(doneMap[`w_${id}`]){ Swal.fire({title:"Already completed!",icon:"info",background:"#0A1422"}); return; }
-  let progressData = getItem(STORAGE.watchProgress,{});
+let activeTimer = null;
+
+function startWatchTask(id, requiredSec, coinReward, videoUrl) {
+  let doneMap = getItem(STORAGE.doneTasks, {});
+  if (doneMap[`w_${id}`]) {
+    Swal.fire({
+      title: "Already completed!",
+      icon: "info",
+      background: "#0A1422"
+    });
+    return;
+  }
+  let progressData = getItem(STORAGE.watchProgress, {});
   let currentSec = progressData[`w_${id}`] || 0;
-  if(currentSec >= requiredSec){ completeWatchTask(id, coinReward); return; }
+  if (currentSec >= requiredSec) {
+    completeWatchTask(id, coinReward);
+    return;
+  }
   window.open(videoUrl, '_blank');
   Swal.fire({
     title: '⏳ Watch & Earn Coins',
-    html: `<div>Watch video for <strong>${requiredSec} seconds</strong><div id="watchTimerDisplay" style="font-size:48px;font-weight:800;margin:15px 0;">${requiredSec-currentSec}</div><div class="progress-wrapper"><div id="timerProgressFill" style="width:${(currentSec/requiredSec)*100}%;height:100%;background:linear-gradient(90deg,#F0A500,#5BBF72);"></div></div><small style="color:#aaa;">Don't close this window until timer ends!</small></div>`,
+    html: `<div>Watch video for <strong>${requiredSec} seconds</strong><div id="watchTimerDisplay" style="font-size:48px;font-weight:800;margin:15px 0;">${requiredSec - currentSec}</div><div class="progress-wrapper"><div id="timerProgressFill" style="width:${(currentSec / requiredSec) * 100}%;height:100%;background:linear-gradient(90deg,#F0A500,#5BBF72);"></div></div><small style="color:#aaa;">Don't close this window until timer ends!</small></div>`,
     showConfirmButton: false,
     allowOutsideClick: false,
-    didOpen: ()=>{
-      if(activeTimer) clearInterval(activeTimer);
-      activeTimer = setInterval(()=>{
-        let prog = getItem(STORAGE.watchProgress,{});
+    didOpen: () => {
+      if (activeTimer) clearInterval(activeTimer);
+      activeTimer = setInterval(() => {
+        let prog = getItem(STORAGE.watchProgress, {});
         let now = (prog[`w_${id}`] || 0) + 1;
-        if(now >= requiredSec){
+        if (now >= requiredSec) {
           clearInterval(activeTimer);
           prog[`w_${id}`] = requiredSec;
           setItem(STORAGE.watchProgress, prog);
@@ -529,55 +686,85 @@ function startWatchTask(id, requiredSec, coinReward, videoUrl){
           setItem(STORAGE.watchProgress, prog);
           let remain = requiredSec - now;
           document.getElementById('watchTimerDisplay') && (document.getElementById('watchTimerDisplay').innerText = remain);
-          let percent = (now/requiredSec)*100;
+          let percent = (now / requiredSec) * 100;
           let fillDiv = document.getElementById('timerProgressFill');
-          if(fillDiv) fillDiv.style.width = percent+'%';
+          if (fillDiv) fillDiv.style.width = percent + '%';
           refreshUI();
         }
-      },1000);
+      }, 1000);
     },
-    willClose: ()=>{ if(activeTimer) clearInterval(activeTimer); }
+    willClose: () => {
+      if (activeTimer) clearInterval(activeTimer);
+    }
   });
 }
 
-function completeWatchTask(taskId, coinReward){
-  let done = getItem(STORAGE.doneTasks,{});
-  if(done[`w_${taskId}`]) return;
+function completeWatchTask(taskId, coinReward) {
+  let done = getItem(STORAGE.doneTasks, {});
+  if (done[`w_${taskId}`]) return;
   done[`w_${taskId}`] = true;
   setItem(STORAGE.doneTasks, done);
   addCoins(coinReward);
   addActivity('✅', `Watch task completed! +${coinReward} Coins`);
-  Swal.fire({title:`🎉 +${coinReward} Coins Earned!`, icon:"success", background:"#0A1422", timer:1800, showConfirmButton:false});
+  Swal.fire({
+    title: `🎉 +${coinReward} Coins Earned!`,
+    icon: "success",
+    background: "#0A1422",
+    timer: 1800,
+    showConfirmButton: false
+  });
   refreshUI();
 }
 
 let openedSocial = {};
-function openSocialTask(taskId, url, coinReward, type){
+
+function openSocialTask(taskId, url, coinReward, type) {
   openedSocial[taskId] = true;
   window.open(url, '_blank');
   Swal.fire({
     title: "Task performed?",
     text: `Did you ${type} / interact as required? Click YES after completing.`,
-    icon: "question", showCancelButton: true, confirmButtonText: "✅ Yes, claim coins",
-    background:"#0A1422"
-  }).then(res=>{
-    if(res.isConfirmed && openedSocial[taskId]){
-      let done = getItem(STORAGE.doneTasks,{});
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "✅ Yes, claim coins",
+    background: "#0A1422"
+  }).then(res => {
+    if (res.isConfirmed && openedSocial[taskId]) {
+      let done = getItem(STORAGE.doneTasks, {});
       let key = `s_${taskId}`;
-      if(done[key]) { Swal.fire("Already claimed!", "","info"); return; }
+      if (done[key]) {
+        Swal.fire("Already claimed!", "", "info");
+        return;
+      }
       done[key] = true;
       setItem(STORAGE.doneTasks, done);
       addCoins(coinReward);
       addActivity('👍', `${type.toUpperCase()} task done: +${coinReward} Coins`);
-      Swal.fire({title:`Earned ${coinReward} Coins!`, icon:"success", timer:1500, showConfirmButton:false});
+      Swal.fire({
+        title: `Earned ${coinReward} Coins!`,
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false
+      });
       refreshUI();
-    } else if(res.isConfirmed && !openedSocial[taskId]) Swal.fire("Please open the task link first!", "", "warning");
+    } else if (res.isConfirmed && !openedSocial[taskId]) {
+      Swal.fire("Please open the task link first!", "", "warning");
+    }
   });
 }
 
-document.querySelectorAll('.tab-btn').forEach(btn=>{ btn.addEventListener('click',function(){ document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active'); refreshUI(); }); });
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    refreshUI();
+  });
+});
+
 refreshUI();
-setInterval(()=>{ refreshUI(); }, 5000);
+setInterval(() => {
+  refreshUI();
+}, 5000);
 </script>
 </body>
 </html>
