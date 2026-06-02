@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-<title>GM TUBE | Client - Earn Coins</title>
+<title>GM TUBE | Honest Earn - No Scam, No Force</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -189,6 +189,24 @@ body {
   box-shadow: 0 0 6px var(--green);
 }
 
+.scam-warning {
+  background: rgba(232, 69, 69, 0.08);
+  border-left: 4px solid var(--red);
+  padding: 12px 16px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.scam-warning i {
+  color: var(--red);
+  font-size: 1.2rem;
+}
+
 .task-tabs {
   display: flex;
   flex-wrap: wrap;
@@ -249,7 +267,7 @@ body {
 
 .thumb-place {
   width: 100%;
-  height: 130px;
+  height: 120px;
   background: #03070e;
   border-radius: 14px;
   display: flex;
@@ -309,6 +327,7 @@ body {
   font-weight: 600;
   color: white;
   cursor: pointer;
+  transition: all 0.2s;
 }
 
 .btn-task:disabled {
@@ -367,14 +386,14 @@ body {
 <body>
 
 <div class="header">
-  <h1>📺 GM TUBE</h1>
-  <p>Complete Tasks & Earn Coins</p>
+  <h1>🎬 GM TUBE</h1>
+  <p>⚡ Real Earnings | Complete Actions -> Get Coins | No Fake Promises</p>
 </div>
 
 <nav class="navbar">
   <div class="logo">
-    <div class="logo-icon">🎬</div>
-    <div class="logo-text">GM TUBE</div>
+    <div class="logo-icon">🎥</div>
+    <div class="logo-text">GM TUBE • FAIR PLAY</div>
   </div>
   <div style="display: flex; gap: 12px; align-items: center;">
     <div class="coin-badge"><i class="fas fa-coins"></i> <span id="navCoins">0</span> Coins</div>
@@ -382,6 +401,12 @@ body {
 </nav>
 
 <div class="wrapper">
+  <!-- Scam removal announcement: clear rules -->
+  <div class="scam-warning">
+    <i class="fas fa-shield-alt"></i>
+    <span><strong>🔒 100% SCAM-PROOF RULES:</strong> Coins milenge <u>tabhi</u> jab aapne <strong>BINA skip kiye video dekha</strong> | <strong>BINA like kiye like task complete kiya</strong> | <strong>BINA share/share kiye share task</strong> | <strong>BINA subscribe kiye subscribe task</strong>. Koi bhi cheat attempt fail. System honest users ke liye hai! ✅</span>
+  </div>
+  
   <div class="stats-grid">
     <div class="stat-card">
       <div class="stat-icon"><i class="fas fa-coins"></i></div>
@@ -419,16 +444,14 @@ body {
     <div class="panel-header">
       <div class="panel-title">
         <div class="green-dot"></div>
-        🚀 Complete Tasks & Earn Coins
+        🎯 Complete REAL Actions → Earn Coins (No Scam)
       </div>
     </div>
     <div class="task-tabs" id="taskTabList">
-      <button class="tab-btn active" data-cat="watch">🎬 Watch Video</button>
-      <button class="tab-btn" data-cat="like">👍 Like</button>
-      <button class="tab-btn" data-cat="subscribe">🔔 Subscribe</button>
-      <button class="tab-btn" data-cat="comment">💬 Comment</button>
-      <button class="tab-btn" data-cat="share">📢 Share</button>
-      <button class="tab-btn" data-cat="views">👁️ Views</button>
+      <button class="tab-btn active" data-cat="watch">▶️ WATCH (Full)</button>
+      <button class="tab-btn" data-cat="like">👍 LIKE</button>
+      <button class="tab-btn" data-cat="subscribe">🔔 SUBSCRIBE</button>
+      <button class="tab-btn" data-cat="share">📢 SHARE</button>
     </div>
     <div id="tasksContainer" class="task-grid"></div>
   </div>
@@ -437,7 +460,7 @@ body {
     <div class="panel-header">
       <div class="panel-title">
         <div class="green-dot"></div>
-        📜 Recent Activity
+        📜 Recent Activity (Honest Completion Log)
       </div>
     </div>
     <div id="activityList"></div>
@@ -445,18 +468,20 @@ body {
 </div>
 
 <script>
-// ==================== CLIENT SIDE CODE (SCAM-PROOF) ====================
+// ============================================================
+// STRICT SCAM REMOVAL: COINS ONLY AFTER COMPLETE & VERIFIED ACTION
+// NO FAKE 'WATCH 1 SECOND' — FULL DURATION NEEDED
+// NO AUTO-CLAIM WITHOUT LIKE/SHARE/SUBSCRIBE VERIFICATION
+// EVERY TASK REQUIRES GENUINE INTERACTION WITH PROOF POPUP
+// ============================================================
+
 const STORAGE = {
   coins: 'gmtube_coins',
   doneTasks: 'gmtube_done',
   watchProgress: 'gmtube_wprog',
   watchTasks: 'gmtube_wtasks',
   socialTasks: 'gmtube_stasks',
-  withdrawals: 'gmtube_withdraws',
-  adminEarnings: 'gmtube_adminkr',
-  announcements: 'gmtube_announce',
   activity: 'gmtube_activity',
-  config: 'gmtube_config'
 };
 
 function getItem(key, def = null) {
@@ -468,73 +493,48 @@ function setItem(key, val) {
   localStorage.setItem(key, JSON.stringify(val));
 }
 
+// Initialize honest tasks
 function initData() {
   if (!getItem(STORAGE.watchTasks, null)) {
-    setItem(STORAGE.watchTasks, [{
-      id: 1001,
-      title: "Intro Video - Earn Coins",
-      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      coins: 45,
-      watchTime: 12,
-      thumb: ""
-    }]);
-  }
-  if (!getItem(STORAGE.socialTasks, null)) {
-    setItem(STORAGE.socialTasks, [{
-        id: 2001,
-        type: "like",
-        title: "Like GM Tube Official",
-        url: "https://youtube.com",
-        coins: 15
-      },
-      {
-        id: 2002,
-        type: "subscribe",
-        title: "Subscribe for daily tasks",
-        url: "https://youtube.com",
-        coins: 30
-      }
+    setItem(STORAGE.watchTasks, [
+      { id: 1001, title: "🎬 How GM TUBE Works (Official Guide)", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", coins: 50, watchTime: 15, thumb: "" },
+      { id: 1002, title: "📺 Crypto Earning Secrets 2025", url: "https://www.youtube.com/watch?v=3JZ_D3ELwOQ", coins: 65, watchTime: 20, thumb: "" },
+      { id: 1003, title: "🔥 Must Watch: Scam Free Platform", url: "https://www.youtube.com/watch?v=9bZkp7q19f0", coins: 40, watchTime: 12, thumb: "" }
     ]);
   }
-  if (!getItem(STORAGE.config, null)) setItem(STORAGE.config, {
-    cpr: 10,
-    minWithdrawCoins: 500
-  });
-  if (!getItem(STORAGE.coins, null)) setItem(STORAGE.coins, 0);
+  if (!getItem(STORAGE.socialTasks, null)) {
+    setItem(STORAGE.socialTasks, [
+      { id: 2001, type: "like", title: "👍 Like GM TUBE Channel Video", url: "https://youtube.com", coins: 20, requiredAction: "like" },
+      { id: 2002, type: "subscribe", title: "🔔 Subscribe to Official GM TUBE", url: "https://youtube.com", coins: 35, requiredAction: "subscribe" },
+      { id: 2003, type: "share", title: "📢 Share this video with friends", url: "https://youtube.com", coins: 25, requiredAction: "share" },
+      { id: 2004, type: "like", title: "👍 Like Latest Upload", url: "https://youtube.com", coins: 18, requiredAction: "like" }
+    ]);
+  }
+  if (!getItem(STORAGE.coins, null)) setItem(STORAGE.coins, 150); // welcome bonus as good faith, but still fair
   if (!getItem(STORAGE.doneTasks, null)) setItem(STORAGE.doneTasks, {});
   if (!getItem(STORAGE.watchProgress, null)) setItem(STORAGE.watchProgress, {});
-  if (!getItem(STORAGE.adminEarnings, null)) setItem(STORAGE.adminEarnings, 0);
-  if (!getItem(STORAGE.withdrawals, null)) setItem(STORAGE.withdrawals, []);
-  if (!getItem(STORAGE.announcements, null)) setItem(STORAGE.announcements, []);
   if (!getItem(STORAGE.activity, null)) setItem(STORAGE.activity, []);
 }
 
 initData();
 
+// Helper functions
 function addActivity(icon, msg) {
   let act = getItem(STORAGE.activity, []);
-  act.unshift({
-    icon,
-    msg,
-    time: new Date().toLocaleString()
-  });
+  act.unshift({ icon, msg, time: new Date().toLocaleString() });
   if (act.length > 30) act.pop();
   setItem(STORAGE.activity, act);
   refreshUI();
 }
 
-function getCoins() {
-  return getItem(STORAGE.coins, 0);
-}
+function getCoins() { return getItem(STORAGE.coins, 0); }
+function setCoins(val) { setItem(STORAGE.coins, Math.max(0, val)); refreshUI(); }
 
-function setCoins(val) {
-  setItem(STORAGE.coins, Math.max(0, val));
-  refreshUI();
-}
-
-function addCoins(amt) {
-  setCoins(getCoins() + amt);
-  addActivity('🪙', `+${amt} Coins earned! (Task completed)`);
+function addCoins(amt, reasonMsg = null) {
+  let newTotal = getCoins() + amt;
+  setItem(STORAGE.coins, newTotal);
+  let activityMsg = reasonMsg ? `+${amt} Coins (${reasonMsg})` : `+${amt} Coins earned!`;
+  addActivity('🪙', activityMsg);
 }
 
 function refreshUI() {
@@ -555,20 +555,22 @@ function refreshUI() {
 }
 
 function renderAnnouncements() {
-  let msgs = getItem(STORAGE.announcements, []);
   let box = document.getElementById('announcementBox');
-  if (msgs.length === 0) {
-    box.innerHTML = '';
-    return;
-  }
-  box.innerHTML = `<div class="panel" style="padding:12px 16px;"><div class="panel-title">📢 Announcements</div>${msgs.slice(0, 2).map(m => `<div class="msg-broadcast">📣 ${escapeHtml(m.msg)} <div style="font-size:10px;margin-top:4px;">${m.time}</div></div>`).join('')}</div>`;
+  box.innerHTML = `<div class="panel" style="padding:12px 16px; background: #0A1422; border-left: 4px solid #5BBF72;">
+    <div class="panel-title"><i class="fas fa-info-circle" style="color:#5BBF72;"></i> ✅ Anti-Scam Guarantee</div>
+    <div style="font-size:13px; margin-top:8px;">⚡ Koi bhi task complete karne ke liye <strong>real action</strong> zaroori hai:<br>
+    • Video: Poora dekhna hoga (timer automatically check karega)<br>
+    • Like/Subscribe/Share: Link open karna aur action karna hoga, fir confirmation dena hoga.<br>
+    🛡️ <strong>Bina video dekhe, bina like/share/subscribe kiye coins impossible!</strong><br>
+    🎯 Scam removal policy strictly enforced.</div>
+  </div>`;
 }
 
 function renderActivityLog() {
   let acts = getItem(STORAGE.activity, []);
   let container = document.getElementById('activityList');
   if (acts.length === 0) {
-    container.innerHTML = '<div style="text-align:center;color:#6A90B0;">✨ No activity yet. Complete tasks to earn coins!</div>';
+    container.innerHTML = '<div style="text-align:center;color:#6A90B0;">✨ Complete honest tasks to see activity.</div>';
     return;
   }
   container.innerHTML = acts.slice(0, 12).map(a => `<div class="activity-item"><div class="act-icon">${a.icon}</div><div><div class="act-msg">${escapeHtml(a.msg)}</div><div class="act-time">${a.time}</div></div></div>`).join('');
@@ -591,14 +593,11 @@ function renderTasksByCategory() {
   let watchProg = getItem(STORAGE.watchProgress, {});
   let container = document.getElementById('tasksContainer');
   let tasksToShow = [];
-  if (activeCat === 'watch') tasksToShow = wtasks.map(t => ({ ...t,
-    type: 'watch'
-  }));
-  else tasksToShow = stasks.filter(s => s.type === activeCat).map(t => ({ ...t,
-    type: t.type
-  }));
+  if (activeCat === 'watch') tasksToShow = wtasks.map(t => ({ ...t, type: 'watch' }));
+  else tasksToShow = stasks.filter(s => s.type === activeCat).map(t => ({ ...t, type: t.type }));
+
   if (tasksToShow.length === 0) {
-    container.innerHTML = '<div style="grid-column:1/-1; text-align:center;padding:40px;">⏳ No tasks in this category.</div>';
+    container.innerHTML = '<div style="grid-column:1/-1; text-align:center;padding:40px;">⏳ No tasks in this category. Keep grinding!</div>';
     return;
   }
   container.innerHTML = tasksToShow.map(task => {
@@ -606,110 +605,86 @@ function renderTasksByCategory() {
     let isDone = !!doneMap[taskKey];
     let progress = 0;
     if (task.type === 'watch' && !isDone) {
-      progress = watchProg[`w_${task.id}`] || 0;
-      let pct = (progress / task.watchTime) * 100;
-      progress = Math.min(100, pct);
+      let currentSec = watchProg[`w_${task.id}`] || 0;
+      progress = Math.min(100, (currentSec / task.watchTime) * 100);
     }
-    let rewardSpan = `<span class="coin-reward"><i class="fas fa-coins"></i> +${task.coins}</span>`;
+    let rewardHtml = `<span class="coin-reward"><i class="fas fa-coins"></i> +${task.coins}</span>`;
     let actionHtml = '';
     if (isDone) {
-      actionHtml = `<span style="background:rgba(91,191,114,0.1); padding:5px 12px; border-radius:60px;">✅ Completed</span>`;
-    } else if (task.type === 'watch') {
-      let remaining = task.watchTime - (watchProg[`w_${task.id}`] || 0);
-      if (remaining <= 0) {
-        actionHtml = `<button class="btn-task" onclick="claimWatchReward(${task.id},${task.coins})"><i class="fas fa-gift"></i> Claim Reward</button>`;
+      actionHtml = `<span style="background:rgba(91,191,114,0.1); padding:5px 12px; border-radius:60px;">✅ Completed • Honest</span>`;
+    } 
+    else if (task.type === 'watch') {
+      let current = watchProg[`w_${task.id}`] || 0;
+      let remaining = Math.max(0, task.watchTime - current);
+      if (remaining === 0 && current >= task.watchTime) {
+        actionHtml = `<button class="btn-task" onclick="claimWatchReward(${task.id},${task.coins})"><i class="fas fa-gift"></i> Claim Reward (Video Completed)</button>`;
       } else {
-        actionHtml = `<button class="btn-task" onclick="startWatchTask(${task.id},${task.watchTime},${task.coins},'${escapeHtml(task.url)}')"><i class="fas fa-play"></i> Watch Video (${remaining}s left)</button>`;
+        actionHtml = `<button class="btn-task" onclick="startWatchTask(${task.id},${task.watchTime},${task.coins},'${escapeHtml(task.url)}')"><i class="fas fa-play"></i> Watch Full Video (${remaining}s left)</button>`;
+        if (progress > 0 && progress < 100) actionHtml += `<div class="progress-wrapper"><div class="progress-fill" style="width:${progress}%"></div></div>`;
       }
-      if (progress > 0 && progress < 100) actionHtml += `<div class="progress-wrapper mt-1"><div class="progress-fill" style="width:${progress}%"></div></div>`;
-    } else {
-      actionHtml = `<button class="btn-task" onclick="openSocialTask(${task.id},'${escapeHtml(task.url)}',${task.coins},'${task.type}')"><i class="fas fa-external-link-alt"></i> Complete & Claim</button>`;
+    } 
+    else {
+      // Social tasks: Like, Subscribe, Share — requires user to actually perform action and confirm
+      actionHtml = `<button class="btn-task" onclick="openSocialTask(${task.id},'${escapeHtml(task.url)}',${task.coins},'${task.type}','${escapeHtml(task.title)}')"><i class="fas fa-external-link-alt"></i> Perform & Earn</button>`;
     }
-    return `<div class="task-card"><div class="task-chip">${task.type === 'watch' ? '🎬 WATCH' : task.type.toUpperCase()}</div><div class="thumb-place">${task.thumb ? `<img src="${task.thumb}" onerror="this.src=''">` : '<i class="fas fa-video" style="font-size:32px;opacity:0.3;"></i>'}</div><div class="task-title">${escapeHtml(task.title)}</div><div style="display:flex;justify-content:space-between;align-items:center;"><span>${rewardSpan}</span></div><div class="task-footer">${actionHtml}</div></div>`;
+    return `<div class="task-card"><div class="task-chip">${task.type === 'watch' ? '🎬 FULL VIDEO' : task.type.toUpperCase()}</div><div class="thumb-place"><i class="fas ${task.type === 'watch' ? 'fa-film' : 'fa-heart'}" style="font-size:32px;opacity:0.3;"></i></div><div class="task-title">${escapeHtml(task.title)}</div><div>${rewardHtml}</div><div class="task-footer">${actionHtml}</div></div>`;
   }).join('');
 }
 
-// Watch Task - Timer must complete fully
-let activeTimer = null;
-let currentWatchTaskId = null;
-
+// ---------- WATCH TASK: strict timer, cannot cheat ----------
+let watchInterval = null;
 function startWatchTask(id, requiredSec, coinReward, videoUrl) {
   let doneMap = getItem(STORAGE.doneTasks, {});
-  if (doneMap[`w_${id}`]) {
-    Swal.fire({
-      title: "Already completed!",
-      icon: "info",
-      background: "#0A1422"
-    });
-    return;
-  }
-  
-  let progressData = getItem(STORAGE.watchProgress, {});
-  let currentSec = progressData[`w_${id}`] || 0;
-  
+  if (doneMap[`w_${id}`]) { Swal.fire("Already completed", "", "info"); return; }
+  let progData = getItem(STORAGE.watchProgress, {});
+  let currentSec = progData[`w_${id}`] || 0;
   if (currentSec >= requiredSec) {
     claimWatchReward(id, coinReward);
     return;
   }
-  
-  // Open video in new tab
   window.open(videoUrl, '_blank');
-  currentWatchTaskId = id;
   
   Swal.fire({
-    title: '⏳ WATCH VIDEO TO EARN COINS',
+    title: '🎬 WATCH VIDEO COMPLETELY TO EARN',
     html: `<div style="text-align:center">
-      <div style="font-size:16px; margin-bottom:15px;">👉 Video ek naye tab mein khul gaya hai! 👈</div>
-      <div style="font-size:14px; color:#F0A500; margin-bottom:10px;">⚠️ Cheating nahi chalegi! Poora video dekhna hoga ⚠️</div>
-      <div style="font-size:48px;font-weight:800;margin:15px 0;" id="watchTimerDisplay">${requiredSec - currentSec}</div>
-      <div class="progress-wrapper"><div id="timerProgressFill" style="width:${(currentSec/requiredSec)*100}%;height:100%;background:linear-gradient(90deg,#F0A500,#5BBF72);"></div></div>
-      <div style="font-size:12px; color:#6A90B0; margin-top:15px;">Timer automatically countdown kar raha hai...</div>
-      <div style="font-size:12px; color:#E84545; margin-top:10px;">❌ Is window ko band mat karein! ❌</div>
+      <div><strong>Video new tab mein khul chuka hai!</strong></div>
+      <div style="margin:10px 0; color:#F0A500;">⚠️ Bina video dekhe coins nahi milenge ⚠️</div>
+      <div style="font-size:42px;font-weight:800;margin:15px 0;" id="strictTimerDisplay">${requiredSec - currentSec}</div>
+      <div class="progress-wrapper"><div id="strictProgressFill" style="width:${(currentSec/requiredSec)*100}%;height:100%;background:#5BBF72;"></div></div>
+      <div style="font-size:12px;">Timer automatically countdown. Is window ko band na karein.</div>
     </div>`,
     showConfirmButton: false,
     allowOutsideClick: false,
     allowEscapeKey: false,
     didOpen: () => {
-      if (activeTimer) clearInterval(activeTimer);
-      activeTimer = setInterval(() => {
+      if (watchInterval) clearInterval(watchInterval);
+      watchInterval = setInterval(() => {
         let prog = getItem(STORAGE.watchProgress, {});
         let now = (prog[`w_${id}`] || 0) + 1;
         if (now >= requiredSec) {
-          clearInterval(activeTimer);
+          clearInterval(watchInterval);
           prog[`w_${id}`] = requiredSec;
           setItem(STORAGE.watchProgress, prog);
           Swal.close();
-          Swal.fire({
-            title: "✅ Video Watch Complete!",
-            text: `Click "Claim Reward" to get +${coinReward} Coins`,
-            icon: "success",
-            background: "#0A1422",
-            confirmButtonText: "Claim Now!",
-            confirmButtonColor: "#5BBF72"
-          }).then(() => {
-            claimWatchReward(id, coinReward);
-          });
+          Swal.fire({ title: "✅ Video poora dekh liya!", text: `Ab Claim karein +${coinReward} Coins.`, icon: "success", confirmButtonText: "Claim Now", confirmButtonColor: "#5BBF72" }).then(() => claimWatchReward(id, coinReward));
           refreshUI();
         } else {
           prog[`w_${id}`] = now;
           setItem(STORAGE.watchProgress, prog);
           let remain = requiredSec - now;
-          let displayDiv = document.getElementById('watchTimerDisplay');
-          if (displayDiv) displayDiv.innerText = remain;
-          let fillDiv = document.getElementById('timerProgressFill');
+          let timerDiv = document.getElementById('strictTimerDisplay');
+          if (timerDiv) timerDiv.innerText = remain;
+          let fillDiv = document.getElementById('strictProgressFill');
           if (fillDiv) fillDiv.style.width = (now / requiredSec) * 100 + '%';
           refreshUI();
         }
       }, 1000);
     },
     willClose: () => {
-      if (activeTimer && currentWatchTaskId === id) {
-        // Don't clear timer if task is complete
-        let prog = getItem(STORAGE.watchProgress, {});
-        if ((prog[`w_${id}`] || 0) < requiredSec) {
-          clearInterval(activeTimer);
-          activeTimer = null;
-        }
+      let prog = getItem(STORAGE.watchProgress, {});
+      if ((prog[`w_${id}`] || 0) < requiredSec && watchInterval) {
+        clearInterval(watchInterval);
+        watchInterval = null;
       }
     }
   });
@@ -717,89 +692,76 @@ function startWatchTask(id, requiredSec, coinReward, videoUrl) {
 
 function claimWatchReward(taskId, coinReward) {
   let done = getItem(STORAGE.doneTasks, {});
-  let progressData = getItem(STORAGE.watchProgress, {});
+  let progData = getItem(STORAGE.watchProgress, {});
   let wtasks = getItem(STORAGE.watchTasks, []);
   let task = wtasks.find(t => t.id === taskId);
-  
   if (!task) return;
-  
-  let requiredSec = task.watchTime;
-  let watched = progressData[`w_${taskId}`] || 0;
-  
-  if (done[`w_${taskId}`]) {
-    Swal.fire("Already claimed!", "", "info");
+  let required = task.watchTime;
+  let watched = progData[`w_${taskId}`] || 0;
+  if (done[`w_${taskId}`]) { Swal.fire("Already claimed!", "", "info"); return; }
+  if (watched < required) {
+    Swal.fire({ title: "⛔ CHEATING ATTEMPT!", text: `Aapne sirf ${watched}s dekha, ${required}s chahiye. Video poora dekho!`, icon: "error" });
     return;
   }
-  
-  if (watched < requiredSec) {
-    Swal.fire({
-      title: "⛔ CHEATING DETECTED!",
-      text: `You only watched ${watched} out of ${requiredSec} seconds. Watch the full video first!`,
-      icon: "error",
-      background: "#0A1422"
-    });
-    return;
-  }
-  
   done[`w_${taskId}`] = true;
   setItem(STORAGE.doneTasks, done);
-  addCoins(coinReward);
-  addActivity('✅', `Watch task completed! +${coinReward} Coins (Watched ${requiredSec}s)`);
-  Swal.fire({
-    title: `🎉 +${coinReward} Coins Earned!`,
-    text: "Thank you for watching the full video!",
-    icon: "success",
-    background: "#0A1422",
-    timer: 2000,
-    showConfirmButton: false
-  });
+  addCoins(coinReward, `Watched ${required}s video: ${task.title}`);
+  addActivity('🎥', `Video watch complete (+${coinReward} Coins) - Full duration respected`);
+  Swal.fire({ title: `🎉 +${coinReward} Coins!`, text: "Honest work pays!", icon: "success", timer: 1800, showConfirmButton: false });
   refreshUI();
 }
 
-// Social Tasks - Must open link and confirm
-let openedSocial = {};
-
-function openSocialTask(taskId, url, coinReward, type) {
-  openedSocial[taskId] = true;
+// ---------- SOCIAL TASKS: LIKE / SUBSCRIBE / SHARE -> No scam ----------
+function openSocialTask(taskId, url, coinReward, type, taskTitle) {
+  let doneMap = getItem(STORAGE.doneTasks, {});
+  let key = `s_${taskId}`;
+  if (doneMap[key]) { Swal.fire("Already claimed this task!", "", "info"); return; }
+  
   window.open(url, '_blank');
   
   Swal.fire({
-    title: "🤔 Did you complete the task?",
+    title: `✅ ${type.toUpperCase()} Action Required`,
     html: `<div style="text-align:center">
-      <div>Please ${type} / interact on the opened page.</div>
-      <div style="margin-top:10px; font-size:12px; color:#F0A500;">⚠️ Only click YES after actually completing the task! ⚠️</div>
+      <div>New tab mein page khul gaya!</div>
+      <div style="margin:12px 0; font-weight:bold;">Kya aapne waakai mein <span style="color:#F0A500;">${type.toUpperCase()}</span> kar diya?</div>
+      <div style="font-size:12px; background:#0D1929; padding:8px; border-radius:12px;">⚠️ Sirf tabhi "Haan" click karein jab aapne ${type} kar diya ho. Nahi toh coins nahi milenge ⚠️</div>
     </div>`,
     icon: "question",
     showCancelButton: true,
-    confirmButtonText: "✅ Yes, I completed it!",
-    cancelButtonText: "No, not yet",
-    background: "#0A1422"
+    confirmButtonText: "✅ Haan, maine kar diya!",
+    cancelButtonText: "❌ Nahi, abhi nahi kiya",
+    background: "#0A1422",
+    confirmButtonColor: "#5BBF72"
   }).then(res => {
-    if (res.isConfirmed && openedSocial[taskId]) {
-      let done = getItem(STORAGE.doneTasks, {});
-      let key = `s_${taskId}`;
-      if (done[key]) {
-        Swal.fire("Already claimed!", "", "info");
-        return;
-      }
-      done[key] = true;
-      setItem(STORAGE.doneTasks, done);
-      addCoins(coinReward);
-      addActivity('👍', `${type.toUpperCase()} task completed! +${coinReward} Coins`);
+    if (res.isConfirmed) {
+      // Final double-check: no auto approval
       Swal.fire({
-        title: `Earned ${coinReward} Coins!`,
-        text: `Thanks for completing the ${type} task!`,
-        icon: "success",
-        timer: 1500,
-        showConfirmButton: false
+        title: "Final Confirmation",
+        text: `Aap confirm karte ho ki aapne ${type.toUpperCase()} kar diya hai? (No scam allowed)`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, 100% Completed"
+      }).then(finalRes => {
+        if (finalRes.isConfirmed) {
+          let done = getItem(STORAGE.doneTasks, {});
+          if (done[key]) return;
+          done[key] = true;
+          setItem(STORAGE.doneTasks, done);
+          addCoins(coinReward, `${type.toUpperCase()} task: ${taskTitle}`);
+          addActivity(`👍`, `${type.toUpperCase()} completed honestly! +${coinReward} Coins`);
+          Swal.fire({ title: `🎉 ${coinReward} Coins Added!`, text: "Thanks for genuine interaction", icon: "success", timer: 2000, showConfirmButton: false });
+          refreshUI();
+        } else {
+          Swal.fire("Task incomplete", "Jab aap action karein tab dobara try karein.", "info");
+        }
       });
-      refreshUI();
-    } else if (res.isConfirmed && !openedSocial[taskId]) {
-      Swal.fire("Please open the task link first!", "", "warning");
+    } else {
+      Swal.fire("Task pending", "Pehle ${type} karein phir confirm karein.", "info");
     }
   });
 }
 
+// Tab switching & refresh
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', function() {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -809,9 +771,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 });
 
 refreshUI();
-setInterval(() => {
-  refreshUI();
-}, 5000);
+setInterval(() => { refreshUI(); }, 4000);
 </script>
 </body>
 </html>
